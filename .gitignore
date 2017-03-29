@@ -48,3 +48,6 @@ vgcore.*
 
 # Vim
 .swp
+
+# YouCompleteMe-Plug
+.ycm_extra_conf.py
