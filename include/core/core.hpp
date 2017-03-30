@@ -1,13 +1,9 @@
 #ifndef CORE_HPP_
 # define CORE_HPP_
-# undef EXIT_FAILURE
-# define EXIT_FAILURE 84
-# undef EXIT_SUCCESS
-# define EXIT_SUCCESS 0
 
 # include <string>
 # include <vector>
-# include <interface/IGfxLib.hpp>
+# include "interface/IGfxLib.hpp"
 
 namespace arcade
 {
@@ -19,8 +15,10 @@ namespace arcade
       int gameLoop();
     private:
       void loadLibraries();
-      const std::vector<std::string const &> m_libsName;
-      const std::vector<IGfxLib *> m_libsGame;
+      std::vector<std::string> m_libsName;
+      std::string fileName;
+      std::vector<IGfxLib *> m_libsGame;
+      void *sdlHandler;
   };
 }
 

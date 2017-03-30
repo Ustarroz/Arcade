@@ -17,11 +17,11 @@ SRC_SDL=	$(addprefix ./src/lib/sdl/,	\
 
 OBJ_SDL=	$(SRC_SDL:.cpp=.o)
 
-CXXFLAGS=		-W -Wall -Wextra -Wpointer-arith -Wshadow -fstack-protector
+CXXFLAGS=		-W -Wall -Wextra -Wpointer-arith -Wshadow -fstack-protector -std=c++14
 
 CXXFLAGS+=	-I./include/
 
-LDFLAGS=	""
+LDFLAGS=	-ldl
 
 ifeq ($(DEBUG), yes)
   CXXFLAGS+= -g
@@ -32,7 +32,7 @@ $(NAME):	$(OBJ_CORE)
 		@echo "options: $(CXXFLAGS)"
 
 libs:
-		$(CXX)-shared -o lib_arcade_sdl.so -fPIC $(SRC_SDL) $(CXXFLAGS)
+		$(CXX) -shared -o lib_arcade_sdl.so -fPIC $(SRC_SDL) $(CXXFLAGS)
 		
 
 all: 		$(NAME) libs

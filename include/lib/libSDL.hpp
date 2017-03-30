@@ -31,6 +31,7 @@ namespace arcade
       
   };
 }
+
 extern "C"
 {
   arcade::IGfxLib *entryPoint();
