@@ -6,39 +6,47 @@ CXX=		clang++
 
 SRC_CORE=	$(addprefix ./src/core/,	\
 		main.cpp			\
+		Core.cpp 			\
 		)
 
-OBJ_CORE=	$(SRC_CORE:.c=.o)
+OBJ_CORE=	$(SRC_CORE:.cpp=.o)
 
-CFLAGS=		-W -Wall -Wextra -Wpointer-arith -Wshadow -fstack-protector
+SRC_SDL=	$(addprefix ./src/lib/sdl/,	\
+		libSDL.cpp			\
+		)
 
-CFLAGS+=	-I./include
+OBJ_SDL=	$(SRC_SDL:.cpp=.o)
+
+CXXFLAGS=		-W -Wall -Wextra -Wpointer-arith -Wshadow -fstack-protector
+
+CXXFLAGS+=	-I./include/
 
 LDFLAGS=	""
 
 ifeq ($(DEBUG), yes)
-  CFLAGS+= -g
+  CXXFLAGS+= -g
+endif
+
+$(NAME):	$(OBJ_CORE)
+		@$(CXX) -o $(NAME) $(OBJ_CORE) $(LDFLAGS)
+		@echo "options: $(CXXFLAGS)"
 
 libs:
-	echo "compiling libs"
+		$(CXX)-shared -o lib_arcade_sdl.so -fPIC $(SRC_SDL) $(CXXFLAGS)
+		
 
-games:
-	echo "compiling games"
+all: 		$(NAME) libs
 
-core:	$(OBJ_CORE)
-	echo "compiling core"
-	$(CXX) -o $(NAME) $(OBJ_CORE) $(LDFLAGS)
-
-all: 	libs games core
-
-%.o:	%.c
-	echo $<
-	$(CXX) -c -o $@ $< $(CFLAGS)
+%.o:		%.cpp
+		@echo "process $<"
+		@$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 clean:
-	rm -rf $(OBJS)
+		rm -rf $(OBJ_CORE)
 
-flcean: clean
-	rm -rf $(NAME)
+fclean: 	clean
+		rm -rf $(NAME)
 
-.PHONY: re fclean clean all core games libs
+re: 		fclean all
+
+.PHONY: re fclean clean all
