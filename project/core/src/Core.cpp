@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <dlfcn.h>
-#include "core/Core.hpp"
+#include "Core.hpp"
 
 namespace arcade
 {

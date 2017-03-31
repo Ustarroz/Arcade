@@ -1,52 +1,15 @@
-DEBUG=		yes
+PROJECT_DIR=	./project/core/ 	\
+		./project/lib/sdl/ 	\
 
-NAME=		arcade
-
-CXX=		clang++
-
-SRC_CORE=	$(addprefix ./src/core/,	\
-		main.cpp			\
-		Core.cpp 			\
-		)
-
-OBJ_CORE=	$(SRC_CORE:.cpp=.o)
-
-SRC_SDL=	$(addprefix ./src/lib/sdl/,	\
-		libSDL.cpp			\
-		)
-
-OBJ_SDL=	$(SRC_SDL:.cpp=.o)
-
-CXXFLAGS=		-W -Wall -Wextra -Wpointer-arith -Wshadow -fstack-protector -std=c++14
-
-CXXFLAGS+=	-I./include/
-
-LDFLAGS=	-ldl
-
-ifeq ($(DEBUG), yes)
-  CXXFLAGS+= -g
-endif
-
-$(NAME):	$(OBJ_CORE)
-		@$(CXX) -o $(NAME) $(OBJ_CORE) $(LDFLAGS)
-		@echo "options: $(CXXFLAGS)"
-
-libs:
-		$(CXX) -shared -o lib_arcade_sdl.so -fPIC $(SRC_SDL) $(CXXFLAGS)
-		
-
-all: 		$(NAME) libs
-
-%.o:		%.cpp
-		@echo "process $<"
-		@$(CXX) -c -o $@ $< $(CXXFLAGS)
+all:
+		@$(foreach c, $(PROJECT_DIR), $(MAKE) -C $(c) && ) true
 
 clean:
-		rm -rf $(OBJ_CORE)
+		@$(foreach c, $(PROJECT_DIR), $(MAKE) -C $(c) clean && ) true
 
-fclean: 	clean
-		rm -rf $(NAME)
+fclean:
+		@$(foreach c, $(PROJECT_DIR), $(MAKE) -C $(c) fclean && ) true
 
-re: 		fclean all
+re:
+		@$(foreach c, $(PROJECT_DIR), $(MAKE) -C $(c) re && ) true
 
-.PHONY: re fclean clean all

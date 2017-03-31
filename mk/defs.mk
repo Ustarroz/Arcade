@@ -12,6 +12,8 @@ SRC=		""
 
 OBJ=		""
 
+BASE_DIR=	$(CURDIR)
+
 ifeq ($(DEBUG), yes)
   CXXFLAGS+= -g
 endif

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "core/Core.hpp"
+#include "Core.hpp"
 
 int main(int argc, char **argv)
 {

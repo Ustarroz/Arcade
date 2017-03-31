@@ -1,11 +1,11 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "interface/Event.hpp"
-#include "interface/IMap.hpp"
-#include "interface/IGUI.hpp"
-#include "interface/IGfxLib.hpp"
-#include "lib/libSDL.hpp"
+#include "Event.hpp"
+#include "IMap.hpp"
+#include "IGUI.hpp"
+#include "IGfxLib.hpp"
+#include "libSDL.hpp"
 
 namespace arcade
 {

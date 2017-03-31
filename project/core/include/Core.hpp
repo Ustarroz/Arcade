@@ -3,7 +3,7 @@
 
 # include <string>
 # include <vector>
-# include "interface/IGfxLib.hpp"
+# include "IGfxLib.hpp"
 
 namespace arcade
 {
