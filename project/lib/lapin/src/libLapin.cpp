@@ -39,16 +39,20 @@ namespace arcade
   {
   }
 
-  void libLapin::playSound(int soundId)
+  void libLapin::soundControl(const Sound &sound)
   {
     std::cout << "PLAYSOUND func" << std::endl;
+  }
+  
+  void libLapin::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
+  {
   }
 
   void libLapin::updateMap(IMap const &map)
   {
   }
 
-  void libLapin::updateGUI(IGUI const &gui)
+  void libLapin::updateGUI(IGUI &gui)
   {
   }
 
@@ -63,7 +67,10 @@ namespace arcade
   }
 }
 
-arcade::IGfxLib *entryPoint()
+extern "C"
+{
+  arcade::IGfxLib *entryPoint()
   {
     return (new arcade::libLapin());
   }
+}

@@ -19,16 +19,16 @@ namespace arcade
       virtual bool pollEvent(Event &e);
       virtual bool doesSupportSound() const;
       virtual void loadSounds(std::vector<std::string> const &sounds);
-      virtual void playSound(int soundId);
+      virtual void soundControl(const Sound &sound);
+      virtual void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites);
       virtual void updateMap(IMap const &map);
-      virtual void updateGUI(IGUI const &gui);
+      virtual void updateGUI(IGUI &gui);
       virtual void display();
       virtual void clear();
     private:
       bool m_doesSupportSound;
       int m_windowHeight;
       int m_windowWeight;
-      
   };
 }
 

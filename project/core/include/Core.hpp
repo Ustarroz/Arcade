@@ -11,7 +11,7 @@ namespace arcade
   template <typename T>
     std::function<T> cast(void* f)
     {
-          return static_cast<T*>(f);
+          return reinterpret_cast<T*>(f);
     }
 
   class Core
@@ -23,12 +23,11 @@ namespace arcade
 
     private:
       void loadLibraries();
-      std::vector<std::string> &getLibs() const;
+      void getLibs();
       int setInterface(std::string const &);
 
     private:
       std::vector<std::string> m_libsName;
-      std::string fileName;
       std::vector<IGfxLib *> m_libsGame;
       std::vector<void *> m_handler;
   };

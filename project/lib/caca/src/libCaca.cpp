@@ -39,16 +39,20 @@ namespace arcade
   {
   }
 
-  void libCaca::playSound(int soundId)
+  void libCaca::soundControl(const Sound &sound)
   {
     std::cout << "PLAYSOUND func" << std::endl;
+  }
+
+  void libCaca::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
+  {
   }
 
   void libCaca::updateMap(IMap const &map)
   {
   }
 
-  void libCaca::updateGUI(IGUI const &gui)
+  void libCaca::updateGUI(IGUI &gui)
   {
   }
 
@@ -63,7 +67,10 @@ namespace arcade
   }
 }
 
-arcade::IGfxLib *entryPoint()
+extern "C"
+{
+  arcade::IGfxLib *entryPoint()
   {
     return (new arcade::libCaca());
   }
+}

@@ -39,16 +39,20 @@ namespace arcade
   {
   }
 
-  void libSDL::playSound(int soundId)
+  void libSDL::soundControl(const Sound &sound)
   {
     std::cout << "PLAYSOUND func" << std::endl;
+  }
+
+  void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
+  {
   }
 
   void libSDL::updateMap(IMap const &map)
   {
   }
 
-  void libSDL::updateGUI(IGUI const &gui)
+  void libSDL::updateGUI(IGUI &gui)
   {
   }
 
@@ -63,7 +67,10 @@ namespace arcade
   }
 }
 
-arcade::IGfxLib *entryPoint()
+extern "C"
+{
+  arcade::IGfxLib *entryPoint()
   {
     return (new arcade::libSDL());
   }
+}
