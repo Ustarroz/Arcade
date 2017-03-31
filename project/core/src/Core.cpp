@@ -1,5 +1,4 @@
 #include <vector>
-#include <functional>
 #include <iostream>
 #include <string>
 #include <dlfcn.h>
@@ -7,11 +6,6 @@
 
 namespace arcade
 {
-  template <typename T>
-    std::function<T> cast(void* f)
-    {
-          return static_cast<T*>(f);
-    }
   Core::Core(std::string const &filename)
   {
     m_libsName.push_back(filename);
@@ -34,11 +28,38 @@ namespace arcade
 
   void Core::loadLibraries()
   {
-    //get others libName;
-    std::cout << "Loading others" << std::endl;
+    std::vector<std::string> libsName(getLibs());
+    for (int i = 0; i < libsName.size(); i++)
+    {
+      if (setInterface(libsName[i]) == -1)
+      {
+        std::cerr << "SHOULD EXIT NOW!" << std::endl;
+      }
+    }
+  }
 
-    sdlHandler = dlopen(m_libsName[0].c_str(), RTLD_LAZY);
-    std::function<IGfxLib *()> sdl = reinterpret_cast<IGfxLib *(*)()>(dlsym(sdlHandler, "entryPoint"));
+  int Core::setInterface(std::string const &fileName)
+  {
+    void *sdlHandler = dlopen(fileName.c_str(), RTLD_LAZY);
+    std::function<IGfxLib *()> sdl = cast<IGfxLib *()>(dlsym(sdlHandler, "entryPoint"));
+    m_handler.push_back(sdlHandler);
     m_libsGame.push_back(sdl());
+  }
+
+  std::vector<std::string> &Core::getLibs() const
+  {
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir ("./lib")) != NULL) {
+        /* print all the files and directories within directory */
+        while ((ent = readdir (dir)) != NULL) {
+              printf ("%s\n", ent->d_name);
+                }
+          closedir (dir);
+    } else {
+        /* could not open directory */
+        perror ("");
+          return EXIT_FAILURE;
+    }
   }
 }

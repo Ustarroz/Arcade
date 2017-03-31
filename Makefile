@@ -1,5 +1,7 @@
 PROJECT_DIR=	./project/core/ 	\
 		./project/lib/sdl/ 	\
+		./project/lib/lapin/ 	\
+		./project/lib/caca/ 	\
 
 all:
 		@$(foreach c, $(PROJECT_DIR), $(MAKE) -C $(c) && ) true
