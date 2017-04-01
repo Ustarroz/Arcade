@@ -9,7 +9,11 @@ int main(int argc, char **argv)
     return (EXIT_FAILURE);
   }
   arcade::Core core(argv[1]);
+  if (core.loadLibraries())
+  {
+    std::cerr << core.getError() << std::endl;
+    return (EXIT_FAILURE);
+  }
   core.gameLoop();
-  std::cout << "loading libraries..." << std::endl;
   return (EXIT_SUCCESS);
 }

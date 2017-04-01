@@ -8,4 +8,12 @@ SRC=	$(addprefix ./src/,	\
 	Core.cpp 		\
 	)
 
+COMMON_SRC= $(addprefix ./../common/,	\
+	    Component.cpp 		\
+	    GUI.cpp 			\
+	    Color.cpp 			\
+	    )
+
+SRC+=	$(COMMON_SRC)
+
 include $(MK_COMMON_DIR)rules.mk

@@ -19,10 +19,11 @@ namespace arcade
     public:
       ~Core();
       explicit Core(std::string const &fileName);
+      int loadLibraries();
       int gameLoop();
+      std::string const &getError() const;
 
     private:
-      void loadLibraries();
       void getLibs();
       int setInterface(std::string const &);
 
@@ -30,6 +31,7 @@ namespace arcade
       std::vector<std::string> m_libsName;
       std::vector<IGfxLib *> m_libsGame;
       std::vector<void *> m_handler;
+      std::string m_error;
   };
 }
 
