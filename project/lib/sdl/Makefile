@@ -7,8 +7,8 @@ SRC=	$(addprefix ./src/,	\
 	libSDL.cpp		\
 	)
 
-SRC+=	$(addprefix ./../../common/,	\
-	$(COMMON_SRC)			\
-	)
+#SRC+=	$(addprefix ./../../common/,	\
+	#$(COMMON_SRC)			\
+	#)
 
 include $(MK_COMMON_DIR)rules.mk

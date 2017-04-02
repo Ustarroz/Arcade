@@ -1,12 +1,12 @@
 OBJ=	$(SRC:.cpp=.o)
 
 all:	$(OBJ)
-	@$(CXX) -o $(NAME) $(OBJ) $(LDFLAGS) $(LOCAL_LDFLAGS)
+	$(CXX) -o $(NAME) $(OBJ) $(LDFLAGS) $(LOCAL_LDFLAGS)
 	@echo  -e '\E[30;32m'"\033[1m[OK] $(NAME) with options: $(CXXFLAGS) $(LOCAL_CXXFLAGS) $(LDFLAGS) $(LOCAL_LDFLAGS)\033[0m"
 
 %.o:	%.cpp
-	@echo "compiling $<"
-	@$(CXX) -c -o $@ $< $(CXXFLAGS) $(LOCAL_CXXFLAGS)
+	echo "compiling $<"
+	$(CXX) -c -o $@ $< $(CXXFLAGS) $(LOCAL_CXXFLAGS)
 
 clean:
 	@$(RM) $(OBJ)

@@ -14,6 +14,6 @@ COMMON_SRC= $(addprefix ./../common/,	\
 	    Color.cpp 			\
 	    )
 
-SRC+=	$(COMMON_SRC)
+#SRC+=	$(COMMON_SRC)
 
 include $(MK_COMMON_DIR)rules.mk

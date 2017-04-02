@@ -1,10 +1,10 @@
-CXX=		clang++
+CXX=		g++
 
 DEBUG=		yes
 
 CXXFLAGS=	-W -Wall -Wextra -Wpointer-arith -Wshadow -std=c++14
 
-LDFLAGS=	""
+LDFLAGS=
 
 RM=		rm -f
 
