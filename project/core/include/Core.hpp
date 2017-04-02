@@ -5,6 +5,7 @@
 # include <vector>
 # include <functional>
 # include "IGfxLib.hpp"
+# include "IGame.hpp"
 
 namespace arcade
 {
@@ -24,12 +25,16 @@ namespace arcade
       std::string const &getError() const;
 
     private:
-      void getLibs();
-      int setInterface(std::string const &);
+      void getLibsGfx();
+      void getLibsGame();
+      int setInterfaceGfx(std::string const &);
+      int setInterfaceGame(std::string const &);
 
     private:
-      std::vector<std::string> m_libsName;
-      std::vector<IGfxLib *> m_libsGame;
+      std::vector<std::string> m_libsGfxName;
+      std::vector<IGfxLib *> m_libsGfx;
+      std::vector<std::string> m_libsGameName;
+      std::vector<IGame *> m_libsGame;
       std::vector<void *> m_handler;
       std::string m_error;
   };

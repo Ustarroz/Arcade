@@ -57,7 +57,7 @@ namespace arcade
 
 extern "C"
 {
-  arcade::IGfxLib *entryPoint();
+  arcade::IGfxLib *getLib();
 }
 
 #endif

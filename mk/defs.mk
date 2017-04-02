@@ -10,6 +10,13 @@ RM=		rm -f
 
 SRC=		""
 
+COMMON_SRC=	Color.cpp	\
+		Component.cpp	\
+		GUI.cpp		\
+		Layer.cpp	\
+		Map.cpp		\
+		Tile.cpp
+
 OBJ=		""
 
 BASE_DIR=	$(CURDIR)

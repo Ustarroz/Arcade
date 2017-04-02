@@ -6,6 +6,7 @@
 #include "IMap.hpp"
 #include "IGUI.hpp"
 #include "IGfxLib.hpp"
+#include "ITile.hpp"
 #include "libSDL.hpp"
 
 namespace arcade
@@ -52,46 +53,66 @@ namespace arcade
 
   bool libSDL::doesSupportSound() const
   {
-    return (m_doesSupportSound);
+    //return (m_doesSupportSound);
+    return (false);
   }
 
   void libSDL::loadSounds(std::vector<std::string> const &sound)
   {
+    std::cout << ">LOAD SOUNDS" << std::endl;
   }
 
   void libSDL::soundControl(const Sound &sound)
   {
-    std::cout << "PLAYSOUND func" << std::endl;
+    std::cout << "> SOUND CONTROL" << std::endl;
   }
 
   void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
+    std::cout << "> LOAD SPRITES" << std::endl;
   }
 
   void libSDL::updateMap(IMap const &map)
   {
+    std::cout << "Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
+    for (size_t nb = 0; nb < map.getLayerNb(); nb++)
+    {
+      for (size_t y = 0; y < map.getHeight(); y++)
+      {
+        for (size_t x = 0; x < map.getWidth(); x++)
+        {
+          ITile const &tile = map.at(nb, x, y);
+          Color a = tile.getColor();
+          SDL_Color color = {a.r, a.g, a.b, a.a};
+          pos_t pos = {static_cast<int>(x * 10), static_cast<int>(y * 10)};
+          drawSquare(m_disp.screen, pos, 10, &color);
+        }
+      }
+    }
   }
 
   void libSDL::updateGUI(IGUI &gui)
   {
-    pos_t pos;
-    SDL_memset(m_disp.screen->pixels, 0,
-        m_disp.screen->h * m_disp.screen->pitch);
-    pos.x = 100;
-    pos.y = 100;
-    drawSquare(m_disp.screen, pos, 50, &m_disp.palette->colors[0]);
+    for (size_t nb = 0; nb < gui.size(); nb++)
+    {
+      IComponent &c = gui.at(nb);
+      SDL_Color red = {255, 0, 0, 255};
+      pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
+      drawSquare(m_disp.screen, pos, c.getHeight(), &red);
+    }
   }
 
   void libSDL::display()
   {
     std::cout << "DISPLAY func" << std::endl;
     SDL_UpdateWindowSurface(m_disp.window);
-    SDL_Delay(600);
+    SDL_Delay(6000);
   }
 
   void libSDL::clear()
   {
-    std::cout << "CLEAR func" << std::endl;
+    SDL_memset(m_disp.screen->pixels, 0,
+        m_disp.screen->h * m_disp.screen->pitch);
   }
 
   void libSDL::setPalette(SDL_Palette *pal)
@@ -136,7 +157,7 @@ namespace arcade
 
 extern "C"
 {
-  arcade::IGfxLib *entryPoint()
+  arcade::IGfxLib *getLib()
   {
     return (new arcade::libSDL());
   }

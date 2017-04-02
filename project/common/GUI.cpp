@@ -14,11 +14,16 @@ namespace arcade
 
   std::size_t GUI::size() const
   {
-    return (0);
+    return (m_comps.size());
   }
 
   IComponent &GUI::at(std::size_t n)
   {
-    return (a);
+    return (m_comps[n % m_comps.size()]);
+  }
+
+  void GUI::addComponent(Component &c)
+  {
+    m_comps.push_back(c);
   }
 }

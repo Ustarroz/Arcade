@@ -4,10 +4,10 @@
 
 namespace arcade
 {
-  Component::Component()
+  Component::Component(Color const &color, std::string const &text,
+      double posX, double posY, double width, double height)
+    :m_color(color), m_text(text), m_x(posX), m_y(posY), m_width(width), m_height(height)
   {
-    a = Color();
-    b = "lmao";
   }
 
   Component::~Component()
@@ -16,22 +16,22 @@ namespace arcade
 
   double Component::getX() const
   {
-    return (0);
+    return (m_x);
   }
 
   double Component::getY() const
   {
-    return (0);
+    return (m_y);
   }
 
   double Component::getWidth() const
   {
-    return (0);
+    return (m_width);
   }
 
   double Component::getHeight() const
   {
-    return (0);
+    return (m_height);
   }
 
   size_t Component::getBackgroundId() const
@@ -41,12 +41,12 @@ namespace arcade
 
   Color Component::getBackgroundColor() const
   {
-    return (a);
+    return (m_color);
   }
 
   std::string const &Component::getText() const
   {
-    return (b);
+    return (m_text);
   }
 
   void Component::setClicked()

@@ -10,7 +10,7 @@ namespace arcade
   class Component: public IComponent
   {
     public:
-      Component();
+      explicit Component(Color const &, std::string const &, double, double, double, double);
       virtual ~Component();
       virtual double getX() const;
       virtual double getY() const;
@@ -21,8 +21,12 @@ namespace arcade
       virtual std::string const &getText() const;
       virtual void setClicked();
     private:
-      Color a;
-      std::string b;
+      Color m_color;
+      std::string m_text;
+      double m_x;
+      double m_y;
+      double m_width;
+      double m_height;
   };
 }
 #endif
