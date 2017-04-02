@@ -33,7 +33,7 @@ namespace arcade
       libSDL(int, int);
       virtual bool pollEvent(Event &e);
       virtual bool doesSupportSound() const;
-      virtual void loadSounds(std::vector<std::string> const &sounds);
+      virtual void loadSounds(std::vector<std::pair<std::string, SoundType> > const &sounds);
       virtual void soundControl(const Sound &sound);
       virtual void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites);
       virtual void updateMap(IMap const &map);

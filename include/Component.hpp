@@ -16,6 +16,7 @@ namespace arcade
       virtual double getY() const;
       virtual double getWidth() const;
       virtual double getHeight() const;
+      virtual bool hasSprite() const;
       virtual size_t getBackgroundId() const;
       virtual Color getBackgroundColor() const;
       virtual std::string const &getText() const;

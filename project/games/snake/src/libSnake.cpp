@@ -44,7 +44,7 @@ namespace arcade
     return (std::move(sprites));
   }
 
-  std::vector<std::string> Snake::getSoundsToLoad() const
+  std::vector<std::pair<std::string, SoundType> > Snake::getSoundsToLoad() const
   {
     return (std::move(m_soundsName));
   }
@@ -59,7 +59,7 @@ namespace arcade
     return (m_map);
   }
 
-  IGUI const &Snake::getGUI() const
+  IGUI &Snake::getGUI()
   {
     return (m_gui);
   }

@@ -14,6 +14,7 @@ namespace arcade
       virtual TileType getType() const;
       virtual TileTypeEvolution getTypeEv() const;
       virtual Color getColor() const;
+      virtual bool hasSprite() const;
       virtual size_t getSpriteId() const;
       virtual size_t getSpritePos() const;
       virtual double getShiftX() const;

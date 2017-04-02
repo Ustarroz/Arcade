@@ -30,6 +30,11 @@ namespace arcade
     return (m_color);
   }
 
+  bool Tile::hasSprite() const
+  {
+    return (false);
+  }
+
   size_t Tile::getSpriteId() const
   {
     return (m_spriteId);

@@ -18,14 +18,14 @@ namespace arcade
       virtual std::vector<NetworkPacket> &&getNetworkToSend();
       virtual void process();
       virtual std::vector<std::unique_ptr<ISprite>> &&getSpritesToLoad() const;
-      virtual std::vector<std::string> getSoundsToLoad() const;
+      virtual std::vector<std::pair<std::string, SoundType> > getSoundsToLoad() const;
       virtual std::vector<int>       &&getSoundsToPlay();
       virtual IMap const &getCurrentMap() const;
-      virtual IGUI const &getGUI() const;
+      virtual IGUI &getGUI();
     private:
       Map m_map;
       GUI m_gui;
-      std::vector<std::string> m_soundsName;
+      std::vector<std::pair<std::string, SoundType> > m_soundsName;
       std::vector<NetworkPacket> m_net;
       std::vector<std::unique_ptr<ISprite> > m_sprites;
       std::vector<int> m_soundsPlay;

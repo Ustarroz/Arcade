@@ -34,6 +34,11 @@ namespace arcade
     return (m_height);
   }
 
+  bool Component::hasSprite() const
+  {
+    return (false);
+  }
+
   size_t Component::getBackgroundId() const
   {
     return (0);
