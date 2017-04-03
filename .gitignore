@@ -54,3 +54,8 @@ vgcore.*
 
 # ctags
 tags
+
+#CLion file
+CMakeLists.txt
+cmake-build-debug
+.idea
