@@ -6,10 +6,10 @@
 namespace arcade
 {
   Snake::Snake()
-    : m_map(30, 30)
+    : m_map(60, 60)
   {
     m_map.addLayer();
-    //m_map.setTile(0, 50, 50, Tile(TileType::BLOCK, TileTypeEvolution::BLOCK, {255, 0, 0, 255}, 0, 0, 0, 0));
+    m_map.setTile(0, 50, 50, Tile(TileType::BLOCK, TileTypeEvolution::BLOCK, {0, 0, 0, 255}, 0, 0, 0, 0));
   }
 
   Snake::~Snake()
