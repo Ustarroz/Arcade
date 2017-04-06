@@ -38,7 +38,7 @@ namespace arcade
   {
   }
 
-  std::vector<std::unique_ptr<ISprite>> &&Snake::getSpritesToLoad() const
+  std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
     return (std::move(sprites));
@@ -49,7 +49,7 @@ namespace arcade
     return (std::move(m_soundsName));
   }
 
-  std::vector<int> &&Snake::getSoundsToPlay()
+  std::vector<Sound> Snake::getSoundsToPlay()
   {
     return (std::move(m_soundsPlay));
   }

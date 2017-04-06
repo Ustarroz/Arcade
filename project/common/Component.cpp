@@ -49,6 +49,11 @@ namespace arcade
     return (m_color);
   }
 
+  Color Component::getTextColor() const
+  {
+    return (m_color);
+  }
+
   std::string const &Component::getText() const
   {
     return (m_text);

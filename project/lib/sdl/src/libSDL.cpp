@@ -33,8 +33,8 @@ namespace arcade
   {
     SDL_Init(SDL_INIT_VIDEO);
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
-                                SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
-                                m_windowHeight, SDL_WINDOW_SHOWN);
+        SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
+        m_windowHeight, SDL_WINDOW_SHOWN);
     if (m_disp.window == NULL)
     {
       std::cerr << SDL_GetError() << std::endl;
@@ -48,7 +48,25 @@ namespace arcade
 
   bool libSDL::pollEvent(Event &e)
   {
-    return (false);
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+      switch (event.type){
+        case SDL_KEYDOWN:
+          for (std::map<SDL_Keycode, KeyboardKey>::iterator it = m_keys.begin(); it != m_keys.end(); ++it)
+          {
+            if (event.key.keysym.sym == it->first)
+            {
+              if (it->first == SDLK_ESCAPE)
+                return (false);
+              e.type = ET_KEYBOARD;
+              e.action = AT_PRESSED;
+              e.kb_key = it->second;
+            }
+          }
+      }
+    }
+    return (true);
   }
 
   bool libSDL::doesSupportSound() const
@@ -106,7 +124,6 @@ namespace arcade
   {
     std::cout << "DISPLAY func" << std::endl;
     SDL_UpdateWindowSurface(m_disp.window);
-    SDL_Delay(6000);
   }
 
   void libSDL::clear()

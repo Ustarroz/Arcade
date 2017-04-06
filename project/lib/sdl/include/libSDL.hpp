@@ -3,6 +3,7 @@
 
 # include <vector>
 # include <string>
+# include <map>
 # include <SDL2/SDL.h>
 # include "Event.hpp"
 # include "IMap.hpp"
@@ -48,6 +49,7 @@ namespace arcade
       void drawPixel(SDL_Surface *, pos_t, SDL_Color *);
 
     private:
+      static std::map<SDL_Keycode, KeyboardKey> m_keys;
       bool m_doesSupportSound;
       int m_windowHeight;
       int m_windowWeight;

@@ -31,10 +31,15 @@ namespace arcade
 
   int Core::gameLoop()
   {
-    std::cout << "GameLoop" << std::endl;
-    IMap const &map = m_libsGame[0]->getCurrentMap();
-    m_libsGfx[0]->updateMap(map);
-    m_libsGfx[0]->display();
+    Event e;
+    memset(&e, 0, sizeof(Event));
+    while (m_libsGfx[0]->pollEvent(e))
+    {
+      std::cout << "GameLoop" << std::endl;
+      IMap const &map = m_libsGame[0]->getCurrentMap();
+      m_libsGfx[0]->updateMap(map);
+      m_libsGfx[0]->display();
+    }
 
     return (0);
   }
