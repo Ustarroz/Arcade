@@ -1,3 +1,0 @@
-mk/defs.mk = common source -> each subMakefile -> add prefix
-
-makefile for game

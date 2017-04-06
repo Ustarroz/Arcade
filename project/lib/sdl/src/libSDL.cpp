@@ -77,22 +77,30 @@ namespace arcade
 
   void libSDL::loadSounds(std::vector<std::pair<std::string, SoundType> > const &sound)
   {
-    std::cout << ">LOAD SOUNDS" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] LOAD SOUNDS" << std::endl;
+#endif
   }
 
   void libSDL::soundControl(const Sound &sound)
   {
-    std::cout << "> SOUND CONTROL" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] SOUND CONTROL" << std::endl;
+#endif
   }
 
   void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
-    std::cout << "> LOAD SPRITES" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] LOAD SPRITES" << std::endl;
+#endif
   }
 
   void libSDL::updateMap(IMap const &map)
   {
-    std::cout << "Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
+#endif
     for (size_t nb = 0; nb < map.getLayerNb(); nb++)
     {
       for (size_t y = 0; y < map.getHeight(); y++)
@@ -122,7 +130,9 @@ namespace arcade
 
   void libSDL::display()
   {
-    std::cout << "DISPLAY func" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] refresh screen" << std::endl;
+#endif
     SDL_UpdateWindowSurface(m_disp.window);
   }
 
