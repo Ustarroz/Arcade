@@ -5,6 +5,7 @@
 #include <dlfcn.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <zconf.h>
 #include "Core.hpp"
 #include "Component.hpp"
 #include "GUI.hpp"
@@ -35,6 +36,15 @@ namespace arcade
     IMap const &map = m_libsGame[0]->getCurrentMap();
     m_libsGfx[0]->updateMap(map);
     m_libsGfx[0]->display();
+    sleep(1);
+    m_libsGame[0]->process();
+    m_libsGfx[0]->updateMap(map);
+    m_libsGfx[0]->display();
+    sleep(1);
+    m_libsGame[0]->process();
+    m_libsGfx[0]->updateMap(map);
+    m_libsGfx[0]->display();
+    sleep(1);
 
     return (0);
   }
