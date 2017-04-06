@@ -198,10 +198,11 @@ namespace arcade
     if (m_apple._x == m_dir[0]._x && m_apple._y == m_dir[0]._y)
       {
 	m_score = m_score + m_apple.score;
+	std::cout << "score " << m_score << std::endl;
 	placeApple();
       }
-    else if (m_apple.score >= MINSCORE + 10)
-      m_apple.score = m_apple.score - 10;
+    else if (m_apple.score >= MINSCORE + STEPSCORE)
+      m_apple.score = m_apple.score - STEPSCORE;
   }
 
   void Snake::placeApple()

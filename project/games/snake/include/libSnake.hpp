@@ -7,6 +7,7 @@
 
 #define MAXSCORE 100
 #define MINSCORE 20
+#define STEPSCORE 10
 
 namespace arcade
 {
