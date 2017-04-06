@@ -5,6 +5,7 @@ include $(MK_COMMON_DIR)defs.mk $(MK_THIS)local_defs.mk
 
 SRC=	$(addprefix ./src/,	\
 	libSDL.cpp		\
+	keyMapSDL.cpp 		\
 	)
 
 #SRC+=	$(addprefix ./../../common/,	\

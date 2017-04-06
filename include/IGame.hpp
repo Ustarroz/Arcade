@@ -11,7 +11,6 @@
 #include "NetworkPacket.hpp"
 #include "IStat.hpp"
 #include "IMap.hpp"
-#include "ILevel.hpp"
 #include "IGUI.hpp"
 #include "ISprite.hpp"
 #include "Sound.hpp"
@@ -76,7 +75,7 @@ namespace arcade
 	  /// \fn virtual std::vector<std::string> getSpritesToLoad() const = 0
 	  /// \brief get the list of sprites to load for this game
 	  ///
-    virtual std::vector<std::unique_ptr<ISprite>> &&getSpritesToLoad() const = 0;
+    virtual std::vector<std::unique_ptr<ISprite>> getSpritesToLoad() const = 0;
 
     // Sound
     ///
@@ -84,11 +83,13 @@ namespace arcade
     /// \brief get the list of sound files to load for this game
     ///
     virtual std::vector<std::pair<std::string, SoundType>> getSoundsToLoad() const = 0;
+
     ///
-    /// \fn virtual std::vector<int>       &&getSoundsToPlay() = 0
+    /// \fn     virtual std::vector<Sound> getSoundsToPlay() = 0
     /// \brief Get the sounds to play
+    ///  You should return by std::move to not copy your vector and to clear it at the same time
     ///
-    virtual std::vector<int>       &&getSoundsToPlay() = 0;
+    virtual std::vector<Sound>			getSoundsToPlay() = 0;
 
     // Map
     ///

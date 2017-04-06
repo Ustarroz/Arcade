@@ -33,8 +33,8 @@ namespace arcade
   {
     SDL_Init(SDL_INIT_VIDEO);
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
-                                SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
-                                m_windowHeight, SDL_WINDOW_SHOWN);
+        SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
+        m_windowHeight, SDL_WINDOW_SHOWN);
     if (m_disp.window == NULL)
     {
       std::cerr << SDL_GetError() << std::endl;
@@ -48,7 +48,25 @@ namespace arcade
 
   bool libSDL::pollEvent(Event &e)
   {
-    return (false);
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+      switch (event.type){
+        case SDL_KEYDOWN:
+          for (std::map<SDL_Keycode, KeyboardKey>::iterator it = m_keys.begin(); it != m_keys.end(); ++it)
+          {
+            if (event.key.keysym.sym == it->first)
+            {
+              if (it->first == SDLK_ESCAPE)
+                return (false);
+              e.type = ET_KEYBOARD;
+              e.action = AT_PRESSED;
+              e.kb_key = it->second;
+            }
+          }
+      }
+    }
+    return (true);
   }
 
   bool libSDL::doesSupportSound() const
@@ -59,22 +77,30 @@ namespace arcade
 
   void libSDL::loadSounds(std::vector<std::pair<std::string, SoundType> > const &sound)
   {
-    std::cout << ">LOAD SOUNDS" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] LOAD SOUNDS" << std::endl;
+#endif
   }
 
   void libSDL::soundControl(const Sound &sound)
   {
-    std::cout << "> SOUND CONTROL" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] SOUND CONTROL" << std::endl;
+#endif
   }
 
   void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
-    std::cout << "> LOAD SPRITES" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] LOAD SPRITES" << std::endl;
+#endif
   }
 
   void libSDL::updateMap(IMap const &map)
   {
-    std::cout << "Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
+#endif
     for (size_t nb = 0; nb < map.getLayerNb(); nb++)
     {
       for (size_t y = 0; y < map.getHeight(); y++)
@@ -104,9 +130,10 @@ namespace arcade
 
   void libSDL::display()
   {
-    std::cout << "DISPLAY func" << std::endl;
+#ifdef DEBUG
+    std::cout << "[SDL] refresh screen" << std::endl;
+#endif
     SDL_UpdateWindowSurface(m_disp.window);
-    SDL_Delay(6000);
   }
 
   void libSDL::clear()

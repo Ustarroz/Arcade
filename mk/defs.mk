@@ -1,6 +1,6 @@
 CXX=		g++
 
-DEBUG=		yes
+DEBUG=		no
 
 CXXFLAGS=	-W -Wall -Wextra -Wpointer-arith -Wshadow -std=c++14
 
@@ -22,5 +22,5 @@ OBJ=		""
 BASE_DIR=	$(CURDIR)
 
 ifeq ($(DEBUG), yes)
-  CXXFLAGS+= -g
+  CXXFLAGS+= -g -D DEBUG
 endif

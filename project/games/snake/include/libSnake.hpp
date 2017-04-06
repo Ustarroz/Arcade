@@ -46,9 +46,9 @@ namespace arcade
       virtual void notifyNetwork(std::vector<NetworkPacket> &&events);
       virtual std::vector<NetworkPacket> &&getNetworkToSend();
       virtual void process();
-      virtual std::vector<std::unique_ptr<ISprite>> &&getSpritesToLoad() const;
+      virtual std::vector<std::unique_ptr<ISprite>> getSpritesToLoad() const;
       virtual std::vector<std::pair<std::string, SoundType> > getSoundsToLoad() const;
-      virtual std::vector<int>       &&getSoundsToPlay();
+      virtual std::vector<Sound> getSoundsToPlay();
       virtual IMap const &getCurrentMap() const;
       virtual IGUI &getGUI();
     private:
@@ -57,7 +57,6 @@ namespace arcade
       std::vector<std::pair<std::string, SoundType> > m_soundsName;
       std::vector<NetworkPacket> m_net;
       std::vector<std::unique_ptr<ISprite> > m_sprites;
-      std::vector<int> m_soundsPlay;
       std::vector<PosSnake> m_dir;
       Apple m_apple;
       size_t m_score;
@@ -67,6 +66,7 @@ namespace arcade
       void useEventKeyButton(Event event);
       void placeApple();
       void resetGame(bool first);
+      std::vector<Sound> m_soundsPlay;
   };
 }
 

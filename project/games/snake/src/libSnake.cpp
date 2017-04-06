@@ -31,6 +31,7 @@ namespace arcade
 	    m_map.setTile(0, it->_x, it->_y, reset);
 	  }
 	m_map.setTile(0, m_apple._x, m_apple._y, reset);
+	m_dir.clear();
       }
     m_dir.push_back(PosSnake(25, 25, DIR_UP,
 			     Tile(TileType::OTHER,
@@ -233,7 +234,7 @@ namespace arcade
 		       {255, 0, 255, 255}, 0, 0, 0, 0));
   }
 
-  std::vector<std::unique_ptr<ISprite>> &&Snake::getSpritesToLoad() const
+  std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
     return (std::move(sprites));
@@ -244,7 +245,7 @@ namespace arcade
     return (std::move(m_soundsName));
   }
 
-  std::vector<int> &&Snake::getSoundsToPlay()
+  std::vector<Sound> Snake::getSoundsToPlay()
   {
     return (std::move(m_soundsPlay));
   }

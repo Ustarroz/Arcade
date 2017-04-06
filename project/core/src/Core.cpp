@@ -32,19 +32,19 @@ namespace arcade
 
   int Core::gameLoop()
   {
+#ifdef DEBUG
     std::cout << "GameLoop" << std::endl;
-    IMap const &map = m_libsGame[0]->getCurrentMap();
-    m_libsGfx[0]->updateMap(map);
-    m_libsGfx[0]->display();
-    sleep(1);
-    m_libsGame[0]->process();
-    m_libsGfx[0]->updateMap(map);
-    m_libsGfx[0]->display();
-    sleep(1);
-    m_libsGame[0]->process();
-    m_libsGfx[0]->updateMap(map);
-    m_libsGfx[0]->display();
-    sleep(1);
+#endif
+    Event e;
+    memset(&e, 0, sizeof(Event));
+    while (m_libsGfx[0]->pollEvent(e))
+    {
+      IMap const &map = m_libsGame[0]->getCurrentMap();
+	m_libsGame[0]->process();
+      m_libsGfx[0]->updateMap(map);
+      m_libsGfx[0]->display();
+	usleep(100000);
+    }
 
     return (0);
   }
@@ -57,17 +57,23 @@ namespace arcade
     {
       if (setInterfaceGfx(m_libsGfxName[i]))
         return (1);
+#ifdef DEBUG
       else
         std::cout << "lib(" << m_libsGfxName[i] << ") " << i + 1 << "/" << m_libsGfxName.size() << std::endl;
+#endif
     }
     for (unsigned long i = 0; i < m_libsGameName.size(); i++)
     {
       if (setInterfaceGame(m_libsGameName[i]))
         return (1);
+#ifdef DEBUG
       else
         std::cout << "lib(" << m_libsGameName[i] << ") " << i + 1 << "/" << m_libsGameName.size() << std::endl;
+#endif
     }
+#ifdef DEBUG
     std::cout << "[Core] [OK] libs loaded" << std::endl;
+#endif
     return (0);
   }
 
