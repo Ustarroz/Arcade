@@ -37,13 +37,18 @@ namespace arcade
 #endif
     Event e;
     memset(&e, 0, sizeof(Event));
+    std::vector<Event> event_list;
+
     while (m_libsGfx[0]->pollEvent(e))
     {
-      IMap const &map = m_libsGame[0]->getCurrentMap();
-	m_libsGame[0]->process();
+      event_list.clear();
+	event_list.push_back(e);
+	m_libsGame[0]->notifyEvent(std::move(event_list));
+      m_libsGame[0]->process();
+	IMap const &map = m_libsGame[0]->getCurrentMap();
       m_libsGfx[0]->updateMap(map);
       m_libsGfx[0]->display();
-	usleep(100000);
+      usleep(100000);
     }
 
     return (0);
