@@ -13,7 +13,13 @@
 namespace arcade
 {
   libCaca::libCaca()
-    : m_doesSupportSound(true)
+    : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640)
+  {
+    initCaca();
+  }
+
+  libCaca::libCaca(int height, int weight)
+    : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640)
   {
     initCaca();
   }
@@ -25,8 +31,8 @@ namespace arcade
 
   int libCaca::initCaca()
   {
-    m_disp = caca_create_display(NULL);
-    m_canvas = caca_get_canvas(m_disp);
+    m_canvas = caca_create_canvas(m_windowHeight, m_windowWeight);
+    m_disp = caca_create_display(m_canvas);
     caca_set_color_ansi(m_canvas, CACA_BLACK, CACA_WHITE);
     return (0);
   }
