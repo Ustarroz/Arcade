@@ -35,11 +35,6 @@ namespace arcade
 	Tile		_tile = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 					 {0, 0, 0, 0}, 0, 0, 0, 0);
       };
-      struct Apple{
-	int	_x;
-	int	_y;
-	int 	score;
-      };
       Snake();
       virtual ~Snake();
       virtual GameState getGameState() const;
@@ -60,7 +55,7 @@ namespace arcade
       std::vector<NetworkPacket> m_net;
       std::vector<std::unique_ptr<ISprite> > m_sprites;
       std::vector<PosSnake> m_dir;
-      Apple m_apple;
+      size_t m_appleScore;
       size_t m_score;
       void useEvent(Event event);
       void useEventKeyBoard(Event event);
