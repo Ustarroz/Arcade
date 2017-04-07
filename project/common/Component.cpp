@@ -51,7 +51,7 @@ namespace arcade
 
   Color Component::getTextColor() const
   {
-    return (m_color);
+    return (m_stringColor);
   }
 
   std::string const &Component::getText() const
@@ -61,5 +61,15 @@ namespace arcade
 
   void Component::setClicked()
   {
+  }
+
+  void Component::setString(std::string const & cpy)
+  {
+    m_text = cpy;
+  }
+
+  void Component::setStringColor(Color const &cpy)
+  {
+    m_stringColor = cpy;
   }
 }

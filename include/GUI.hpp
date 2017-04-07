@@ -15,7 +15,8 @@ namespace arcade
       virtual ~GUI();
       virtual std::size_t size() const;
       virtual IComponent &at(std::size_t);
-      void addComponent(Component &c);
+      void addComponent(const Component &c);
+      Component & getComponent(size_t pos);
     private:
       std::vector<Component> m_comps;
   };

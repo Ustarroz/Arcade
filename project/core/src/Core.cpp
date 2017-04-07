@@ -67,7 +67,9 @@ namespace arcade
       m_libsGame->notifyEvent(std::move(event_list));
       m_libsGame->process();
       IMap const &map = m_libsGame->getCurrentMap();
+      IGUI &gui = m_libsGame->getGUI();
       m_libsGfx->updateMap(map);
+      m_libsGfx->updateGUI(gui);
       m_libsGfx->display();
       usleep(100000);
       e.type = ET_NONE;

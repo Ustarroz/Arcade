@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string>
 #include "libSnake.hpp"
 #include "Map.hpp"
 #include "GameState.hpp"
@@ -8,11 +9,37 @@
 namespace arcade
 {
   Snake::Snake()
-    : m_map(60, 60)
+    : m_map(64, 40)
   {
     m_map.addLayer();
     resetGame(true);
-    //m_gui.addComponent(Component({255,255,255,255}, "0", 0,0,10,5));
+    Component comp = Component({255,255,255,255}, "0", 0.7, 0.77,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Score", 0.7, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "HighScore", 0.7, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Caca", 0.4, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "SDL", 0.4, 0.91,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Snake", 0.1, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Centipede", 0.1, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
   }
 
   Snake::~Snake()
@@ -23,6 +50,9 @@ namespace arcade
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
     		{255, 0, 0, 255}, 0, 0, 0, 0);
+    size_t posx;
+    size_t posy;
+
     if (!first)
       {
 	for (std::vector<PosSnake>::iterator it = m_dir.begin();
@@ -41,21 +71,23 @@ namespace arcade
 		}
 	m_dir.clear();
       }
-    m_dir.push_back(PosSnake(25, 25, DIR_UP,
+    posx = m_map.getWidth() / 2;
+    posy = m_map.getHeight() / 2 - 1;
+    m_dir.push_back(PosSnake(posx, posy, DIR_UP,
 			     Tile(TileType::OTHER,
 				  TileTypeEvolution::PLAYER,
 				  {0, 0, 255, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(25,26, DIR_UP,
+    m_dir.push_back(PosSnake(posx, posy + 1, DIR_UP,
 			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(25,27, DIR_UP,
+    m_dir.push_back(PosSnake(posx, posy + 2, DIR_UP,
 			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, 25, 25, m_dir[0]._tile);
-    m_map.setTile(0, 25, 26, m_dir[1]._tile);
-    m_map.setTile(0, 25, 27, m_dir[2]._tile);
+    m_map.setTile(0, posx, posy, m_dir[0]._tile);
+    m_map.setTile(0, posx, posy + 1, m_dir[1]._tile);
+    m_map.setTile(0, posx, posy + 2, m_dir[2]._tile);
     placeApple();
     m_score = 0;
   }
@@ -203,6 +235,7 @@ namespace arcade
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_gui.getComponent(0).setString(std::to_string(m_score));
 	addSnake();
 	placeApple();
       }
@@ -253,12 +286,17 @@ namespace arcade
 	  {
 	    changeDir(tail, static_cast<DirSnake>(tmp));
 	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
+		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
+	      {
+		tmp = tmp + 1;
+		continue ;
+	      }
 	    loop = false;
 	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
 		 it != m_dir.end(); ++it)
 	      if (it->_x == tail._x && it->_y == tail._y)
 		{
-		  it = m_dir.end();
 		  loop = true;
 		}
 	  }

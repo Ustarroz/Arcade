@@ -22,8 +22,11 @@ namespace arcade
       virtual Color getTextColor() const;
       virtual std::string const &getText() const;
       virtual void setClicked();
+      void setString(std::string const &);
+      void setStringColor(Color const &);
     private:
       Color m_color;
+      Color m_stringColor;
       std::string m_text;
       double m_x;
       double m_y;
