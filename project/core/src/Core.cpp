@@ -50,6 +50,7 @@ namespace arcade
       m_libsGfx[0]->updateMap(map);
       m_libsGfx[0]->display();
       usleep(100000);
+      e.type = ET_NONE;
     }
 
     return (0);
