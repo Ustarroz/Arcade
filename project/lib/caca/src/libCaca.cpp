@@ -81,6 +81,7 @@ namespace arcade
 
   void libCaca::loadSounds(std::vector<std::pair<std::string, SoundType> > const &sound)
   {
+    (void)sound;
 #ifdef DEBUG
     std::cout << "[Caca] LOAD SOUNDS" << std::endl;
 #endif
@@ -88,6 +89,7 @@ namespace arcade
 
   void libCaca::soundControl(const Sound &sound)
   {
+    (void)sound;
 #ifdef DEBUG
     std::cout << "[Caca] SOUND CONTROL" << std::endl;
 #endif
@@ -95,6 +97,7 @@ namespace arcade
 
   void libCaca::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
+    (void)sprites;
 #ifdef DEBUG
     std::cout << "[Caca] LOAD SPRITES" << std::endl;
 #endif
@@ -132,6 +135,7 @@ namespace arcade
 
   void libCaca::updateGUI(IGUI &gui)
   {
+    (void)gui;
     /*for (size_t nb = 0; nb < gui.size(); nb++)
     {
       IComponent &c = gui.at(nb);

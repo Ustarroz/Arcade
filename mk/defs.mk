@@ -2,7 +2,7 @@ CXX=		g++
 
 DEBUG=		no
 
-CXXFLAGS=	-W -Wall -Wextra -Wpointer-arith -Wshadow -std=c++14
+CXXFLAGS=	-W -Wall -Wextra -Wpointer-arith -std=c++14
 
 LDFLAGS=
 

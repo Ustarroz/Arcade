@@ -80,10 +80,12 @@ namespace arcade
 
   void Snake::useEventKeyButton(Event event)
   {
+    (void)event;
   }
 
   void Snake::useEventKeyJoystick(Event event)
   {
+    (void)event;
   }
 
   void Snake::useEvent(Event event)
@@ -115,6 +117,7 @@ namespace arcade
 
   void Snake::notifyNetwork(std::vector<NetworkPacket> &&events)
   {
+    (void)events;
   }
 
   std::vector<NetworkPacket> &&Snake::getNetworkToSend()
@@ -134,6 +137,8 @@ namespace arcade
 	  return (Snake::DIR_RIGHT);
 	case Snake::DIR_RIGHT:
 	  return (Snake::DIR_LEFT);
+        default:
+          return (Snake::DIR_UP);
       }
   }
 
@@ -173,8 +178,8 @@ namespace arcade
 	it->_dir = save;
 	save = subsave;
       }
-    if (m_dir[0]._x < 0 || m_dir[0]._x >= m_map.getWidth() ||
-     	m_dir[0]._y < 0 || m_dir[0]._y >= m_map.getHeight())
+    if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
+     	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()))
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
 	std::cout << "score " << m_score << std::endl;
@@ -211,9 +216,9 @@ namespace arcade
     std::vector<size_t> list;
     size_t pos;
 
-    for (int x = 0; x != m_map.getWidth(); x++)
+    for (std::size_t x = 0; x != m_map.getWidth(); x++)
       {
-	for (int y = 0; y != m_map.getHeight(); y++)
+	for (std::size_t y = 0; y != m_map.getHeight(); y++)
 	  {
 	    list.push_back(x + y * m_map.getWidth());
 	  }
