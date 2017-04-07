@@ -10,6 +10,7 @@
 # include "IGUI.hpp"
 # include "IGfxLib.hpp"
 # include "Sound.hpp"
+# include "Common.hpp"
 
 namespace arcade
 {
@@ -22,12 +23,6 @@ namespace arcade
         SDL_Surface *screen;
         SDL_Palette *palette;
       };
-      struct pos_t
-      {
-        int x;
-        int y;
-      };
-
     public:
       virtual ~libSDL();
       libSDL();

@@ -209,7 +209,6 @@ namespace arcade
   void Snake::placeApple()
   {
     std::vector<size_t> list;
-    std::random_device rd;
     size_t pos;
 
     for (int x = 0; x != m_map.getWidth(); x++)

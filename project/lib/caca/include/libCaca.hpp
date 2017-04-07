@@ -3,10 +3,13 @@
 
 # include <vector>
 # include <string>
+# include <map>
+# include <caca.h>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
 # include "IGfxLib.hpp"
+# include "Common.hpp"
 
 namespace arcade
 {
@@ -18,7 +21,7 @@ namespace arcade
       libCaca(int, int);
       virtual bool pollEvent(Event &e);
       virtual bool doesSupportSound() const;
-      virtual void loadSounds(std::vector<std::string> const &sounds);
+      virtual void loadSounds(std::vector<std::pair<std::string, SoundType> > const &sounds);
       virtual void soundControl(const Sound &sound);
       virtual void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites);
       virtual void updateMap(IMap const &map);
@@ -26,10 +29,13 @@ namespace arcade
       virtual void display();
       virtual void clear();
     private:
+      void drawSquare(pos_t, int);
+      int initCaca();
+    private:
       bool m_doesSupportSound;
-      int m_windowHeight;
-      int m_windowWeight;
-      
+      caca_display_t *m_disp;
+      caca_canvas_t *m_canvas;
+      static std::map<int, KeyboardKey> m_keys;
   };
 }
 
