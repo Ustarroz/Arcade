@@ -41,11 +41,12 @@ namespace arcade
 
     while (m_libsGfx[0]->pollEvent(e))
     {
+      m_libsGfx[0]->clear();
       event_list.clear();
-	event_list.push_back(e);
-	m_libsGame[0]->notifyEvent(std::move(event_list));
-	m_libsGame[0]->process();
-	IMap const &map = m_libsGame[0]->getCurrentMap();
+      event_list.push_back(e);
+      m_libsGame[0]->notifyEvent(std::move(event_list));
+      m_libsGame[0]->process();
+      IMap const &map = m_libsGame[0]->getCurrentMap();
       m_libsGfx[0]->updateMap(map);
       m_libsGfx[0]->display();
       usleep(100000);

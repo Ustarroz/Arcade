@@ -5,6 +5,7 @@ include $(MK_COMMON_DIR)defs.mk $(MK_THIS)local_defs.mk
 
 SRC=	$(addprefix ./src/,	\
 	libCaca.cpp		\
+	KeyMapCaca.cpp 		\
 	)
 
 include $(MK_COMMON_DIR)rules.mk
