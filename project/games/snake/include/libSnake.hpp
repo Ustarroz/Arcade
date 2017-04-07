@@ -5,8 +5,8 @@
 # include "Map.hpp"
 # include "GUI.hpp"
 
-#define MAXSCORE 100
-#define MINSCORE 20
+#define MAXSCORE 500
+#define MINSCORE 50
 #define STEPSCORE 10
 
 namespace arcade
@@ -65,6 +65,7 @@ namespace arcade
       void useEventKeyJoystick(Event event);
       void useEventKeyButton(Event event);
       void placeApple();
+      void addSnake();
       void resetGame(bool first);
       std::vector<Sound> m_soundsPlay;
   };

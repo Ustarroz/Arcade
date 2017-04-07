@@ -200,6 +200,7 @@ namespace arcade
       {
 	m_score = m_score + m_apple.score;
 	std::cout << "score " << m_score << std::endl;
+	addSnake();
 	placeApple();
       }
     else if (m_apple.score >= MINSCORE + STEPSCORE)
@@ -232,6 +233,37 @@ namespace arcade
     m_map.setTile(0, m_apple._x, m_apple._y,
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
 		       {255, 0, 255, 255}, 0, 0, 0, 0));
+  }
+
+  void Snake::addSnake()
+  {
+    int tmp;
+    bool loop;
+
+    tmp = DIR_UP;
+    loop = true;
+    while (tmp <= DIR_DOWN && loop)
+      {
+	PosSnake tail = m_dir.back();
+	if (tmp != tail._dir)
+	  {
+	    changeDir(tail, static_cast<DirSnake>(tmp));
+	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    loop = false;
+	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+		 it != m_dir.end(); ++it)
+	      if (it->_x == tail._x && it->_y == tail._y)
+		{
+		  it = m_dir.end();
+		  loop = true;
+		}
+	  }
+	if (!loop)
+	  m_dir.push_back(tail);
+	tmp = tmp + 1;
+      }
+    if (loop)
+      resetGame(false);
   }
 
   std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
