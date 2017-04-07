@@ -204,7 +204,7 @@ namespace arcade
     if (m_apple._x == m_dir[0]._x && m_apple._y == m_dir[0]._y)
       {
 	m_score = m_score + m_apple.score;
-	std::cout << "score " << m_score << std::endl;
+	addSnake();
 	placeApple();
       }
     else if (m_apple.score >= MINSCORE + STEPSCORE)
@@ -238,6 +238,37 @@ namespace arcade
 		       {255, 0, 255, 255}, 0, 0, 0, 0));
   }
 
+  void Snake::addSnake()
+  {
+    int tmp;
+    bool loop;
+
+    tmp = DIR_UP;
+    loop = true;
+    while (tmp <= DIR_DOWN && loop)
+      {
+	PosSnake tail = m_dir.back();
+	if (tmp != tail._dir)
+	  {
+	    changeDir(tail, static_cast<DirSnake>(tmp));
+	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    loop = false;
+	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+		 it != m_dir.end(); ++it)
+	      if (it->_x == tail._x && it->_y == tail._y)
+		{
+		  it = m_dir.end();
+		  loop = true;
+		}
+	  }
+	if (!loop)
+	  m_dir.push_back(tail);
+	tmp = tmp + 1;
+      }
+    if (loop)
+      resetGame(false);
+  }
+
   std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
@@ -262,6 +293,21 @@ namespace arcade
   IGUI &Snake::getGUI()
   {
     return (m_gui);
+  }
+
+  std::vector<Position> Snake::getPlayer() const
+  {
+    std::vector<Position> list;
+
+    for(std::vector<PosSnake>::const_iterator it = m_dir.begin();
+     	it != m_dir.end(); ++it)
+      {
+	Position pos;
+	pos.x = static_cast<uint16_t >(it->_x);
+	pos.y = static_cast<uint16_t >(it->_y);
+	list.push_back(pos);
+      }
+    return (list);
   }
 }
 
