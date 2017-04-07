@@ -32,11 +32,13 @@ namespace arcade
 
     private:
       std::vector<std::string> m_libsGfxName;
-      std::vector<IGfxLib *> m_libsGfx;
+      IGfxLib * m_libsGfx;
       std::vector<std::string> m_libsGameName;
-      std::vector<IGame *> m_libsGame;
-      std::vector<void *> m_handler;
+      IGame * m_libsGame;
+      std::vector<void *> m_handlerGfx;
+      std::vector<void *> m_handlerGame;
       std::string m_error;
+      int m_ndx;
   };
 }
 

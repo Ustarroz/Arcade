@@ -32,6 +32,8 @@ namespace arcade
       void drawSquare(pos_t, int);
       int initCaca();
     private:
+      int m_windowHeight;
+      int m_windowWeight;
       bool m_doesSupportSound;
       caca_display_t *m_disp;
       caca_canvas_t *m_canvas;
