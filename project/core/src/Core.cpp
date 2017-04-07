@@ -15,13 +15,18 @@ namespace arcade
   Core::Core(std::string const &fileName)
   {
     m_libsGfxName.push_back(fileName);
+    m_ndx = 0;
   }
 
   Core::~Core()
   {
-    for (unsigned long i = 0; i < m_handler.size(); i++)
+    for (unsigned long i = 0; i < m_handlerGfx.size(); i++)
     {
-      dlclose(m_handler[i]);
+      dlclose(m_handlerGfx[i]);
+    }
+    for (unsigned long i = 0; i < m_handlerGame.size(); i++)
+    {
+      dlclose(m_handlerGame[i]);
     }
   }
 
@@ -38,17 +43,32 @@ namespace arcade
     Event e;
     memset(&e, 0, sizeof(Event));
     std::vector<Event> event_list;
+    std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[0], "getLib"));
+    m_libsGfx = gfxLaunch();
+    std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[0], "getGame"));
+    m_libsGame = gameLaunch();
 
-    while (m_libsGfx[0]->pollEvent(e))
+    while (m_libsGfx->pollEvent(e))
     {
-      m_libsGfx[0]->clear();
+      if (static_cast<KeyboardKey>(e.m_key) == KB_1)
+      {
+#ifdef DEBUG
+        std::cout << "switch gfx lib" << std::endl;
+#endif
+        delete m_libsGfx;
+        ++m_ndx;
+        std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[m_ndx % m_handlerGfx.size()], "getLib"));
+        m_libsGfx = gfxLaunch();
+        e.kb_key = KB_0;
+      }
+      m_libsGfx->clear();
       event_list.clear();
       event_list.push_back(e);
-      m_libsGame[0]->notifyEvent(std::move(event_list));
-      m_libsGame[0]->process();
-      IMap const &map = m_libsGame[0]->getCurrentMap();
-      m_libsGfx[0]->updateMap(map);
-      m_libsGfx[0]->display();
+      m_libsGame->notifyEvent(std::move(event_list));
+      m_libsGame->process();
+      IMap const &map = m_libsGame->getCurrentMap();
+      m_libsGfx->updateMap(map);
+      m_libsGfx->display();
       usleep(100000);
     }
 
@@ -91,10 +111,7 @@ namespace arcade
       m_error = "[Core] Error: Cannot load: " + fileName + " (" + dlerror() + ")";
       return (1);
     }
-    std::function<IGfxLib *()> sdl = cast<IGfxLib *()>(dlsym(sdlHandler, "getLib"));
-    m_handler.push_back(sdlHandler);
-    IGfxLib *tmp = sdl();
-    m_libsGfx.push_back(tmp);
+    m_handlerGfx.push_back(sdlHandler);
     return (0);
   }
 
@@ -106,10 +123,7 @@ namespace arcade
       m_error = "[Core] Error: Cannot load: " + fileName + " (" + dlerror() + ")";
       return (1);
     }
-    std::function<IGame *()> sdl = cast<IGame *()>(dlsym(sdlHandler, "getGame"));
-    m_handler.push_back(sdlHandler);
-    IGame *tmp = sdl();
-    m_libsGame.push_back(tmp);
+    m_handlerGame.push_back(sdlHandler);
     return (0);
   }
 
