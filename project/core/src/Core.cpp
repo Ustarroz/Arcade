@@ -9,6 +9,7 @@
 #include "Core.hpp"
 #include "Component.hpp"
 #include "GUI.hpp"
+#include "ISound.hpp"
 
 namespace arcade
 {
@@ -16,6 +17,26 @@ namespace arcade
   {
     m_libsGfxName.push_back(fileName);
     m_ndx = 0;
+    /*libSound sound;
+    sound.loadMusic("./music/stars.mp3");
+    sound.playMusic(0);*/
+    m_handlerSound = dlopen("./music/lib_arcade_sound.so", RTLD_NOW | RTLD_GLOBAL);
+    if (m_handlerSound != NULL)
+    {
+#ifdef DEBUG
+      std::cout << "[Core] sound lib loaded" << std::endl;
+#endif
+      /*std::function<ISound *()> sound = cast<ISound *()>(dlsym(m_handlerSound, "getSound"));
+      m_libSound = sound();
+      m_libSound->loadMusic("./music/stars.mp3");
+      m_libSound->playMusic(0);*/
+    }
+    else
+    {
+#ifdef DEBUG
+      std::cout << "[Core] failed to open sound lib: " << dlerror() << std::endl;
+#endif
+    }
   }
 
   Core::~Core()

@@ -6,6 +6,7 @@
 # include <functional>
 # include "IGfxLib.hpp"
 # include "IGame.hpp"
+# include "ISound.hpp"
 
 namespace arcade
 {
@@ -37,7 +38,9 @@ namespace arcade
       IGame * m_libsGame;
       std::vector<void *> m_handlerGfx;
       std::vector<void *> m_handlerGame;
+      void * m_handlerSound;
       std::string m_error;
+      ISound *m_libSound;
       int m_ndx;
   };
 }

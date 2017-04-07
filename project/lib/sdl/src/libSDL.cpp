@@ -26,12 +26,12 @@ namespace arcade
   libSDL::~libSDL()
   {
     SDL_DestroyWindow(m_disp.window);
-    SDL_Quit();
+    //SDL_Quit();
   }
 
   int libSDL::initSDL()
   {
-    SDL_Init(SDL_INIT_VIDEO);
+    //SDL_Init(SDL_INIT_VIDEO);
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
         m_windowHeight, SDL_WINDOW_SHOWN);

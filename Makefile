@@ -1,7 +1,8 @@
 PROJECT_DIR=	./project/core/ 	\
 		./project/games/snake/	\
 		./project/lib/caca/ 	\
-		./project/lib/sdl/
+		./project/lib/sdl/	\
+		./project/lib/sound/
 		#./project/lib/lapin/ 	\
 
 all:
