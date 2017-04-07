@@ -8,7 +8,7 @@
 namespace arcade
 {
   Snake::Snake()
-    : m_map(60, 60)
+    : m_map(10, 10)
   {
     m_map.addLayer();
     resetGame(true);
@@ -23,6 +23,9 @@ namespace arcade
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
     		{255, 0, 0, 255}, 0, 0, 0, 0);
+    size_t posx;
+    size_t posy;
+
     if (!first)
       {
 	for (std::vector<PosSnake>::iterator it = m_dir.begin();
@@ -41,21 +44,23 @@ namespace arcade
 		}
 	m_dir.clear();
       }
-    m_dir.push_back(PosSnake(25, 25, DIR_UP,
+    posx = m_map.getWidth() / 2;
+    posy = m_map.getHeight() / 2 - 1;
+    m_dir.push_back(PosSnake(posx, posy, DIR_UP,
 			     Tile(TileType::OTHER,
 				  TileTypeEvolution::PLAYER,
 				  {0, 0, 255, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(25,26, DIR_UP,
+    m_dir.push_back(PosSnake(posx, posy + 1, DIR_UP,
 			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(25,27, DIR_UP,
+    m_dir.push_back(PosSnake(posx, posy + 2, DIR_UP,
 			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, 25, 25, m_dir[0]._tile);
-    m_map.setTile(0, 25, 26, m_dir[1]._tile);
-    m_map.setTile(0, 25, 27, m_dir[2]._tile);
+    m_map.setTile(0, posx, posy, m_dir[0]._tile);
+    m_map.setTile(0, posx, posy + 1, m_dir[1]._tile);
+    m_map.setTile(0, posx, posy + 2, m_dir[2]._tile);
     placeApple();
     m_score = 0;
   }
@@ -253,12 +258,17 @@ namespace arcade
 	  {
 	    changeDir(tail, static_cast<DirSnake>(tmp));
 	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
+		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
+	      {
+		tmp = tmp + 1;
+		continue ;
+	      }
 	    loop = false;
 	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
 		 it != m_dir.end(); ++it)
 	      if (it->_x == tail._x && it->_y == tail._y)
 		{
-		  it = m_dir.end();
 		  loop = true;
 		}
 	  }
