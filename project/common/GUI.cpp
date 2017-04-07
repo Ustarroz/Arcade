@@ -22,8 +22,13 @@ namespace arcade
     return (m_comps[n % m_comps.size()]);
   }
 
-  void GUI::addComponent(Component &c)
+  void GUI::addComponent(const Component &c)
   {
     m_comps.push_back(c);
+  }
+
+  Component & GUI::getComponent(size_t pos)
+  {
+    return (m_comps[pos % m_comps.size()]);
   }
 }

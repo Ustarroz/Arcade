@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <string>
 #include "libSnake.hpp"
 #include "Map.hpp"
 #include "GameState.hpp"
@@ -8,11 +9,37 @@
 namespace arcade
 {
   Snake::Snake()
-    : m_map(10, 10)
+    : m_map(64, 40)
   {
     m_map.addLayer();
     resetGame(true);
-    //m_gui.addComponent(Component({255,255,255,255}, "0", 0,0,10,5));
+    Component comp = Component({255,255,255,255}, "0", 0.7, 0.77,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Score", 0.7, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "HighScore", 0.7, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Caca", 0.4, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "SDL", 0.4, 0.91,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Snake", 0.1, 0.73,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
+    comp = Component({255,255,255,255}, "Centipede", 0.1, 0.82,160,17);
+    comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);
   }
 
   Snake::~Snake()
@@ -208,6 +235,7 @@ namespace arcade
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_gui.getComponent(0).setString(std::to_string(m_score));
 	addSnake();
 	placeApple();
       }
