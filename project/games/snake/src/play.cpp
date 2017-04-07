@@ -1,7 +1,6 @@
 #include <iostream>
 #include "libSnake.hpp"
 
-
 template<typename T>
 void write_struct(std::ostream& out, T& t)
 {
@@ -10,10 +9,13 @@ void write_struct(std::ostream& out, T& t)
 
 namespace arcade
 {
-
-  void	write_map()
+  void	write_map(IMap const& map)
   {
-
+    for (unsigned int x = 0; x < map.getWidth(); x++)
+      for (unsigned int y = 0; y < map.getHeight(); y++)
+	{
+	  std::cout << static_cast<const Tile &> (map.at(0, x, y)).getType();
+	}
   }
 
   void	write_position(std::vector<Position> pos)
@@ -59,7 +61,7 @@ void Play()
 	    map.width = (uint16_t)snake.getCurrentMap().getWidth();
 	    map.height = (uint16_t)snake.getCurrentMap().getHeight();
 	    write_struct(std::cout, map);
-	    //write_map(snake.getCurrentMap());
+	    write_map(snake.getCurrentMap());
 	  }
 	case 2:
 	  {
