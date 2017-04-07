@@ -204,7 +204,6 @@ namespace arcade
     if (m_apple._x == m_dir[0]._x && m_apple._y == m_dir[0]._y)
       {
 	m_score = m_score + m_apple.score;
-	std::cout << "score " << m_score << std::endl;
 	addSnake();
 	placeApple();
       }
@@ -294,6 +293,21 @@ namespace arcade
   IGUI &Snake::getGUI()
   {
     return (m_gui);
+  }
+
+  std::vector<Position> Snake::getPlayer() const
+  {
+    std::vector<Position> list;
+
+    for(std::vector<PosSnake>::const_iterator it = m_dir.begin();
+     	it != m_dir.end(); ++it)
+      {
+	Position pos;
+	pos.x = static_cast<uint16_t >(it->_x);
+	pos.y = static_cast<uint16_t >(it->_y);
+	list.push_back(pos);
+      }
+    return (list);
   }
 }
 

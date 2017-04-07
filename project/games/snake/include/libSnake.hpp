@@ -4,6 +4,7 @@
 # include "IGame.hpp"
 # include "Map.hpp"
 # include "GUI.hpp"
+#include "Protocol.hpp"
 
 #define MAXSCORE 500
 #define MINSCORE 50
@@ -51,6 +52,7 @@ namespace arcade
       virtual std::vector<Sound> getSoundsToPlay();
       virtual IMap const &getCurrentMap() const;
       virtual IGUI &getGUI();
+      virtual std::vector<Position> getPlayer() const;
     private:
       Map m_map;
       GUI m_gui;
