@@ -77,4 +77,14 @@ namespace arcade
   {
     m_color = cpy;
   }
+
+  void Component::setHeight(double height)
+  {
+    m_height = height;
+  }
+
+  void Component::setWidth(double width)
+  {
+    m_width = width;
+  }
 }

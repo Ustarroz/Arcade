@@ -60,5 +60,9 @@ CMakeLists.txt
 cmake-build-debug
 .idea
 
+#osx
+.DS_Store
+
 #Moulinette
 karcade
+
