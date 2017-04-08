@@ -8,7 +8,6 @@ namespace arcade
     : m_type(type), m_evo(evo), m_color(color), m_spriteId(id),
     m_spritePos(pos), m_shiftX(x), m_shiftY(y)
   {
-
   }
 
   Tile::~Tile()

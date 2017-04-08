@@ -68,11 +68,11 @@ namespace arcade
   };
 }
 
-void	Play();
 
 extern "C"
 {
   arcade::IGame *getGame();
+void	Play();
 }
 
 #endif

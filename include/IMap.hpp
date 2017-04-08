@@ -25,7 +25,6 @@ namespace arcade
 	  /// \brief Virtual destructor of the interface
 	  ///
     virtual ~IMap(){};
-
 	///
 	/// \fn virtual size_t getLayerNb() const = 0
 	/// \brief Get the number of layers

@@ -30,7 +30,7 @@ namespace arcade
       m_libSound = sound();
       m_libSound->loadMusic("./music/stars.mp3");
       m_libSound->playMusic(0);*/
-    }
+     }
     else
     {
 #ifdef DEBUG
@@ -68,7 +68,6 @@ namespace arcade
     m_libsGfx = gfxLaunch();
     std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[0], "getGame"));
     m_libsGame = gameLaunch();
-
     while (m_libsGfx->pollEvent(e))
     {
       if (static_cast<KeyboardKey>(e.m_key) == KB_1)
