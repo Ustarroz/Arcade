@@ -41,6 +41,7 @@ namespace arcade
       int initSDL();
       void setPalette(SDL_Palette *);
       void drawSquare(SDL_Surface *, pos_t, int, SDL_Color *);
+      void drawRect(SDL_Surface *, pos_t, int, int, SDL_Color *);
       void drawPixel(SDL_Surface *, pos_t, SDL_Color *);
 
     private:
