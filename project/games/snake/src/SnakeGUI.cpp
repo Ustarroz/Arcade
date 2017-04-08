@@ -1,11 +1,11 @@
 /*
 ** SnakeGUI.cpp for arcade in /home/login_p/delivery/arcade/SnakeGUI.cpp
 **
-** Made by Prenom Nom
-** Login   <prenom.nom@epitech.eu>
+** Made by Edouard Puillandre
+** Login   <edouard.puillandre@epitech.eu>
 **
-** Started on  sam. avr. 08 13:28:48 2017 Prenom Nom
-** Last update sam. avr. 08 13:28:48 2017 Prenom Nom
+** Started on  sam. avr. 08 13:28:48 2017 Edouard Puillandre
+** Last update sam. avr. 08 13:28:48 2017 Edouard Puillandre
 */
 
 #include "SnakeGUI.hpp"

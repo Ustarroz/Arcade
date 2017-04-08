@@ -29,6 +29,7 @@ namespace arcade
 
     if (!first)
       {
+	std::cout << "score " << m_score << std::endl;
 	for (std::vector<PosSnake>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
@@ -59,9 +60,9 @@ namespace arcade
 			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, posx, posy, m_dir[0]._tile);
-    m_map.setTile(0, posx, posy + 1, m_dir[1]._tile);
-    m_map.setTile(0, posx, posy + 2, m_dir[2]._tile);
+    m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+    m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
+    m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
     placeApple();
     m_score = 0;
     m_state = GameState::QUIT;
@@ -209,7 +210,6 @@ namespace arcade
      	== TileType::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
-	std::cout << "score " << m_score << std::endl;
 	resetGame(false);
 	return ;
       }
@@ -243,10 +243,14 @@ namespace arcade
 	  }
       }
     for (std::vector<PosSnake>::iterator it = m_dir.begin();
-	 it != m_dir.end(); ++it)
+	 it != m_dir.end(); it++)
       {
-	std::remove(list.begin(), list.end(),
-		    it->_x + it->_y * m_map.getWidth());
+	list.erase(std::find(list.begin(), list.end(), it->_x + it->_y * m_map.getWidth()));
+      }
+    if (list.size() == 0)
+      {
+	resetGame(false);
+	return ;
       }
     pos = list[std::rand() % list.size()];
     m_appleScore = MAXSCORE;
