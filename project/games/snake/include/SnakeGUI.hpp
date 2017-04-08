@@ -23,11 +23,24 @@
 #define GUI_STEP_LINE 0.04
 #define GUI_WIDTH 160
 #define GUI_HEIGHT 17
+#define GUI_SELECTED 0
+#define GUI_SCORE 0
+#define GUI_HIGHSCORE 0
+#define GUI_NAME 0
+#define GUI_GAMEOVER 0
 
 namespace arcade
 {
+  struct ButtonSelected
+  {
+
+  };
+
   class SnakeGUI: public GUI
   {
+    int posx;
+    int posy;
+    std::vector<int> selected;
     GameState useEventKeyBoardGUI(Event event, GameState state);
     GameState useEventKeyJoystickGUI(Event event, GameState state);
     GameState useEventKeyButtonGUI(Event event, GameState state);
