@@ -24,6 +24,7 @@ namespace arcade
       virtual void setClicked();
       void setString(std::string const &);
       void setStringColor(Color const &);
+      void setColor(Color const &);
     private:
       Color m_color;
       Color m_stringColor;
