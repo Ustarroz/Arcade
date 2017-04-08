@@ -72,4 +72,9 @@ namespace arcade
   {
     m_stringColor = cpy;
   }
+
+  void Component::setColor(Color const &cpy)
+  {
+    m_color = cpy;
+  }
 }

@@ -1,10 +1,11 @@
 #ifndef LIBSNAKE_HPP_
 # define LIBSNAKE_HPP_
 
-# include "IGame.hpp"
-# include "Map.hpp"
-# include "GUI.hpp"
+#include "IGame.hpp"
+#include "Map.hpp"
+#include "GUI.hpp"
 #include "Protocol.hpp"
+#include "SnakeGUI.hpp"
 
 #define MAXSCORE 500
 #define MINSCORE 50
@@ -50,13 +51,14 @@ namespace arcade
       virtual std::vector<Position> getPlayer() const;
     private:
       Map m_map;
-      GUI m_gui;
       std::vector<std::pair<std::string, SoundType> > m_soundsName;
       std::vector<NetworkPacket> m_net;
       std::vector<std::unique_ptr<ISprite> > m_sprites;
       std::vector<PosSnake> m_dir;
       size_t m_appleScore;
       size_t m_score;
+      GameState m_state;
+      SnakeGUI m_gui;
       void useEvent(Event event);
       void useEventKeyBoard(Event event);
       void useEventKeyJoystick(Event event);

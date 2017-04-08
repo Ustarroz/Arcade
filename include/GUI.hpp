@@ -17,7 +17,7 @@ namespace arcade
       virtual IComponent &at(std::size_t);
       void addComponent(const Component &c);
       Component & getComponent(size_t pos);
-    private:
+    protected:
       std::vector<Component> m_comps;
   };
 }

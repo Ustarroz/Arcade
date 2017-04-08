@@ -13,33 +13,7 @@ namespace arcade
   {
     m_map.addLayer();
     resetGame(true);
-    Component comp = Component({255,255,255,255}, "0", 0.7, 0.77,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Score", 0.7, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "HighScore", 0.7, 0.73,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Caca", 0.4, 0.73,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "SDL", 0.4, 0.91,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Snake", 0.1, 0.73,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Centipede", 0.1, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
+    m_state = GameState::INGAME;
   }
 
   Snake::~Snake()
@@ -90,11 +64,12 @@ namespace arcade
     m_map.setTile(0, posx, posy + 2, m_dir[2]._tile);
     placeApple();
     m_score = 0;
+    m_state = GameState::QUIT;
   }
 
   GameState Snake::getGameState() const
   {
-    return (GameState::INGAME);
+    return (m_state);
   }
 
   void Snake::useEventKeyBoard(Event event)
@@ -113,6 +88,9 @@ namespace arcade
 	case KB_ARROW_UP:
 	  m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
 	  break;
+	case KB_ENTER:
+	  m_state = GameState::MENU;
+	  return ;
 	default:
 	  break;
     }
@@ -151,7 +129,10 @@ namespace arcade
     for(std::vector<Event>::iterator it = event.begin();
 	it != event.end(); ++it)
       {
-	this->useEvent(*it);
+	if (m_state == GameState::INGAME)
+	  useEvent(*it);
+	else
+	  m_state = m_gui.useEventGUI(*it, m_state);
       }
   }
 
@@ -206,6 +187,8 @@ namespace arcade
     DirSnake	save;
     DirSnake	subsave;
 
+    if (m_state != GameState::INGAME)
+      return ;
     save = m_dir[0]._dir;
     for(std::vector<PosSnake>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
@@ -235,7 +218,7 @@ namespace arcade
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	m_gui.getComponent(0).setString(std::to_string(m_score));
+	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();
       }
