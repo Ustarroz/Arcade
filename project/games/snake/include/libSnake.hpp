@@ -74,7 +74,7 @@ namespace arcade
 extern "C"
 {
   arcade::IGame *getGame();
-void	Play();
+  void	Play();
 }
 
 #endif
