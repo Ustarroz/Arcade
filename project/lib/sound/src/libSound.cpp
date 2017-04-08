@@ -8,7 +8,7 @@ namespace arcade
   libSound::libSound()
   {
     sf::Music music;
-    if (!music.openFromFile("assets/musics/stars.mp3"))
+    if (!music.openFromFile("assets/musics/stars.ogg"))
     {
       std::cout << "Error: Cannot open Music" << std::endl;
     }
