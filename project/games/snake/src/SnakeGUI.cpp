@@ -14,7 +14,11 @@ namespace arcade
 {
   SnakeGUI::SnakeGUI()
   {
-    Component comp = Component({255,255,255,255}, "0", GUI_COL_THREE, GUI_LINE_THREE + GUI_STEP_LINE, GUI_WIDTH, GUI_HEIGHT);
+    //selected = std::vector<int>(3, 0);
+    Component comp = Component({255,255,255,255}, "GameOver", 0.4, 0.25, GUI_WIDTH, GUI_HEIGHT);
+    comp.setStringColor({0,0,0,255});
+    m_comps.push_back(comp);
+    comp = Component({255,255,255,255}, "0", GUI_COL_THREE, GUI_LINE_THREE + GUI_STEP_LINE, GUI_WIDTH, GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
     comp = Component({255,255,255,255}, "0", GUI_COL_THREE, GUI_LINE_TWO + GUI_STEP_LINE, GUI_WIDTH, GUI_HEIGHT);
@@ -35,7 +39,7 @@ namespace arcade
     comp = Component({255,255,255,255}, "Lapin", GUI_COL_TWO, GUI_LINE_TWO, GUI_WIDTH,GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
-    comp = Component({255,255,255,255}, "SDL", GUI_COL_ONE, GUI_LINE_THREE, GUI_WIDTH,GUI_HEIGHT);
+    comp = Component({255,255,255,255}, "SDL", GUI_COL_TWO, GUI_LINE_THREE, GUI_WIDTH,GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
     comp = Component({255,255,255,255}, "Snake", GUI_COL_ONE, GUI_LINE_ONE, GUI_WIDTH,GUI_HEIGHT);
@@ -68,7 +72,7 @@ namespace arcade
 	  break;
 	case KB_ENTER:
 	  if (state == GameState::QUIT)
-	    m_comps.pop_back();
+	    //m_comps.pop_back();
 	  return (GameState::INGAME);
 	default:
 	  break;
@@ -92,9 +96,7 @@ namespace arcade
   {
     if (state == GameState::QUIT && m_comps.size() != 11)
       {
-	Component comp = Component({255,255,255,255}, "GameOver", 0.4, 0.25, GUI_WIDTH, GUI_HEIGHT);
-	comp.setStringColor({0,0,0,255});
-	m_comps.push_back(comp);
+	//m_comps[.setStringColor({0,0,0,255});
 	return (GameState::QUIT);
       }
     switch (event.type)
