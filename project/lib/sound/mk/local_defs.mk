@@ -4,4 +4,4 @@ BASE_NAME=	lib_arcade_sound.so
 
 LOCAL_CXXFLAGS= -fPIC -I./include -I./../../../include
 
-LOCAL_LDFLAGS= -shared -lSDL2 -lSDL_mixer
+LOCAL_LDFLAGS= -shared -lsfml-audio

@@ -3,7 +3,6 @@
 
 # include <iostream>
 # include <vector>
-# include <SDL/SDL_mixer.h>
 # include "ISound.hpp"
 
 namespace arcade
@@ -18,8 +17,6 @@ namespace arcade
       virtual void playMusic(int, int nb = -1);
       virtual void playEffect(int);
     private:
-      std::vector<Mix_Music *> m_music;
-      std::vector<Mix_Chunk *> m_effect;
   };
 }
 
