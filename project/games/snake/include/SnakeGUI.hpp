@@ -22,6 +22,7 @@
 #define GUI_LINE_THREE 0.85
 #define GUI_STEP_LINE 0.04
 #define GUI_WIDTH 160
+#define GUI_GAME_OVER_WIDTH 80
 #define GUI_HEIGHT 17
 #define GUI_CURSOR 0
 #define GUI_SELECTED_ONE 1
@@ -33,11 +34,6 @@
 
 namespace arcade
 {
-  struct ButtonSelected
-  {
-
-  };
-
   class SnakeGUI: public GUI
   {
     int posx;

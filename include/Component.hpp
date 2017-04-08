@@ -25,6 +25,8 @@ namespace arcade
       void setString(std::string const &);
       void setStringColor(Color const &);
       void setColor(Color const &);
+      void setHeight(double width);
+      void setWidth(double width);
     private:
       Color m_color;
       Color m_stringColor;
