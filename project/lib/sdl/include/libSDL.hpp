@@ -5,6 +5,7 @@
 # include <string>
 # include <map>
 # include <SDL2/SDL.h>
+# include <SDL/SDL_ttf.h>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
@@ -41,6 +42,7 @@ namespace arcade
       int initSDL();
       void setPalette(SDL_Palette *);
       void drawSquare(SDL_Surface *, pos_t, int, SDL_Color *);
+      void drawRect(SDL_Surface *, pos_t, int, int, SDL_Color *);
       void drawPixel(SDL_Surface *, pos_t, SDL_Color *);
 
     private:
@@ -49,6 +51,7 @@ namespace arcade
       int m_windowHeight;
       int m_windowWeight;
       disp_t m_disp;
+      TTF_Font *m_font;
   };
 }
 

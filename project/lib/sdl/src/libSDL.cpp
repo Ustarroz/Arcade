@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <SDL/SDL_ttf.h>
 #include "Event.hpp"
 #include "IMap.hpp"
 #include "IGUI.hpp"
@@ -25,13 +26,14 @@ namespace arcade
 
   libSDL::~libSDL()
   {
+    TTF_CloseFont(m_font);
     SDL_DestroyWindow(m_disp.window);
-    //SDL_Quit();
+    SDL_Quit();
   }
 
   int libSDL::initSDL()
   {
-    //SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
         m_windowHeight, SDL_WINDOW_SHOWN);
@@ -43,6 +45,9 @@ namespace arcade
     m_disp.screen = SDL_GetWindowSurface(m_disp.window);
     m_disp.palette = SDL_AllocPalette(10);
     setPalette(m_disp.palette);
+
+    TTF_Init();
+    m_font = TTF_OpenFont("./assets/fonts/Sans.ttf", 14);
     return (0);
   }
 
@@ -124,7 +129,24 @@ namespace arcade
       IComponent &c = gui.at(nb);
       SDL_Color red = {255, 0, 0, 255};
       pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
-      drawSquare(m_disp.screen, pos, c.getHeight(), &red);
+      drawRect(m_disp.screen, pos, c.getWidth(), c.getHeight(), &red);
+#ifdef DEBUG
+      //std::cout << c.getText() << std::endl;
+#endif
+      if (m_font)
+      {
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(m_font, c.getText().c_str(), {255, 255, 255});
+        SDL_Rect fontRect;
+        fontRect.x = static_cast<int>(static_cast<double>(m_windowWeight) * c.getX());
+        fontRect.y = static_cast<int>(static_cast<double>(m_windowHeight) * c.getY());
+        SDL_BlitSurface(surfaceMessage, NULL, m_disp.screen, &fontRect);
+      }
+      else
+      {
+#ifdef DEBUG
+        std::cout << "Cannot load font : " << TTF_GetError() << std::endl;
+#endif
+      }
     }
   }
 
@@ -161,6 +183,17 @@ namespace arcade
     for (int y = pos.y; y < pos.y + size; y++)
     {
       for (int x = pos.x; x < pos.x + size; x++)
+      {
+        drawPixel(surface, {x, y}, color);
+      }
+    }
+  }
+
+  void libSDL::drawRect(SDL_Surface *surface, pos_t pos, int size_x, int size_y, SDL_Color *color)
+  {
+    for (int y = pos.y; y < pos.y + size_y; y++)
+    {
+      for (int x = pos.x; x < pos.x + size_x; x++)
       {
         drawPixel(surface, {x, y}, color);
       }
