@@ -53,6 +53,9 @@ namespace arcade
     {
       switch (event.type){
         case SDL_KEYDOWN:
+#ifdef DEBUG
+          std::cout << "Key combination: " << event.key.keysym.sym << std::endl;
+#endif
           for (std::map<SDL_Keycode, KeyboardKey>::iterator it = m_keys.begin(); it != m_keys.end(); ++it)
           {
             if (event.key.keysym.sym == it->first)
@@ -98,9 +101,6 @@ namespace arcade
 
   void libSDL::updateMap(IMap const &map)
   {
-#ifdef DEBUG
-    std::cout << "[SDL] Layer: " << map.getLayerNb() << ", y: " << map.getHeight() << ", x: " << map.getWidth() << std::endl;
-#endif
     for (size_t nb = 0; nb < map.getLayerNb(); nb++)
     {
       for (size_t y = 0; y < map.getHeight(); y++)
@@ -130,9 +130,6 @@ namespace arcade
 
   void libSDL::display()
   {
-#ifdef DEBUG
-    std::cout << "[SDL] refresh screen" << std::endl;
-#endif
     SDL_UpdateWindowSurface(m_disp.window);
   }
 
