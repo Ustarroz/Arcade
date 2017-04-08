@@ -59,9 +59,14 @@ namespace arcade
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosSnake(posx, posy + 3, DIR_UP,
+			     Tile(TileType::EMPTY,
+				  TileTypeEvolution::OBSTACLE,
+				  {0, 255, 0, 255}, 0, 0, 0, 0)));
     m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
     m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
     m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
+    m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
   }
