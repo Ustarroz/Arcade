@@ -28,9 +28,9 @@ namespace arcade
 {
   class SnakeGUI: public GUI
   {
-    GameState useEventKeyBoardGUI(Event event);
-    GameState useEventKeyJoystickGUI(Event event);
-    GameState useEventKeyButtonGUI(Event event);
+    GameState useEventKeyBoardGUI(Event event, GameState state);
+    GameState useEventKeyJoystickGUI(Event event, GameState state);
+    GameState useEventKeyButtonGUI(Event event, GameState state);
    public:
     SnakeGUI();
     ~SnakeGUI();

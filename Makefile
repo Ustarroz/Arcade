@@ -1,5 +1,6 @@
 PROJECT_DIR=	./project/core/ 	\
 		./project/games/snake/	\
+		./project/games/centipede/	\
 		./project/lib/caca/ 	\
 		./project/lib/sdl/	\
 		./project/lib/sound/	\

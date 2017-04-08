@@ -50,7 +50,7 @@ namespace arcade
   {
   }
 
-  GameState SnakeGUI::useEventKeyBoardGUI(Event event)
+  GameState SnakeGUI::useEventKeyBoardGUI(Event event, GameState state)
   {
     switch (event.kb_key)
       {
@@ -67,35 +67,44 @@ namespace arcade
 
 	  break;
 	case KB_ENTER:
+	  if (state == GameState::QUIT)
+	    m_comps.pop_back();
 	  return (GameState::INGAME);
 	default:
 	  break;
       }
-    return (GameState::MENU);
+    return (state);
   }
 
-  GameState SnakeGUI::useEventKeyButtonGUI(Event event)
+  GameState SnakeGUI::useEventKeyButtonGUI(Event event, GameState state)
   {
     (void)event;
-    return (GameState::MENU);
+    return (state);
   }
 
-  GameState SnakeGUI::useEventKeyJoystickGUI(Event event)
+  GameState SnakeGUI::useEventKeyJoystickGUI(Event event, GameState state)
   {
     (void)event;
-    return (GameState::MENU);
+    return (state);
   }
 
   GameState SnakeGUI::useEventGUI(Event event, GameState state)
   {
+    if (state == GameState::QUIT && m_comps.size() != 11)
+      {
+	Component comp = Component({255,255,255,255}, "GameOver", 0.4, 0.25, GUI_WIDTH, GUI_HEIGHT);
+	comp.setStringColor({0,0,0,255});
+	m_comps.push_back(comp);
+	return (GameState::QUIT);
+      }
     switch (event.type)
       {
 	case ET_KEYBOARD:
-	  return (useEventKeyBoardGUI(event));
+	  return (useEventKeyBoardGUI(event, state));
 	case ET_JOYSTICK:
-	  return (useEventKeyJoystickGUI(event));
+	  return (useEventKeyJoystickGUI(event, state));
 	case ET_BUTTON:
-	  return (useEventKeyButtonGUI(event));
+	  return (useEventKeyButtonGUI(event, state));
 	default:
 	  break;
       }

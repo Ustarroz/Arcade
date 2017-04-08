@@ -29,7 +29,6 @@ namespace arcade
 
     if (!first)
       {
-	std::cout << "score " << m_score << std::endl;
 	for (std::vector<PosSnake>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
@@ -65,7 +64,6 @@ namespace arcade
     m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
     placeApple();
     m_score = 0;
-    m_state = GameState::QUIT;
   }
 
   GameState Snake::getGameState() const
@@ -133,7 +131,14 @@ namespace arcade
 	if (m_state == GameState::INGAME)
 	  useEvent(*it);
 	else
-	  m_state = m_gui.useEventGUI(*it, m_state);
+	  {
+	    GameState prev;
+
+	    prev = m_state;
+	    m_state = m_gui.useEventGUI(*it, m_state);
+	    if (prev == GameState::QUIT && m_state == INGAME)
+	      resetGame(false);
+	  }
       }
   }
 
@@ -210,7 +215,9 @@ namespace arcade
      	== TileType::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
-	resetGame(false);
+	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	std::cout << "score " << m_score << std::endl;
+	m_state = GameState::QUIT;
 	return ;
       }
     if (m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
@@ -249,7 +256,8 @@ namespace arcade
       }
     if (list.size() == 0)
       {
-	resetGame(false);
+	std::cout << "score " << m_score << std::endl;
+	m_state = GameState::QUIT;
 	return ;
       }
     pos = list[std::rand() % list.size()];
