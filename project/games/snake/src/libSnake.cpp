@@ -48,15 +48,15 @@ namespace arcade
     posx = m_map.getWidth() / 2;
     posy = m_map.getHeight() / 2 - 1;
     m_dir.push_back(PosSnake(posx, posy, DIR_UP,
-			     Tile(TileType::OTHER,
+			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::PLAYER,
 				  {0, 0, 255, 255}, 0, 0, 0, 0)));
     m_dir.push_back(PosSnake(posx, posy + 1, DIR_UP,
-			     Tile(TileType::OBSTACLE,
+			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
     m_dir.push_back(PosSnake(posx, posy + 2, DIR_UP,
-			     Tile(TileType::OBSTACLE,
+			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
     m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
@@ -211,12 +211,12 @@ namespace arcade
       }
     if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
      	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
-     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getType()
-     	== TileType::OBSTACLE)
+     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
+     	== TileTypeEvolution ::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	std::cout << "score " << m_score << std::endl;
+	//std::cout << "score " << m_score << std::endl;
 	m_state = GameState::QUIT;
 	return ;
       }
@@ -256,7 +256,7 @@ namespace arcade
       }
     if (list.size() == 0)
       {
-	std::cout << "score " << m_score << std::endl;
+	//std::cout << "score " << m_score << std::endl;
 	m_state = GameState::QUIT;
 	return ;
       }

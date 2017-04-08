@@ -16,26 +16,6 @@ namespace arcade
   class Centipede: public IGame
   {
    public:
-      enum DirCentipede{
-        DIR_UP = 0,
-        DIR_LEFT,
-        DIR_RIGHT,
-        DIR_DOWN
-      };
-      struct PosCentipede{
-	PosCentipede(int x, int y, DirCentipede dir, Tile const & mtile)
-	{
-	  _x = x;
-	  _y = y;
-	  _dir = dir;
-	  _tile = mtile;
-	};
-	int		_x;
-	int 		_y;
-	DirCentipede	_dir;
-	Tile		_tile = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-					 {0, 0, 0, 0}, 0, 0, 0, 0);
-      };
       Centipede();
       virtual ~Centipede();
       virtual GameState getGameState() const;
@@ -55,7 +35,6 @@ namespace arcade
       std::vector<NetworkPacket> m_net;
       std::vector<std::unique_ptr<ISprite> > m_sprites;
       std::vector<PosCentipede> m_dir;
-      size_t m_appleScore;
       size_t m_score;
       GameState m_state;
       CentipedeGUI m_gui;
@@ -63,8 +42,6 @@ namespace arcade
       void useEventKeyBoard(Event event);
       void useEventKeyJoystick(Event event);
       void useEventKeyButton(Event event);
-      void placeApple();
-      void addCentipede();
       void resetGame(bool first);
       std::vector<Sound> m_soundsPlay;
   };
