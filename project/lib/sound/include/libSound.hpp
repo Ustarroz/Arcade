@@ -17,6 +17,7 @@ namespace arcade
       virtual void playMusic(int, int nb = -1);
       virtual void playEffect(int);
     private:
+    sf::Music m_music;
   };
 }
 

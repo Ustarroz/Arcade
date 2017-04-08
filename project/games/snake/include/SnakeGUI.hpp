@@ -23,11 +23,13 @@
 #define GUI_STEP_LINE 0.04
 #define GUI_WIDTH 160
 #define GUI_HEIGHT 17
-#define GUI_SELECTED 0
-#define GUI_SCORE 0
-#define GUI_HIGHSCORE 0
-#define GUI_NAME 0
-#define GUI_GAMEOVER 0
+#define GUI_CURSOR 0
+#define GUI_SELECTED_ONE 1
+#define GUI_SELECTED_TWO 2
+#define GUI_SCORE 3
+#define GUI_HIGHSCORE 4
+#define GUI_NAME 5
+#define GUI_GAMEOVER 6
 
 namespace arcade
 {
