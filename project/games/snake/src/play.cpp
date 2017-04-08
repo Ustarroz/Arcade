@@ -11,29 +11,15 @@ void write_struct(std::ostream& out, T& t)
 
 namespace arcade
 {
-  void write_map(IMap const &map)
+  void write_map(IMap const &map, GetMap *tmp)
   {
-    TileType test;
+    int i = -1;
 
-    for (unsigned int x = 0; x < map.getWidth(); x++)
-      for (unsigned int y = 0; y < map.getHeight(); y++)
+    for (unsigned int y = 0; y < map.getWidth(); y++)
+      for (unsigned int x = 0; x < map.getHeight(); x++)
 	{
-	  test = dynamic_cast<const Tile &>(map.at(0, x, y)).getType();
-	  write(1, &test, sizeof(TileType));
+	  tmp->tile[++i] = dynamic_cast<const Tile &>(map.at(0, x, y)).getType();
 	}
-  }
-
-  void write_position(std::vector<Position> pos, WhereAmI *tmp)
-  {
-    std::vector<Position>::iterator it;
-
-    int i = 0;
-    it = pos.begin();
-    while (it != pos.end())
-      {
-	tmp->position[i++] = *it;
-	it++;
-      }
   }
 
   extern "C"
@@ -42,10 +28,10 @@ namespace arcade
   {
     Snake snake;
     CommandType in;
-    int op;
-    GetMap map;
+    size_t op;
+    //GetMap *map;
     Position pos;
-    WhereAmI *ami;
+    //WhereAmI *ami;
     Event e;
     std::vector<Event> e_list;
 
@@ -54,27 +40,45 @@ namespace arcade
     while (1)
       {
 	memset(&in, 0, sizeof(CommandType));
-	//read(0, &in, sizeof(CommandType));
-
-	std::cin.read(reinterpret_cast<char *>(&in), sizeof(in));
-	std::cerr << "CommandType: " << static_cast<int> (in) << std::endl;
+       std::cin.read(reinterpret_cast<char *>(&in), sizeof(in));
 	if (in == CommandType::WHERE_AM_I)
 	  {
-	    std::cerr << "WHEREAMI" << std::endl;
-	    WhereAmI *ami = new(WhereAmI [sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
-		ami->type = CommandType::WHERE_AM_I;
-		ami->lenght = static_cast<uint16_t> (snake.getPlayer().size());
+	    std::cerr << "WHEREAMIBEGIN" << std::endl;
+	    WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
+	    ami->type = CommandType::WHERE_AM_I;
+	    ami->lenght = snake.getPlayer().size();
+	    for (size_t i = -1; i < snake.getPlayer().size(); ++i)
+	      {
+		ami->position[i] = snake.getPlayer()[i];
+	      }
+	    write(1, ami, sizeof(sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size()));
+
+	    	    /*WhereAmI *ami = new(WhereAmI [sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
+	    ami->type = CommandType::WHERE_AM_I;
+	    ami->lenght = static_cast<uint16_t> (snake.getPlayer().size());
 	    write_position(snake.getPlayer(), ami);
-	    std::cout.write(reinterpret_cast<char*>(&ami), sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size());
+	    std::cout.write(reinterpret_cast<char*>(ami), sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size());
+	    std::cerr << "WHEREAMI" << std::endl;
+	    delete(ami);*/
 	      }
 	else if (in == CommandType::GET_MAP)
 	      {
-	    std::cerr << "GETMAP" << std::endl;
-		map.type = CommandType::GET_MAP;
-		map.width = (uint16_t) snake.getCurrentMap().getWidth();
-		map.height = (uint16_t) snake.getCurrentMap().getHeight();
-		write_struct(std::cout, map);
-		write_map(snake.getCurrentMap());
+	    std::cerr << "BEGIN" << std::endl;
+	   	GetMap *getMap = reinterpret_cast<GetMap *>(new char [sizeof(struct GetMap) + sizeof(TileType) * snake.getCurrentMap().getWidth() * snake.getCurrentMap().getHeight()]);
+	    	getMap->type = CommandType::GET_MAP;
+	    	getMap->width = snake.getCurrentMap().getWidth();
+	    	getMap->height = snake.getCurrentMap().getHeight();
+	    for (size_t i = 0; i < getMap->height; ++i)
+	      {
+		for (size_t j = 0; j < getMap->width ; ++j)
+		  {
+		    getMap->tile[i * getMap->width + j] = dynamic_cast<const Tile &> (snake.getCurrentMap().at(0, j, i)).getType();
+		  }
+	      }
+	    std::cerr << "READ0" << std::endl;
+	    write(1, getMap, sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size());
+	    std::cerr << "READ1" << std::endl;
+	    delete(getMap);
 	      }
 	else if (in == CommandType::GO_UP)
 	      {
