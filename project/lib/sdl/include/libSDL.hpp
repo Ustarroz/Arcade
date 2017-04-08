@@ -5,6 +5,7 @@
 # include <string>
 # include <map>
 # include <SDL2/SDL.h>
+# include <SDL/SDL_ttf.h>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
@@ -50,6 +51,7 @@ namespace arcade
       int m_windowHeight;
       int m_windowWeight;
       disp_t m_disp;
+      TTF_Font *m_font;
   };
 }
 

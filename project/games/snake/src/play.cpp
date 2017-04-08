@@ -40,9 +40,15 @@ namespace arcade
     while (1)
       {
 	memset(&in, 0, sizeof(CommandType));
-       std::cin.read(reinterpret_cast<char *>(&in), sizeof(in));
+	std::cin.read(reinterpret_cast<char *>(&in), sizeof(in));
+#ifdef DEBUG
+	std::cerr << "CommandType: " << static_cast<int> (in) << std::endl;
+#endif
 	if (in == CommandType::WHERE_AM_I)
 	  {
+#ifdef DEBUG
+	    std::cerr << "WHEREAMI" << std::endl;
+#endif
 	    std::cerr << "WHEREAMIBEGIN" << std::endl;
 	    WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
 	    ami->type = CommandType::WHERE_AM_I;
@@ -60,61 +66,104 @@ namespace arcade
 	    std::cout.write(reinterpret_cast<char*>(ami), sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size());
 	    std::cerr << "WHEREAMI" << std::endl;
 	    delete(ami);*/
-	      }
+#ifdef DEBUG
+	    std::cerr << "END_WHEREAMI" << std::endl;
+#endif
+	  }
 	else if (in == CommandType::GET_MAP)
-	      {
+	  {
+#ifdef DEBUG
+	    std::cerr << "GETMAP" << std::endl;
+#endif
 	    std::cerr << "BEGIN" << std::endl;
-	   	GetMap *getMap = reinterpret_cast<GetMap *>(new char [sizeof(struct GetMap) + sizeof(TileType) * snake.getCurrentMap().getWidth() * snake.getCurrentMap().getHeight()]);
-	    	getMap->type = CommandType::GET_MAP;
-	    	getMap->width = snake.getCurrentMap().getWidth();
-	    	getMap->height = snake.getCurrentMap().getHeight();
+	    GetMap *getMap = reinterpret_cast<GetMap *>(new char[
+	    sizeof(struct GetMap) +
+	    sizeof(TileType) * snake.getCurrentMap().getWidth() *
+	    snake.getCurrentMap().getHeight()]);
+	    getMap->type = CommandType::GET_MAP;
+	    getMap->width = snake.getCurrentMap().getWidth();
+	    getMap->height = snake.getCurrentMap().getHeight();
 	    for (size_t i = 0; i < getMap->height; ++i)
 	      {
-		for (size_t j = 0; j < getMap->width ; ++j)
+		for (size_t j = 0; j < getMap->width; ++j)
 		  {
-		    getMap->tile[i * getMap->width + j] = dynamic_cast<const Tile &> (snake.getCurrentMap().at(0, j, i)).getType();
+		    getMap->tile[i * getMap->width +
+				 j] = dynamic_cast<const Tile &> (snake.getCurrentMap().at(
+		     0, j, i)).getType();
 		  }
 	      }
 	    std::cerr << "READ0" << std::endl;
-	    write(1, getMap, sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size());
+	    write(1, getMap, sizeof(struct WhereAmI) +
+			     sizeof(Position) * snake.getPlayer().size());
 	    std::cerr << "READ1" << std::endl;
-	    delete(getMap);
-	      }
+	    delete (getMap);
+	  }
+
 	else if (in == CommandType::GO_UP)
 	      {
+#ifdef DEBUG
+	    std::cerr << "GO_UP" << std::endl;
+#endif
 		e_list.clear();
 		e.kb_key = KB_ARROW_UP;
 		e.action = AT_PRESSED;
 		e_list.push_back(e);
 		snake.notifyEvent(std::move(e_list));
+#ifdef DEBUG
+	    std::cerr << "END_GO_UP" << std::endl;
+#endif
 	      }
 	else if  (in == CommandType::GO_DOWN)
 	      {
+#ifdef DEBUG
+	    std::cerr << "GO_DOWN" << std::endl;
+#endif
 		e_list.clear();
 		e.kb_key = KB_ARROW_DOWN;
 		e.action = AT_PRESSED;
 		e_list.push_back(e);
 		snake.notifyEvent(std::move(e_list));
+#ifdef DEBUG
+	    std::cerr << "END_GO_DOWN" << std::endl;
+#endif
 	      }
 	else if (in == CommandType::GO_LEFT)
 	      {
+#ifdef DEBUG
+	    std::cerr << "GO_LEFT" << std::endl;
+#endif
 		e_list.clear();
 		e.kb_key = KB_ARROW_LEFT;
 		e.action = AT_PRESSED;
 		e_list.push_back(e);
 		snake.notifyEvent(std::move(e_list));
+#ifdef DEBUG
+	    std::cerr << "END_GO_LEFT" << std::endl;
+#endif
 	  	}
 	else if (in == CommandType::GO_RIGHT)
 	      {
+#ifdef DEBUG
+	    std::cerr << "GO_RIGHT" << std::endl;
+#endif
 		e_list.clear();
 		e.kb_key = KB_ARROW_RIGHT;
 		e.action = AT_PRESSED;
 		e_list.push_back(e);
 		snake.notifyEvent(std::move(e_list));
+#ifdef DEBUG
+	    std::cerr << "END_GO_RIGHT" << std::endl;
+#endif
 	  	}
 	else if (in == CommandType::PLAY)
 	      {
+#ifdef DEBUG
+	    std::cerr << "GO_PLAY" << std::endl;
+#endif
 		snake.process();
+#ifdef DEBUG
+	    std::cerr << "END_GO_PLAY" << std::endl;
+#endif
 	      }
 	if (snake.getGameState() == GameState::QUIT)
 	  break;
