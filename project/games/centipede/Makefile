@@ -4,9 +4,8 @@ MK_COMMON_DIR=	./../../../mk/
 include $(MK_COMMON_DIR)defs.mk $(MK_THIS)local_defs.mk
 
 SRC=	$(addprefix ./src/,	\
-	libSnake.cpp		\
-	play.cpp		\
-	SnakeGUI.cpp		\
+	libCentipede.cpp		\
+	CentipedeGUI.cpp		\
 	)
 SRC+=	$(addprefix ./../../common/,	\
 	$(COMMON_SRC)			\

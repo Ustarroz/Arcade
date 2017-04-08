@@ -1,5 +1,5 @@
 /*
-** SnakeGUI.hpp.hpp for arcade in /home/login_p/delivery/arcade/SnakeGUI.hpp.hpp
+** CentipedeGUI.hpp.hpp for arcade in /home/login_p/delivery/arcade/CentipedeGUI.hpp.hpp
 **
 ** Made by Prenom Nom
 ** Login   <prenom.nom@epitech.eu>
@@ -8,8 +8,8 @@
 ** Last update sam. avr. 08 13:28:10 2017 Prenom Nom
 */
 
-#ifndef SNAKEGUI_HPP_
-#define SNAKEGUI_HPP_
+#ifndef CENTIPEDEGUI_HPP_
+#define CENTIPEDEGUI_HPP_
 
 #include "Event.hpp"
 #include "GUI.hpp"
@@ -26,17 +26,17 @@
 
 namespace arcade
 {
-  class SnakeGUI: public GUI
+  class CentipedeGUI: public GUI
   {
     GameState useEventKeyBoardGUI(Event event, GameState state);
     GameState useEventKeyJoystickGUI(Event event, GameState state);
     GameState useEventKeyButtonGUI(Event event, GameState state);
    public:
-    SnakeGUI();
-    ~SnakeGUI();
+    CentipedeGUI();
+    ~CentipedeGUI();
     GameState useEventGUI(Event event, GameState state);
     void setScore(size_t score);
   };
 }
 
-#endif /* !SNAKEGUI_HPP_ */
+#endif /* !CENTIPEDEGUI_HPP_ */

@@ -1,5 +1,5 @@
 /*
-** SnakeGUI.cpp for arcade in /home/login_p/delivery/arcade/SnakeGUI.cpp
+** CentipedeGUI.cpp for arcade in /home/login_p/delivery/arcade/CentipedeGUI.cpp
 **
 ** Made by Edouard Puillandre
 ** Login   <edouard.puillandre@epitech.eu>
@@ -8,11 +8,11 @@
 ** Last update sam. avr. 08 13:28:48 2017 Edouard Puillandre
 */
 
-#include "SnakeGUI.hpp"
+#include "CentipedeGUI.hpp"
 
 namespace arcade
 {
-  SnakeGUI::SnakeGUI()
+  CentipedeGUI::CentipedeGUI()
   {
     Component comp = Component({255,255,255,255}, "0", GUI_COL_THREE, GUI_LINE_THREE + GUI_STEP_LINE, GUI_WIDTH, GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
@@ -38,7 +38,7 @@ namespace arcade
     comp = Component({255,255,255,255}, "SDL", GUI_COL_ONE, GUI_LINE_THREE, GUI_WIDTH,GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
-    comp = Component({255,255,255,255}, "Snake", GUI_COL_ONE, GUI_LINE_ONE, GUI_WIDTH,GUI_HEIGHT);
+    comp = Component({255,255,255,255}, "Centipede", GUI_COL_ONE, GUI_LINE_ONE, GUI_WIDTH,GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
     comp = Component({255,255,255,255}, "Centipede", GUI_COL_ONE, GUI_LINE_TWO, GUI_WIDTH,GUI_HEIGHT);
@@ -46,11 +46,11 @@ namespace arcade
     m_comps.push_back(comp);
   }
 
-  SnakeGUI::~SnakeGUI()
+  CentipedeGUI::~CentipedeGUI()
   {
   }
 
-  GameState SnakeGUI::useEventKeyBoardGUI(Event event, GameState state)
+  GameState CentipedeGUI::useEventKeyBoardGUI(Event event, GameState state)
   {
     switch (event.kb_key)
       {
@@ -76,19 +76,19 @@ namespace arcade
     return (state);
   }
 
-  GameState SnakeGUI::useEventKeyButtonGUI(Event event, GameState state)
+  GameState CentipedeGUI::useEventKeyButtonGUI(Event event, GameState state)
   {
     (void)event;
     return (state);
   }
 
-  GameState SnakeGUI::useEventKeyJoystickGUI(Event event, GameState state)
+  GameState CentipedeGUI::useEventKeyJoystickGUI(Event event, GameState state)
   {
     (void)event;
     return (state);
   }
 
-  GameState SnakeGUI::useEventGUI(Event event, GameState state)
+  GameState CentipedeGUI::useEventGUI(Event event, GameState state)
   {
     if (state == GameState::QUIT && m_comps.size() != 11)
       {
@@ -111,7 +111,7 @@ namespace arcade
     return (state);
   }
 
-  void SnakeGUI::setScore(size_t score)
+  void CentipedeGUI::setScore(size_t score)
   {
     m_comps[0].setString(std::to_string(score));
   }

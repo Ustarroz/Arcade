@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <string>
-#include "libSnake.hpp"
+#include "libCentipede.hpp"
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
@@ -8,7 +8,7 @@
 #include <iostream>
 namespace arcade
 {
-  Snake::Snake()
+  Centipede::Centipede()
     : m_map(64, 40)
   {
     m_map.addLayer();
@@ -16,11 +16,11 @@ namespace arcade
     m_state = GameState::INGAME;
   }
 
-  Snake::~Snake()
+  Centipede::~Centipede()
   {
   }
 
-  void Snake::resetGame(bool first)
+  void Centipede::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
     		{255, 0, 0, 255}, 0, 0, 0, 0);
@@ -29,7 +29,7 @@ namespace arcade
 
     if (!first)
       {
-	for (std::vector<PosSnake>::iterator it = m_dir.begin();
+	for (std::vector<PosCentipede>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
 	    m_map.setTile(0, it->_x, it->_y, reset);
@@ -47,36 +47,31 @@ namespace arcade
       }
     posx = m_map.getWidth() / 2;
     posy = m_map.getHeight() / 2 - 1;
-    m_dir.push_back(PosSnake(posx, posy, DIR_UP,
-			     Tile(TileType::EMPTY,
+    m_dir.push_back(PosCentipede(posx, posy, DIR_UP,
+			     Tile(TileType::OTHER,
 				  TileTypeEvolution::PLAYER,
-				  {0, 0, 255, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 1, DIR_UP,
-			     Tile(TileType::EMPTY,
+				  {255, 255, 255, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosCentipede(posx, posy + 1, DIR_UP,
+			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 2, DIR_UP,
-			     Tile(TileType::EMPTY,
-				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 3, DIR_UP,
-			     Tile(TileType::EMPTY,
+    m_dir.push_back(PosCentipede(posx, posy + 2, DIR_UP,
+			     Tile(TileType::OBSTACLE,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
     m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
     m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
     m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
-    m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
   }
 
-  GameState Snake::getGameState() const
+  GameState Centipede::getGameState() const
   {
     return (m_state);
   }
 
-  void Snake::useEventKeyBoard(Event event)
+  void Centipede::useEventKeyBoard(Event event)
   {
     switch (event.kb_key)
     {
@@ -100,17 +95,17 @@ namespace arcade
     }
   }
 
-  void Snake::useEventKeyButton(Event event)
+  void Centipede::useEventKeyButton(Event event)
   {
     (void)event;
   }
 
-  void Snake::useEventKeyJoystick(Event event)
+  void Centipede::useEventKeyJoystick(Event event)
   {
     (void)event;
   }
 
-  void Snake::useEvent(Event event)
+  void Centipede::useEvent(Event event)
   {
     switch (event.type)
       {
@@ -128,7 +123,7 @@ namespace arcade
       }
   }
 
-  void Snake::notifyEvent(std::vector<Event> &&event)
+  void Centipede::notifyEvent(std::vector<Event> &&event)
   {
     for(std::vector<Event>::iterator it = event.begin();
 	it != event.end(); ++it)
@@ -147,61 +142,61 @@ namespace arcade
       }
   }
 
-  void Snake::notifyNetwork(std::vector<NetworkPacket> &&events)
+  void Centipede::notifyNetwork(std::vector<NetworkPacket> &&events)
   {
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Snake::getNetworkToSend()
+  std::vector<NetworkPacket> &&Centipede::getNetworkToSend()
   {
     return (std::move(m_net));
   }
 
-  static Snake::DirSnake oppositeDir(Snake::DirSnake dir)
+  static Centipede::DirCentipede oppositeDir(Centipede::DirCentipede dir)
   {
     switch (dir)
       {
-	case Snake::DIR_UP:
-	  return (Snake::DIR_DOWN);
-	case Snake::DIR_DOWN:
-	  return (Snake::DIR_UP);
-	case Snake::DIR_LEFT:
-	  return (Snake::DIR_RIGHT);
-	case Snake::DIR_RIGHT:
-	  return (Snake::DIR_LEFT);
+	case Centipede::DIR_UP:
+	  return (Centipede::DIR_DOWN);
+	case Centipede::DIR_DOWN:
+	  return (Centipede::DIR_UP);
+	case Centipede::DIR_LEFT:
+	  return (Centipede::DIR_RIGHT);
+	case Centipede::DIR_RIGHT:
+	  return (Centipede::DIR_LEFT);
         default:
-          return (Snake::DIR_UP);
+          return (Centipede::DIR_UP);
       }
   }
 
-  static void changeDir(Snake::PosSnake &cpy, Snake::DirSnake dir)
+  static void changeDir(Centipede::PosCentipede &cpy, Centipede::DirCentipede dir)
   {
     switch (dir)
       {
-	case Snake::DIR_RIGHT :
+	case Centipede::DIR_RIGHT :
 	  cpy._x = cpy._x + 1;
 	  break;
-	case Snake::DIR_LEFT :
+	case Centipede::DIR_LEFT :
 	  cpy._x = cpy._x - 1;
 	  break;
-	case Snake::DIR_UP :
+	case Centipede::DIR_UP :
 	  cpy._y = cpy._y - 1;
 	  break;
-	case Snake::DIR_DOWN :
+	case Centipede::DIR_DOWN :
 	  cpy._y = cpy._y + 1;
 	  break;
       }
   }
 
-  void Snake::process()
+  void Centipede::process()
   {
-    DirSnake	save;
-    DirSnake	subsave;
+    DirCentipede	save;
+    DirCentipede	subsave;
 
     if (m_state != GameState::INGAME)
       return ;
     save = m_dir[0]._dir;
-    for(std::vector<PosSnake>::iterator it = m_dir.begin();
+    for(std::vector<PosCentipede>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
       {
 	m_map.setTile(0, it->_x, it->_y,
@@ -216,12 +211,12 @@ namespace arcade
       }
     if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
      	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
-     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
-     	== TileTypeEvolution ::OBSTACLE)
+     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getType()
+     	== TileType::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	//std::cout << "score " << m_score << std::endl;
+	std::cout << "score " << m_score << std::endl;
 	m_state = GameState::QUIT;
 	return ;
       }
@@ -231,7 +226,7 @@ namespace arcade
 	m_score = m_score + m_appleScore;
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
 	m_gui.setScore(m_score);
-	addSnake();
+	addCentipede();
 	placeApple();
       }
     else
@@ -242,7 +237,7 @@ namespace arcade
       }
   }
 
-  void Snake::placeApple()
+  void Centipede::placeApple()
   {
     std::vector<size_t> list;
     size_t pos;
@@ -254,14 +249,14 @@ namespace arcade
 	    list.push_back(x + y * m_map.getWidth());
 	  }
       }
-    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+    for (std::vector<PosCentipede>::iterator it = m_dir.begin();
 	 it != m_dir.end(); it++)
       {
 	list.erase(std::find(list.begin(), list.end(), it->_x + it->_y * m_map.getWidth()));
       }
     if (list.size() == 0)
       {
-	//std::cout << "score " << m_score << std::endl;
+	std::cout << "score " << m_score << std::endl;
 	m_state = GameState::QUIT;
 	return ;
       }
@@ -272,7 +267,7 @@ namespace arcade
 		       {255, 0, 255, 255}, 0, 0, 0, 0));
   }
 
-  void Snake::addSnake()
+  void Centipede::addCentipede()
   {
     int tmp;
     bool loop;
@@ -281,11 +276,11 @@ namespace arcade
     loop = true;
     while (tmp <= DIR_DOWN && loop)
       {
-	PosSnake tail = m_dir.back();
+	PosCentipede tail = m_dir.back();
 	if (tmp != tail._dir)
 	  {
-	    changeDir(tail, static_cast<DirSnake>(tmp));
-	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    changeDir(tail, static_cast<DirCentipede>(tmp));
+	    tail._dir = oppositeDir(static_cast<DirCentipede>(tmp));
 	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
 		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
 	      {
@@ -293,7 +288,7 @@ namespace arcade
 		continue ;
 	      }
 	    loop = false;
-	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+	    for (std::vector<PosCentipede>::iterator it = m_dir.begin();
 		 it != m_dir.end(); ++it)
 	      if (it->_x == tail._x && it->_y == tail._y)
 		{
@@ -308,37 +303,37 @@ namespace arcade
       resetGame(false);
   }
 
-  std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
+  std::vector<std::unique_ptr<ISprite>> Centipede::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
     return (std::move(sprites));
   }
 
-  std::vector<std::pair<std::string, SoundType> > Snake::getSoundsToLoad() const
+  std::vector<std::pair<std::string, SoundType> > Centipede::getSoundsToLoad() const
   {
     return (std::move(m_soundsName));
   }
 
-  std::vector<Sound> Snake::getSoundsToPlay()
+  std::vector<Sound> Centipede::getSoundsToPlay()
   {
     return (std::move(m_soundsPlay));
   }
 
-  IMap const &Snake::getCurrentMap() const
+  IMap const &Centipede::getCurrentMap() const
   {
     return (m_map);
   }
 
-  IGUI &Snake::getGUI()
+  IGUI &Centipede::getGUI()
   {
     return (m_gui);
   }
 
-  std::vector<Position> Snake::getPlayer() const
+  std::vector<Position> Centipede::getPlayer() const
   {
     std::vector<Position> list;
 
-    for(std::vector<PosSnake>::const_iterator it = m_dir.begin();
+    for(std::vector<PosCentipede>::const_iterator it = m_dir.begin();
      	it != m_dir.end(); ++it)
       {
 	Position pos;
@@ -354,6 +349,6 @@ extern "C"
 {
   arcade::IGame *getGame()
   {
-    return (new arcade::Snake());
+    return (new arcade::Centipede());
   }
 }

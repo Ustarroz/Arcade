@@ -5,6 +5,7 @@ PROJECT_DIR=	./project/core/ 	\
 		#./project/lib/sound/	\
 		#./project/games/menu/
 		#./project/lib/lapin/ 	\
+		#./project/games/centipede/	\
 
 all:
 		@$(foreach c, $(PROJECT_DIR), $(MAKE) -s -C $(c) && ) true
