@@ -49,7 +49,6 @@ namespace arcade
 #ifdef DEBUG
 	    std::cerr << "WHEREAMI" << std::endl;
 #endif
-	    std::cerr << "WHEREAMIBEGIN" << std::endl;
 	    WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
 	    ami->type = CommandType::WHERE_AM_I;
 	    ami->lenght = snake.getPlayer().size();
@@ -75,7 +74,6 @@ namespace arcade
 #ifdef DEBUG
 	    std::cerr << "GETMAP" << std::endl;
 #endif
-	    std::cerr << "BEGIN" << std::endl;
 	    GetMap *getMap = reinterpret_cast<GetMap *>(new char[
 	    sizeof(struct GetMap) +
 	    sizeof(TileType) * snake.getCurrentMap().getWidth() *
@@ -92,10 +90,14 @@ namespace arcade
 		     0, j, i)).getType();
 		  }
 	      }
-	    std::cerr << "READ0" << std::endl;
+#ifdef DEBUG
+	    std::cerr << "WRITE0" << std::endl;
+#endif
 	    write(1, getMap, sizeof(struct WhereAmI) +
 			     sizeof(Position) * snake.getPlayer().size());
-	    std::cerr << "READ1" << std::endl;
+#ifdef DEBUG
+	    std::cerr << "WRITE1" << std::endl;
+#endif
 	    delete (getMap);
 	  }
 
