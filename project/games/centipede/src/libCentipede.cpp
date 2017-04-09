@@ -149,11 +149,11 @@ namespace arcade
 	      m_gui.setGameOver(false);
 	    }
 	return ;
-	case KB_8:
+	case KB_9:
 	  endGame();
 	  m_state = GameState::MENU;
 	return ;
-	case KB_9:
+	case KB_8:
 	  endGame();
 	  resetGame(false);
 	  m_process = GameProcess::GAMEPLAYING;
@@ -393,7 +393,7 @@ namespace arcade
 	writeHigh( CENTIPEDE_HIGH_FILE, m_score);
 	m_gui.setHighScore(m_score);
       }
-    m_process = GameProcess::GAMEPLAYING;
+    m_process = GameProcess::GAMEOVER;
     m_gui.setGameOver(true, "Game Over");
   }
 

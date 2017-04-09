@@ -101,11 +101,11 @@ namespace arcade
 	      m_gui.setGameOver(false);
 	    }
 	  return ;
-	case KB_8:
+	case KB_9:
 	  endGame();
 	  m_state = GameState::MENU;
 	  return ;
-	case KB_9:
+	case KB_8:
 	  endGame();
 	  resetGame(false);
 	  m_process = GameProcess::GAMEPLAYING;

@@ -66,7 +66,6 @@ namespace arcade
     std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[0], "getGame"));
     m_libsGame = gameLaunch();
     m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
-    // ======================
     bool go = true;
     while (go)
     {
@@ -105,7 +104,6 @@ namespace arcade
       else if (m_libsGame->getGameState() == GameState::QUIT)
         go = false;
     }
-    // ====================
     /*while (m_libsGfx->pollEvent(e))
     {
       if (static_cast<KeyboardKey>(e.m_key) == KB_1)
