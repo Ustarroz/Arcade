@@ -55,13 +55,15 @@ namespace arcade
     void useEventKeyBoard(Event event);
     void useEventKeyJoystick(Event event);
     void useEventKeyButton(Event event);
-    void addShroom();
+    void randShroom();
+    void addShroom(int x, int y);
     void addCentipede();
     void resetGame(bool first);
     void endGame();
     bool checkPos(int x, int y, size_t limit_y);
     void shotAt(int x, int y);
     void shotShroom(int x, int y);
+    void processShoot();
     std::vector<Sound> m_soundsPlay;
   };
 }
