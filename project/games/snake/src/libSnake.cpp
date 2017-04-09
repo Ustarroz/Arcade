@@ -19,6 +19,7 @@ namespace arcade
     size_t tmp = readHigh(SNAKE_HIGH_FILE);
     m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
+    m_process = GameProcess::GAMEPLAYING;
   }
 
   Snake::~Snake()
@@ -86,34 +87,52 @@ namespace arcade
   {
     switch (event.kb_key)
     {
-	case KB_ARROW_LEFT:
-	  m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-	  break;
-	case KB_ARROW_RIGHT:
-	  m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
-	  break;
-	case KB_ARROW_DOWN:
-	  m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
-	  break;
-	case KB_ARROW_UP:
-	  m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
-	  break;
 	case KB_ENTER:
-	  if (m_state == GameState::INGAME)
+	  if (m_process == GameProcess::GAMEPLAYING)
 	    {
-	      m_state = GameState::MENU;
+	      m_process = GameProcess::GAMEPAUSE;
 	      m_gui.setGameOver(true, "Pause");
 	    }
 	  else
 	    {
-	      if (m_state == GameState::QUIT)
+	      if (m_process == GameProcess::GAMEOVER)
 		resetGame(false);
-	      m_state = GameState::INGAME;
+	      m_process = GameProcess::GAMEPLAYING;
 	      m_gui.setGameOver(false);
 	    }
 	  return ;
+	case KB_8:
+	  endGame();
+	  m_state = GameState::MENU;
+	  return ;
+	case KB_9:
+	  endGame();
+	  resetGame(false);
+	  m_process = GameProcess::GAMEPLAYING;
+	  m_gui.setGameOver(false);
+	  return ;
+	case KB_ESCAPE:
+	  endGame();
+	  m_state = GameState::QUIT;
+	  return ;
+	case KB_ARROW_LEFT:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
+	break;
+	case KB_ARROW_RIGHT:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
+	break;
+	case KB_ARROW_DOWN:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
+	break;
+	case KB_ARROW_UP:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
+	break;
 	default:
-	  break;
+	  return ;
     }
   }
 
@@ -140,6 +159,10 @@ namespace arcade
 	case ET_BUTTON:
 	  useEventKeyButton(event);
 	  break;
+	case ET_QUIT:
+	  endGame();
+	  m_state = GameState::QUIT;
+	break;
 	default:
 	  break;
       }
@@ -174,7 +197,7 @@ namespace arcade
     DirGame	save;
     DirGame	subsave;
 
-    if (m_state != GameState::INGAME)
+    if (m_process != GameProcess::GAMEPLAYING)
       return ;
     save = m_dir[0]._dir;
     for(std::vector<PosGame>::iterator it = m_dir.begin();
@@ -338,7 +361,7 @@ namespace arcade
 	writeHigh( SNAKE_HIGH_FILE, m_score);
 	m_gui.setHighScore(m_score);
       }
-    m_state = GameState::QUIT;
+    m_process = GameProcess::GAMEOVER;
     m_gui.setGameOver(true, "Game Over");
   }
 }
