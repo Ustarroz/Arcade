@@ -27,7 +27,7 @@ namespace arcade
   void Snake::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-    		{255, 0, 0, 255}, 0, 0, 0, 0);
+    		{255, 0, 0, 0}, 0, 0, 0, 0);
     size_t posx;
     size_t posy;
 
@@ -176,7 +176,7 @@ namespace arcade
       {
 	m_map.setTile(1, it->_x, it->_y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {255, 0, 0, 255}, 0, 0, 0, 0));
+			   {255, 0, 0, 0}, 0, 0, 0, 0));
 	changeDir(*it, it->_dir);
 	subsave = it->_dir;
 	it->_dir = save;

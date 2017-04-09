@@ -37,7 +37,7 @@ namespace arcade
     virtual std::vector<Sound> getSoundsToPlay();
     virtual IMap const &getCurrentMap() const;
     virtual IGUI &getGUI();
-    virtual std::vector<Position> getPlayer() const;
+    virtual Position getPlayer() const;
    private:
     Map m_map;
     std::vector<std::pair<std::string, SoundType> > m_soundsName;

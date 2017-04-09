@@ -22,5 +22,4 @@ namespace arcade
   {
     return (m_layer[y][x]);
   }
-
 }
