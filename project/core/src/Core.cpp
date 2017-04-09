@@ -63,7 +63,7 @@ namespace arcade
     std::vector<Event> event_list;
     std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[0], "getLib"));
     m_libsGfx = gfxLaunch();
-    std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[0], "getGame"));
+    std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[1], "getGame"));
     m_libsGame = gameLaunch();
     while (m_libsGfx->pollEvent(e))
     {

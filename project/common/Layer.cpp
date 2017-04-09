@@ -4,8 +4,8 @@ namespace arcade
 {
   Layer::Layer(int width, int height)
   {
-    Color a(255, 0, 0, 255);
-    m_col = std::vector<Tile>(width, Tile(TileType::BLOCK, TileTypeEvolution::BLOCK, a, 0, 0, 0, 0));
+    Color a(255, 0, 0, 0);
+    m_col = std::vector<Tile>(width, Tile(TileType::EMPTY, TileTypeEvolution::EMPTY, a, 0, 0, 0, 0));
     m_layer = std::vector<std::vector<Tile> > (height, m_col);
   }
 

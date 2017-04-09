@@ -13,6 +13,7 @@ namespace arcade
     : m_map(16, 16)
   {
     m_map.addLayer();
+    m_map.addLayer();
     resetGame(true);
     size_t tmp = readHigh(SNAKE_HIGH_FILE);
     m_gui.setHighScore(tmp);
@@ -35,7 +36,7 @@ namespace arcade
 	for (std::vector<PosGame>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
-	    m_map.setTile(0, it->_x, it->_y, reset);
+	    m_map.setTile(1, it->_x, it->_y, reset);
 	  }
 	for (unsigned int x = 0; x < m_map.getWidth(); x++)
 	    for (unsigned int y = 0; y < m_map.getHeight(); y++)
@@ -66,10 +67,10 @@ namespace arcade
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-    m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
-    m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
-    m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
+    m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+    m_map.setTile(1, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
+    m_map.setTile(1, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
+    m_map.setTile(1, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
     m_gui.setScore(0);
@@ -173,7 +174,7 @@ namespace arcade
     for(std::vector<PosGame>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
       {
-	m_map.setTile(0, it->_x, it->_y,
+	m_map.setTile(1, it->_x, it->_y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 			   {255, 0, 0, 255}, 0, 0, 0, 0));
 	changeDir(*it, it->_dir);
@@ -181,15 +182,15 @@ namespace arcade
 	it->_dir = save;
 	save = subsave;
 	if (it != m_dir.begin())
-	  m_map.setTile(0, it->_x, it->_y, it->_tile);
+	  m_map.setTile(1, it->_x, it->_y, it->_tile);
       }
     if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
      	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
-     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
+     	m_map.getLayer(1).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
      	== TileTypeEvolution ::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
 	endGame();
 	return ;
       }
@@ -197,7 +198,7 @@ namespace arcade
 	== TileTypeEvolution ::FOOD)
       {
 	m_score = m_score + m_appleScore;
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();
@@ -206,7 +207,7 @@ namespace arcade
       {
 	if (m_appleScore >= MINSCORE + STEPSCORE)
 	  m_appleScore = m_appleScore - STEPSCORE;
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
       }
   }
 
