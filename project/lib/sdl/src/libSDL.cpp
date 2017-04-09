@@ -67,15 +67,21 @@ namespace arcade
             if (event.key.keysym.sym == it->first)
             {
               if (it->first == SDLK_ESCAPE)
-                return (false);
+              {
+                e.type = ET_QUIT;
+                e.action = AT_PRESSED;
+                e.kb_key = it->second;
+                return (true);
+              }
               e.type = ET_KEYBOARD;
               e.action = AT_PRESSED;
               e.kb_key = it->second;
+              return (true);
             }
           }
       }
     }
-    return (true);
+    return (false);
   }
 
   bool libSDL::doesSupportSound() const
