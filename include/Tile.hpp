@@ -9,7 +9,7 @@ namespace arcade
   class Tile: public ITile
   {
     public:
-      explicit Tile(TileType, TileTypeEvolution, Color, size_t, size_t, double, double);
+      explicit Tile(TileType, TileTypeEvolution, Color, size_t, size_t, double, double, bool hasSprite = false);
       virtual ~Tile();
       virtual TileType getType() const;
       virtual TileTypeEvolution getTypeEv() const;
@@ -27,6 +27,7 @@ namespace arcade
       size_t m_spritePos;
       double m_shiftX;
       double m_shiftY;
+      bool m_hasSprite;
   };
 }
 #endif

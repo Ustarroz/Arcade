@@ -77,7 +77,6 @@ namespace arcade
     virtual void updateMap(IMap const &map) = 0;
 
     // GUI
-    //TODO set updateGui to not segfault when outside the map
   	///
 	  /// \fn virtual void updateGUI(IGUI &gui) = 0
   	/// \brief Update the GUI displayed

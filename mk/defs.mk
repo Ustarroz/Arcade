@@ -15,7 +15,8 @@ COMMON_SRC=	Color.cpp	\
 		GUI.cpp		\
 		Layer.cpp	\
 		Map.cpp		\
-		Tile.cpp
+		Tile.cpp	\
+		Sprite.cpp
 
 OBJ=		""
 

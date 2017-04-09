@@ -23,7 +23,8 @@ namespace arcade
       virtual GameState getGameState() const;
       virtual void notifyEvent(std::vector<Event> &&events);
       virtual void notifyNetwork(std::vector<NetworkPacket> &&events);
-      virtual std::vector<NetworkPacket> &&getNetworkToSend();
+      virtual std::vector<NetworkPacket> getNetworkToSend();
+      virtual bool hasNetwork() const;
       virtual void process();
       virtual std::vector<std::unique_ptr<ISprite>> getSpritesToLoad() const;
       virtual std::vector<std::pair<std::string, SoundType> > getSoundsToLoad() const;
@@ -40,6 +41,7 @@ namespace arcade
       size_t m_appleScore;
       size_t m_score;
       GameState m_state;
+      GameProcess m_process;
       GameGUI m_gui;
       void useEvent(Event event);
       void useEventKeyBoard(Event event);

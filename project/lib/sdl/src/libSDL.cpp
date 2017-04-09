@@ -2,7 +2,8 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "Event.hpp"
 #include "IMap.hpp"
 #include "IGUI.hpp"
@@ -34,6 +35,7 @@ namespace arcade
   int libSDL::initSDL()
   {
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
         m_windowHeight, SDL_WINDOW_SHOWN);
@@ -46,7 +48,6 @@ namespace arcade
     m_disp.palette = SDL_AllocPalette(10);
     setPalette(m_disp.palette);
 
-    TTF_Init();
     m_font = TTF_OpenFont("./assets/fonts/Sans.ttf", 14);
     return (0);
   }
@@ -66,15 +67,21 @@ namespace arcade
             if (event.key.keysym.sym == it->first)
             {
               if (it->first == SDLK_ESCAPE)
-                return (false);
+              {
+                e.type = ET_QUIT;
+                e.action = AT_PRESSED;
+                e.kb_key = it->second;
+                return (true);
+              }
               e.type = ET_KEYBOARD;
               e.action = AT_PRESSED;
               e.kb_key = it->second;
+              return (true);
             }
           }
       }
     }
-    return (true);
+    return (false);
   }
 
   bool libSDL::doesSupportSound() const
@@ -99,9 +106,21 @@ namespace arcade
 
   void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
+    m_sprites.clear();
 #ifdef DEBUG
     std::cout << "[SDL] LOAD SPRITES" << std::endl;
 #endif
+    for (size_t i = 0; i < sprites.size(); i++)
+    {
+      SDL_Surface *tmp = IMG_Load(sprites[i]->getGraphicPath(0).c_str());
+      if (tmp)
+      {
+#ifdef DEBUG
+        std::cout << "Loaded sprite: " << sprites[i]->getGraphicPath(0) << std::endl;
+#endif
+        m_sprites.push_back(tmp);
+      }
+    }
   }
 
   void libSDL::updateMap(IMap const &map)
@@ -113,10 +132,25 @@ namespace arcade
         for (size_t x = 0; x < map.getWidth(); x++)
         {
           ITile const &tile = map.at(nb, x, y);
-          Color a = tile.getColor();
-          SDL_Color color = {a.r, a.g, a.b, a.a};
-          pos_t pos = {static_cast<int>(x * 10), static_cast<int>(y * 10)};
-          drawSquare(m_disp.screen, pos, 10, &color);
+          pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
+          SDL_Rect rect;
+          rect.x = pos.x;
+          rect.y = pos.y;
+          rect.w = SIZE_TILE;
+          rect.h = SIZE_TILE;
+          if (tile.hasSprite() && m_sprites.size() > 0)
+          {
+            SDL_Surface *sur = m_sprites[tile.getSpriteId() % m_sprites.size()];
+            if (sur)
+              SDL_BlitScaled(sur, NULL, m_disp.screen, &rect);
+          }
+          else
+          {
+            Color a = tile.getColor();
+            SDL_Color color = {a.r, a.g, a.b, a.a};
+            SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
+            //drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
+          }
         }
       }
     }
@@ -204,7 +238,7 @@ namespace arcade
   {
     SDL_Color *pixel;
 
-    pixel = static_cast<SDL_Color *>(surface->pixels) + pos.x + pos.y * m_windowWeight;
+    pixel = static_cast<SDL_Color *>(surface->pixels) + pos.x + pos.y * surface->w;
     pixel->r = color->r;
     pixel->g = color->g;
     pixel->b = color->b;

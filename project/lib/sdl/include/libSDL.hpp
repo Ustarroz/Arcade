@@ -1,11 +1,13 @@
 #ifndef LIBSDL_HPP_
 # define LIBSDL_HPP_
 
+# define SIZE_TILE 40
+
 # include <vector>
 # include <string>
 # include <map>
 # include <SDL2/SDL.h>
-# include <SDL/SDL_ttf.h>
+# include <SDL2/SDL_ttf.h>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
@@ -52,6 +54,7 @@ namespace arcade
       int m_windowWeight;
       disp_t m_disp;
       TTF_Font *m_font;
+      std::vector<SDL_Surface *> m_sprites;
   };
 }
 

@@ -31,7 +31,16 @@ namespace arcade
     {SDLK_RETURN, KB_ENTER},
     {SDLK_a, KB_A},
     {SDLK_b, KB_B},
+    {224, KB_0},
     {SDLK_AMPERSAND, KB_1},
+    {233, KB_2},
+    {34, KB_3},
+    {39, KB_4},
+    {40, KB_5},
+    {45, KB_6},
+    {232, KB_7},
+    {95, KB_8},
+    {231, KB_9},
     {SDLK_ESCAPE, KB_ESCAPE}
     };
 }

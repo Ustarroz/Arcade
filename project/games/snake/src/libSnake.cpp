@@ -4,8 +4,7 @@
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
-#include "ISprite.hpp"
-
+#include "Sprite.hpp"
 #include <iostream>
 
 namespace arcade
@@ -14,10 +13,12 @@ namespace arcade
     : m_map(16, 16)
   {
     m_map.addLayer();
+    m_map.addLayer();
     resetGame(true);
     size_t tmp = readHigh(SNAKE_HIGH_FILE);
     m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
+    m_process = GameProcess::GAMEPLAYING;
   }
 
   Snake::~Snake()
@@ -27,7 +28,7 @@ namespace arcade
   void Snake::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-    		{255, 0, 0, 255}, 0, 0, 0, 0);
+    		{255, 0, 0, 0}, 0, 0, 0, 0);
     size_t posx;
     size_t posy;
 
@@ -36,7 +37,7 @@ namespace arcade
 	for (std::vector<PosGame>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
-	    m_map.setTile(0, it->_x, it->_y, reset);
+	    m_map.setTile(1, it->_x, it->_y, reset);
 	  }
 	for (unsigned int x = 0; x < m_map.getWidth(); x++)
 	    for (unsigned int y = 0; y < m_map.getHeight(); y++)
@@ -54,23 +55,23 @@ namespace arcade
     m_dir.push_back(PosGame(posx, posy, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::PLAYER,
-				  {0, 0, 255, 255}, 0, 0, 0, 0)));
+				  {0, 0, 255, 255}, 0, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 1, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 2, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 3, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-    m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
-    m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
-    m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
+    m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+    m_map.setTile(1, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
+    m_map.setTile(1, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
+    m_map.setTile(1, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
     m_gui.setScore(0);
@@ -85,34 +86,52 @@ namespace arcade
   {
     switch (event.kb_key)
     {
-	case KB_ARROW_LEFT:
-	  m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-	  break;
-	case KB_ARROW_RIGHT:
-	  m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
-	  break;
-	case KB_ARROW_DOWN:
-	  m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
-	  break;
-	case KB_ARROW_UP:
-	  m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
-	  break;
 	case KB_ENTER:
-	  if (m_state == GameState::INGAME)
+	  if (m_process == GameProcess::GAMEPLAYING)
 	    {
-	      m_state = GameState::MENU;
+	      m_process = GameProcess::GAMEPAUSE;
 	      m_gui.setGameOver(true, "Pause");
 	    }
 	  else
 	    {
-	      if (m_state == GameState::QUIT)
+	      if (m_process == GameProcess::GAMEOVER)
 		resetGame(false);
-	      m_state = GameState::INGAME;
+	      m_process = GameProcess::GAMEPLAYING;
 	      m_gui.setGameOver(false);
 	    }
 	  return ;
+	case KB_9:
+	  endGame();
+	  m_state = GameState::MENU;
+	  return ;
+	case KB_8:
+	  endGame();
+	  resetGame(false);
+	  m_process = GameProcess::GAMEPLAYING;
+	  m_gui.setGameOver(false);
+	  return ;
+	case KB_ESCAPE:
+	  endGame();
+	  m_state = GameState::QUIT;
+	  return ;
+	case KB_ARROW_LEFT:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
+	break;
+	case KB_ARROW_RIGHT:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
+	break;
+	case KB_ARROW_DOWN:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
+	break;
+	case KB_ARROW_UP:
+	  if (m_process == GameProcess::GAMEPLAYING)
+	    m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
+	break;
 	default:
-	  break;
+	  return ;
     }
   }
 
@@ -139,6 +158,10 @@ namespace arcade
 	case ET_BUTTON:
 	  useEventKeyButton(event);
 	  break;
+	case ET_QUIT:
+	  endGame();
+	  m_state = GameState::QUIT;
+	break;
 	default:
 	  break;
       }
@@ -158,9 +181,14 @@ namespace arcade
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Snake::getNetworkToSend()
+  std::vector<NetworkPacket> Snake::getNetworkToSend()
   {
     return (std::move(m_net));
+  }
+
+  bool Snake::hasNetwork() const
+  {
+    return (false);
   }
 
   void Snake::process()
@@ -168,29 +196,29 @@ namespace arcade
     DirGame	save;
     DirGame	subsave;
 
-    if (m_state != GameState::INGAME)
+    if (m_process != GameProcess::GAMEPLAYING)
       return ;
     save = m_dir[0]._dir;
     for(std::vector<PosGame>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
       {
-	m_map.setTile(0, it->_x, it->_y,
+	m_map.setTile(1, it->_x, it->_y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {255, 0, 0, 255}, 0, 0, 0, 0));
+			   {255, 0, 0, 0}, 0, 0, 0, 0));
 	changeDir(*it, it->_dir);
 	subsave = it->_dir;
 	it->_dir = save;
 	save = subsave;
 	if (it != m_dir.begin())
-	  m_map.setTile(0, it->_x, it->_y, it->_tile);
+	  m_map.setTile(1, it->_x, it->_y, it->_tile);
       }
     if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
      	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
-     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
+     	m_map.getLayer(1).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
      	== TileTypeEvolution ::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
 	endGame();
 	return ;
       }
@@ -198,7 +226,10 @@ namespace arcade
 	== TileTypeEvolution ::FOOD)
       {
 	m_score = m_score + m_appleScore;
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y,
+		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+			   {255, 0, 0, 0}, 0, 0, 0, 0));
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();
@@ -207,7 +238,7 @@ namespace arcade
       {
 	if (m_appleScore >= MINSCORE + STEPSCORE)
 	  m_appleScore = m_appleScore - STEPSCORE;
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
       }
   }
 
@@ -237,7 +268,7 @@ namespace arcade
     m_appleScore = MAXSCORE;
     m_map.setTile(0, pos % m_map.getWidth(), pos / m_map.getWidth(),
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
-		       {255, 0, 255, 255}, 0, 0, 0, 0));
+		       {255, 0, 255, 255}, 1, 0, 0, 0, true));
   }
 
   void Snake::addSnake()
@@ -279,6 +310,8 @@ namespace arcade
   std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_head.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_body.png"));
     return (std::move(sprites));
   }
 
@@ -327,7 +360,7 @@ namespace arcade
 	writeHigh( SNAKE_HIGH_FILE, m_score);
 	m_gui.setHighScore(m_score);
       }
-    m_state = GameState::QUIT;
+    m_process = GameProcess::GAMEOVER;
     m_gui.setGameOver(true, "Game Over");
   }
 }

@@ -4,9 +4,9 @@ namespace arcade
 {
 
   Tile::Tile(TileType type, TileTypeEvolution evo, Color color,
-      size_t id, size_t pos, double x, double y)
+      size_t id, size_t pos, double x, double y, bool hasSprite)
     : m_type(type), m_evo(evo), m_color(color), m_spriteId(id),
-    m_spritePos(pos), m_shiftX(x), m_shiftY(y)
+    m_spritePos(pos), m_shiftX(x), m_shiftY(y), m_hasSprite(hasSprite)
   {
   }
 
@@ -31,7 +31,7 @@ namespace arcade
 
   bool Tile::hasSprite() const
   {
-    return (false);
+    return (m_hasSprite);
   }
 
   size_t Tile::getSpriteId() const
