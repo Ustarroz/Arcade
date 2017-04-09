@@ -41,6 +41,7 @@ namespace arcade
       size_t m_appleScore;
       size_t m_score;
       GameState m_state;
+      GameProcess m_process;
       GameGUI m_gui;
       void useEvent(Event event);
       void useEventKeyBoard(Event event);

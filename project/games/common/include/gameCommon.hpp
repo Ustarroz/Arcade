@@ -17,6 +17,12 @@
 
 namespace arcade
 {
+  enum GameProcess{
+    GAMEPLAYING = 0,
+    GAMEPAUSE,
+    GAMEOVER
+  };
+
   enum DirGame{
     DIR_UP = 0,
     DIR_LEFT,
