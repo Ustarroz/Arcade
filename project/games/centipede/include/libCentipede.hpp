@@ -50,6 +50,7 @@ namespace arcade
     PosGame m_player;
     PosGame m_shoot;
     GameState m_state;
+    GameProcess m_process;
     GameGUI m_gui;
     void useEvent(Event event);
     void useEventKeyBoard(Event event);

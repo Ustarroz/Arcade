@@ -17,6 +17,7 @@ namespace arcade
     size_t tmp = readHigh(CENTIPEDE_HIGH_FILE);
     m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
+    m_process = GameProcess::GAMEPLAYING;
   }
 
   Centipede::~Centipede()
@@ -121,7 +122,7 @@ namespace arcade
 	    break;
 	  }
 	case KB_SPACE:
-	  if (m_shoot._dir == DIR_DOWN)
+	  if (m_process == GameProcess::GAMEPLAYING && m_shoot._dir == DIR_DOWN)
 	    {
 	      type = checkPos(m_player._x, m_player._y - 1, 0);
 	      if (type == TileType::EMPTY)
@@ -135,22 +136,38 @@ namespace arcade
 	    }
 	return ;
 	case KB_ENTER:
-	  if (m_state == GameState::INGAME)
+	  if (m_process == GameProcess::GAMEPLAYING)
 	    {
-	      m_state = GameState::MENU;
+	      m_process = GameProcess::GAMEPAUSE;
 	      m_gui.setGameOver(true, "Pause");
 	    }
 	  else
 	    {
-	      if (m_state == GameState::QUIT)
+	      if (m_process == GameProcess::GAMEOVER)
 		resetGame(false);
-	      m_state = GameState::INGAME;
+	      m_process = GameProcess::GAMEPLAYING;
 	      m_gui.setGameOver(false);
 	    }
+	return ;
+	case KB_8:
+	  endGame();
+	  m_state = GameState::MENU;
+	return ;
+	case KB_9:
+	  endGame();
+	  resetGame(false);
+	  m_process = GameProcess::GAMEPLAYING;
+	  m_gui.setGameOver(false);
+	return ;
+	case KB_ESCAPE:
+	  endGame();
+	  m_state = GameState::QUIT;
 	return ;
 	default:
 	  return ;
       }
+    if (m_process != GameProcess::GAMEPLAYING)
+      return ;
     type = checkPos(x, y, m_map.getHeight() * 4 / 5);
     if (type == TileType::EMPTY)
       {
@@ -187,6 +204,10 @@ namespace arcade
 	break;
 	case ET_BUTTON:
 	  useEventKeyButton(event);
+	break;
+	case ET_QUIT:
+	  endGame();
+	  m_state = GameState::QUIT;
 	break;
 	default:
 	  break;
@@ -249,7 +270,7 @@ namespace arcade
     DirGame	save;
     DirGame	subsave;
 
-    if (m_state != GameState::INGAME)
+    if (m_process != GameProcess::GAMEPLAYING)
       return ;
     if (m_shoot._dir == DirGame::DIR_UP)
       processShoot();
@@ -372,7 +393,7 @@ namespace arcade
 	writeHigh( CENTIPEDE_HIGH_FILE, m_score);
 	m_gui.setHighScore(m_score);
       }
-    m_state = GameState::QUIT;
+    m_process = GameProcess::GAMEPLAYING;
     m_gui.setGameOver(true, "Game Over");
   }
 
