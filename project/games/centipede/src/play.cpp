@@ -61,9 +61,9 @@ namespace arcade
 #ifdef DEBUG
               std::cerr << "SIZEOF wrotte: " << sizeof(WhereAmI) + (sizeof(Position)) << std::endl;
 #endif
-            int a = write(1, ami, sizeof(WhereAmI) + (sizeof(Position)));
+              std::cout.write(reinterpret_cast<char *>(ami), sizeof(WhereAmI) + (sizeof(Position)));
 #ifdef DEBUG
-            std::cerr << "REALLY WROTE: " << a << std::endl;
+            std::cerr << "REALLY WROTE: " << std::endl;
 #endif
 
 	    	    /*WhereAmI *ami = new(WhereAmI [sizeof(struct WhereAmI) + sizeof(Position) * centipede.getPlayer().size()]);
@@ -101,11 +101,11 @@ namespace arcade
 		     0, j, i)).getType();
 		  }
 	      }
-	    int a = write(1, getMap, sizeof(struct GetMap) +
+            std::cout.write(reinterpret_cast<char *>(getMap), sizeof(struct GetMap) +
 			     sizeof(TileType) * centipede.getCurrentMap().getWidth() *
                              centipede.getCurrentMap().getHeight());
 #ifdef DEBUG
-	    std::cerr << "MAP: wrote: " <<  a << std::endl;
+	    std::cerr << "MAP: wrote: " << std::endl;
 #endif
 	    //delete (getMap);
 	  }
