@@ -106,6 +106,7 @@ namespace arcade
 
   void libSDL::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
+    m_sprites.clear();
 #ifdef DEBUG
     std::cout << "[SDL] LOAD SPRITES" << std::endl;
 #endif
