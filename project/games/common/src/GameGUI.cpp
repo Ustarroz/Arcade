@@ -1,5 +1,5 @@
 /*
-** SnakeGUI.cpp for arcade in /home/login_p/delivery/arcade/SnakeGUI.cpp
+** GameGUI.cpp for arcade in /home/login_p/delivery/arcade/GameGUI.cpp
 **
 ** Made by Edouard Puillandre
 ** Login   <edouard.puillandre@epitech.eu>
@@ -8,11 +8,11 @@
 ** Last update sam. avr. 08 13:28:48 2017 Edouard Puillandre
 */
 
-#include "SnakeGUI.hpp"
+#include "GameGUI.hpp"
 
 namespace arcade
 {
-  SnakeGUI::SnakeGUI()
+  GameGUI::GameGUI()
   {
     Component comp = Component({255,255,255,255}, "0", GUI_COL_THREE, GUI_LINE_TWO + GUI_STEP_LINE, GUI_WIDTH, GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
@@ -32,16 +32,16 @@ namespace arcade
     comp = Component({255,255,255,255}, "HighScore", GUI_COL_TWO, GUI_LINE_TWO, GUI_WIDTH,GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
-    comp = Component({255,255,255,255}, "Snake", GUI_COL_TWO, GUI_LINE_ONE, GUI_WIDTH, GUI_HEIGHT);
+    comp = Component({255,255,255,255}, "Game", GUI_COL_TWO, GUI_LINE_ONE, GUI_WIDTH, GUI_HEIGHT);
     comp.setStringColor({0,0,0,255});
     m_comps.push_back(comp);
   }
 
-  SnakeGUI::~SnakeGUI()
+  GameGUI::~GameGUI()
   {
   }
 
-  void SnakeGUI::setGameOver(bool print_over, const std::string &text)
+  void GameGUI::setGameOver(bool print_over, const std::string &text)
   {
     if (print_over)
       {
@@ -56,12 +56,12 @@ namespace arcade
       }
   }
 
-  void SnakeGUI::setScore(size_t score)
+  void GameGUI::setScore(size_t score)
   {
     m_comps[GUI_SCORE].setString(std::to_string(score));
   }
 
-  void SnakeGUI::setHighScore(size_t score)
+  void GameGUI::setHighScore(size_t score)
   {
     m_comps[GUI_HIGHSCORE].setString(std::to_string(score));
   }

@@ -6,7 +6,10 @@ include $(MK_COMMON_DIR)defs.mk $(MK_THIS)local_defs.mk
 SRC=	$(addprefix ./src/,	\
 	libSnake.cpp		\
 	play.cpp		\
-	SnakeGUI.cpp		\
+	)
+SRC+=	$(addprefix ../common/src/,	\
+	GameGUI.cpp			\
+	gameCommon.cpp			\
 	)
 SRC+=	$(addprefix ./../../common/,	\
 	$(COMMON_SRC)			\

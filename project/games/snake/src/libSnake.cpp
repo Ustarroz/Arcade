@@ -1,7 +1,5 @@
 #include <algorithm>
 #include <string>
-#include <fstream>
-#include <iostream>
 #include "libSnake.hpp"
 #include "Map.hpp"
 #include "GameState.hpp"
@@ -11,50 +9,12 @@
 
 namespace arcade
 {
-  static size_t readHigh()
-  {
-    std::ifstream myfile;
-    std::string line;
-    int 	nb;
-
-    myfile.open(SNAKE_HIGH_FILE);
-    if (!myfile.is_open())
-      return (0);
-    getline(myfile, line);
-    if (line.size() == 0)
-      {
-	myfile.close();
-	return (0);
-      }
-    try {
-	nb = stoi(line);
-      }
-    catch (std::invalid_argument){
-	return (0);
-      }
-    myfile.close();
-    return (nb < 0 ? 0 : nb);
-  }
-
-  static void writeHigh(size_t high)
-  {
-    std::ofstream myfile;
-    std::string line;
-
-    myfile.open(SNAKE_HIGH_FILE, std::ios::trunc);
-    if (!myfile.is_open())
-      return ;
-    line = std::to_string(high);
-    myfile << line;
-    myfile.close();
-  }
-
   Snake::Snake()
     : m_map(16, 16)
   {
     m_map.addLayer();
     resetGame(true);
-    size_t tmp = readHigh();
+    size_t tmp = readHigh(SNAKE_HIGH_FILE);
     m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
   }
@@ -72,7 +32,7 @@ namespace arcade
 
     if (!first)
       {
-	for (std::vector<PosSnake>::iterator it = m_dir.begin();
+	for (std::vector<PosGame>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
 	    m_map.setTile(0, it->_x, it->_y, reset);
@@ -90,19 +50,19 @@ namespace arcade
       }
     posx = m_map.getWidth() / 2;
     posy = m_map.getHeight() / 2 - 1;
-    m_dir.push_back(PosSnake(posx, posy, DIR_UP,
+    m_dir.push_back(PosGame(posx, posy, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::PLAYER,
 				  {0, 0, 255, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 1, DIR_UP,
+    m_dir.push_back(PosGame(posx, posy + 1, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 2, DIR_UP,
+    m_dir.push_back(PosGame(posx, posy + 2, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosSnake(posx, posy + 3, DIR_UP,
+    m_dir.push_back(PosGame(posx, posy + 3, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
 				  {0, 255, 0, 255}, 0, 0, 0, 0)));
@@ -202,51 +162,15 @@ namespace arcade
     return (std::move(m_net));
   }
 
-  static Snake::DirSnake oppositeDir(Snake::DirSnake dir)
-  {
-    switch (dir)
-      {
-	case Snake::DIR_UP:
-	  return (Snake::DIR_DOWN);
-	case Snake::DIR_DOWN:
-	  return (Snake::DIR_UP);
-	case Snake::DIR_LEFT:
-	  return (Snake::DIR_RIGHT);
-	case Snake::DIR_RIGHT:
-	  return (Snake::DIR_LEFT);
-        default:
-          return (Snake::DIR_UP);
-      }
-  }
-
-  static void changeDir(Snake::PosSnake &cpy, Snake::DirSnake dir)
-  {
-    switch (dir)
-      {
-	case Snake::DIR_RIGHT :
-	  cpy._x = cpy._x + 1;
-	  break;
-	case Snake::DIR_LEFT :
-	  cpy._x = cpy._x - 1;
-	  break;
-	case Snake::DIR_UP :
-	  cpy._y = cpy._y - 1;
-	  break;
-	case Snake::DIR_DOWN :
-	  cpy._y = cpy._y + 1;
-	  break;
-      }
-  }
-
   void Snake::process()
   {
-    DirSnake	save;
-    DirSnake	subsave;
+    DirGame	save;
+    DirGame	subsave;
 
     if (m_state != GameState::INGAME)
       return ;
     save = m_dir[0]._dir;
-    for(std::vector<PosSnake>::iterator it = m_dir.begin();
+    for(std::vector<PosGame>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
       {
 	m_map.setTile(0, it->_x, it->_y,
@@ -298,7 +222,7 @@ namespace arcade
 	    list.push_back(x + y * m_map.getWidth());
 	  }
       }
-    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+    for (std::vector<PosGame>::iterator it = m_dir.begin();
 	 it != m_dir.end(); it++)
       {
 	list.erase(std::find(list.begin(), list.end(), it->_x + it->_y * m_map.getWidth()));
@@ -324,11 +248,11 @@ namespace arcade
     loop = true;
     while (tmp <= DIR_DOWN && loop)
       {
-	PosSnake tail = m_dir.back();
+	PosGame tail = m_dir.back();
 	if (tmp != tail._dir)
 	  {
-	    changeDir(tail, static_cast<DirSnake>(tmp));
-	    tail._dir = oppositeDir(static_cast<DirSnake>(tmp));
+	    changeDir(tail, static_cast<DirGame>(tmp));
+	    tail._dir = oppositeDir(static_cast<DirGame>(tmp));
 	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
 		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
 	      {
@@ -336,7 +260,7 @@ namespace arcade
 		continue ;
 	      }
 	    loop = false;
-	    for (std::vector<PosSnake>::iterator it = m_dir.begin();
+	    for (std::vector<PosGame>::iterator it = m_dir.begin();
 		 it != m_dir.end(); ++it)
 	      if (it->_x == tail._x && it->_y == tail._y)
 		{
@@ -381,7 +305,7 @@ namespace arcade
   {
     std::vector<Position> list;
 
-    for(std::vector<PosSnake>::const_iterator it = m_dir.begin();
+    for(std::vector<PosGame>::const_iterator it = m_dir.begin();
      	it != m_dir.end(); ++it)
       {
 	Position pos;
@@ -394,12 +318,12 @@ namespace arcade
 
   void Snake::endGame()
   {
-    size_t tmp = readHigh();
+    size_t tmp = readHigh(SNAKE_HIGH_FILE);
     if (tmp >= m_score)
       m_gui.setHighScore(tmp);
     else
       {
-	writeHigh(m_score);
+	writeHigh( SNAKE_HIGH_FILE, m_score);
 	m_gui.setHighScore(m_score);
       }
     m_state = GameState::QUIT;

@@ -2,7 +2,6 @@
 #include <cstdlib>
 #include <iostream>
 #include "Core.hpp"
-#include "../../games/snake/include/libSnake.hpp"
 
 int main(int argc, char **argv)
 {
