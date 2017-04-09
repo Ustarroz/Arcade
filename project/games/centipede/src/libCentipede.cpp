@@ -207,9 +207,14 @@ namespace arcade
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Centipede::getNetworkToSend()
+  std::vector<NetworkPacket> Centipede::getNetworkToSend()
   {
     return (std::move(m_net));
+  }
+
+  bool Centipede::hasNetwork() const
+  {
+    return (false);
   }
 
   void Centipede::processShoot()

@@ -159,9 +159,14 @@ namespace arcade
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Snake::getNetworkToSend()
+  std::vector<NetworkPacket> Snake::getNetworkToSend()
   {
     return (std::move(m_net));
+  }
+
+  bool Snake::hasNetwork() const
+  {
+    return (false);
   }
 
   void Snake::process()
@@ -241,7 +246,7 @@ namespace arcade
     m_appleScore = MAXSCORE;
     m_map.setTile(0, pos % m_map.getWidth(), pos / m_map.getWidth(),
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
-		       {255, 0, 255, 255}, 0, 0, 0, 0));
+		       {255, 0, 255, 255}, 1, 0, 0, 0, true));
   }
 
   void Snake::addSnake()
