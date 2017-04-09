@@ -269,50 +269,45 @@ namespace arcade
   {
     DirGame	save;
     DirGame	subsave;
+    DirGame	headsave;
 
     if (m_process != GameProcess::GAMEPLAYING)
       return ;
     if (m_shoot._dir == DirGame::DIR_UP)
       processShoot();
-    /*save = m_centipede[0]._dir;
-    for(std::vector<PosGame>::iterator it = m_centipede.begin();
-	it != m_centipede.end(); ++it)
+    for (std::vector<std::vector<PosGame>>::iterator it = m_centipede.begin();
+	 it != m_centipede.end(); it++)
       {
-	m_map.setTile(0, it->_x, it->_y,
-		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {255, 0, 0, 255}, 0, 0, 0, 0));
-	changeDir(*it, it->_dir);
-	subsave = it->_dir;
-	it->_dir = save;
-	save = subsave;
-	if (it != m_centipede.begin())
-	  m_map.setTile(0, it->_x, it->_y, it->_tile);
+	headsave = oppositeDir(it->begin()->_dir);
+	changeDir(*it->begin(), it->begin()->_dir);
+	if (checkPos(it->begin()->_x, it->begin()->_y, 0) != TileType::EMPTY &&
+	    it->begin()->_y != m_map.getHeight() - 1)
+	  {
+	    it->begin()->_dir = DirGame::DIR_DOWN;
+	  }
+	else if (it->begin()->_y == m_map.getHeight() - 1)
+	  {
+	    it->erase(it->begin());
+	    if (m_score > 0)
+	    	m_score = m_score - SHROOM_SCORE;
+	  }
+	changeDir(*it->begin(), headsave);
+	save = it->begin()->_dir;
+	for (std::vector<PosGame>::iterator jt = it->begin();
+	     jt != it->end(); jt++)
+	  {
+	    m_map.setTile(0, jt->_x, jt->_y,
+			  Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+			       {100, 0, 0, 0}, 0, 0, 0, 0));
+	    changeDir(*jt, jt->_dir);
+	    subsave = jt->_dir;
+	    jt->_dir = save;
+	    save = subsave;
+	    m_map.setTile(0, jt->_x, jt->_y, jt->_tile);
+	  }
+	if (it->begin()->_dir == DirGame::DIR_DOWN)
+	  it->begin()->_dir = headsave;
       }
-    if (m_centipede[0]._x < 0 || m_centipede[0]._x >= static_cast<int>(m_map.getWidth()) ||
-	m_centipede[0]._y < 0 || m_centipede[0]._y >= static_cast<int>(m_map.getHeight()) ||
-	m_map.getLayer(0).getTile(m_centipede[0]._x, m_centipede[0]._y).getTypeEv()
-	== TileTypeEvolution ::OBSTACLE)
-      {
-	changeDir(m_centipede[0], oppositeDir(m_centipede[0]._dir));
-	m_map.setTile(0, m_centipede[0]._x, m_centipede[0]._y, m_centipede[0]._tile);
-	endGame();
-	return ;
-      }
-    if (m_map.getLayer(0).getTile(m_centipede[0]._x, m_centipede[0]._y).getTypeEv()
-	== TileTypeEvolution ::FOOD)
-      {
-	m_score = m_score + m_appleScore;
-	m_map.setTile(0, m_centipede[0]._x, m_centipede[0]._y, m_centipede[0]._tile);
-	m_gui.setScore(m_score);
-	addCentipede();
-	addShroom();
-      }
-    else
-      {
-	if (m_appleScore >= MINSCORE + STEPSCORE)
-	  m_appleScore = m_appleScore - STEPSCORE;
-	m_map.setTile(0, m_centipede[0]._x, m_centipede[0]._y, m_centipede[0]._tile);
-      }*/
   }
 
   void Centipede::addShroom(int x, int y)
@@ -445,7 +440,6 @@ namespace arcade
 		else
 		  {
 		    jt = it->erase(jt);
-		    size_t prev = it->size();
 		    size_t len = it->end() - jt;
 		    std::vector<PosGame> list (len);
 		    std::move(jt, it->end(), list.begin());
@@ -469,6 +463,8 @@ namespace arcade
     else
       {
 	shotCentipede(x, y);
+	m_score = m_score + CENTIPEDE_SCORE;
+	m_gui.setScore(m_score);
       }
   }
 }
