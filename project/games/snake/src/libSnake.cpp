@@ -4,6 +4,7 @@
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
+#include "ISprite.hpp"
 
 #include <iostream>
 
