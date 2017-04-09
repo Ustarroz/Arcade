@@ -60,7 +60,7 @@ namespace arcade
     void addCentipede();
     void resetGame(bool first);
     void endGame();
-    bool checkPos(int x, int y, size_t limit_y);
+    TileType checkPos(int x, int y, size_t limit_y);
     void shotAt(int x, int y);
     void shotShroom(int x, int y);
     void processShoot();

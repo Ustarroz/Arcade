@@ -47,7 +47,7 @@ namespace arcade
 	if (in == CommandType::WHERE_AM_I)
 	  {
 #ifdef DEBUG
-	    std::cerr << "WHEREAMI: playerSize: " << centipede.getPlayer().size() << std::endl;
+	    std::cerr << "WHEREAMI" << std::endl;
 #endif
 	    //WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + (sizeof(Position) * centipede.getPlayer().size())]);
             WhereAmI *ami = new WhereAmI [sizeof(WhereAmI) + (sizeof(Position))];
@@ -59,7 +59,7 @@ namespace arcade
 	    ami->lenght = 1;
 	    ami->position[0] = centipede.getPlayer();
 #ifdef DEBUG
-              std::cerr << "SIZEOF wrotte: " << sizeof(WhereAmI) + (sizeof(Position) * centipede.getPlayer().size()) << std::endl;
+              std::cerr << "SIZEOF wrotte: " << sizeof(WhereAmI) + (sizeof(Position)) << std::endl;
 #endif
             int a = write(1, ami, sizeof(WhereAmI) + (sizeof(Position)));
 #ifdef DEBUG

@@ -10,7 +10,7 @@
 namespace arcade
 {
   Centipede::Centipede()
-   : m_map(40, 40)
+   : m_map(10, 10)
   {
     m_map.addLayer();
     resetGame(true);
@@ -38,6 +38,7 @@ namespace arcade
     if (!first)
       {
 	m_centipede.clear();
+	m_shroom.clear();
       }
     m_shoot._tile = Tile(TileType::MY_SHOOT, TileTypeEvolution::SHOT_PLAYER,
 			 {0, 0, 255, 255}, 0, 0, 0, 0);
@@ -82,72 +83,67 @@ namespace arcade
     return (m_state);
   }
 
-  bool Centipede::checkPos(int x, int y, size_t limit_y)
+  TileType Centipede::checkPos(int x, int y, size_t limit_y)
   {
-    return (!(y < static_cast<int>(limit_y) ||
-	      y >= static_cast<int>(m_map.getHeight()) ||
-	      x < 0 || x >= static_cast<int>(m_map.getWidth()) ||
-	      m_map.getLayer(0).getTile(x, y).getTypeEv()
-	      == TileTypeEvolution::OBSTACLE));
+    if (y < static_cast<int>(limit_y) ||
+	  y >= static_cast<int>(m_map.getHeight()) ||
+	  x < 0 || x >= static_cast<int>(m_map.getWidth()))
+      return (TileType::OTHER);
+    if (m_map.getLayer(0).getTile(x, y).getTypeEv()
+	== TileTypeEvolution::OBSTACLE)
+      return (TileType::OBSTACLE);
+    if (m_map.getLayer(0).getTile(x, y).getTypeEv()
+	== TileTypeEvolution::ENEMY)
+      return (TileType::EVIL_DUDE);
+    return (TileType::EMPTY);
   }
 
   void Centipede::useEventKeyBoard(Event event)
   {
+    int x;
+    int y;
+    TileType type;
+
     switch (event.kb_key)
       {
 	case KB_ARROW_LEFT:
-	  if (checkPos(m_player._x - 1, m_player._y, m_map.getHeight() * 4 / 5))
-	    {
-	      m_map.setTile(0, m_player._x, m_player._y,
-			    Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-				 {100, 0, 0, 255}, 0, 0, 0, 0));
-	      --m_player._x;
-	      m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
-	    }
-	break;
+	  {
+	    x = m_player._x - 1;
+	    y = m_player._y;
+	    break;
+	  }
 	case KB_ARROW_RIGHT:
-	  if (checkPos(m_player._x + 1, m_player._y, m_map.getHeight() * 4 / 5))
-	    {
-	      m_map.setTile(0, m_player._x, m_player._y,
-			    Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-				 {100, 0, 0, 255}, 0, 0, 0, 0));
-	      ++m_player._x;
-	      m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
-	    }
-	break;
+	  {
+	    x = m_player._x + 1;
+	    y = m_player._y;
+	    break;
+	  }
 	case KB_ARROW_DOWN:
-	  if (checkPos(m_player._x, m_player._y + 1, m_map.getHeight() * 4 / 5))
-	    {
-	      m_map.setTile(0, m_player._x, m_player._y,
-			    Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-				 {100, 0, 0, 255}, 0, 0, 0, 0));
-	      ++m_player._y;
-	      m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
-	    }
-	break;
+	  {
+	    x = m_player._x;
+	    y = m_player._y + 1;
+	    break;
+	  }
 	case KB_ARROW_UP:
-	  if (checkPos(m_player._x, m_player._y - 1, m_map.getHeight() * 4 / 5))
-	    {
-	      m_map.setTile(0, m_player._x, m_player._y,
-			    Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-				 {100, 0, 0, 255}, 0, 0, 0, 0));
-	      --m_player._y;
-	      m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
-	    }
-	break;
+	  {
+	    x = m_player._x;
+	    y = m_player._y - 1;
+	    break;
+	  }
 	case KB_SPACE:
 	  if (m_shoot._dir == DIR_DOWN)
 	    {
-	      if (checkPos(m_player._x, m_player._y - 1, 0))
+	      type = checkPos(m_player._x, m_player._y - 1, 0);
+	      if (type == TileType::EMPTY)
 		{
 		  m_shoot._dir = DIR_UP;
 		  m_shoot._x = m_player._x;
 		  m_shoot._y = m_player._y;
 		}
-	      else
+	      else if (type != TileType::OTHER)
 		shotAt(m_player._x, m_player._y - 1);
 	    }
-	break;
+	return ;
 	case KB_ENTER:
 	  if (m_state == GameState::INGAME)
 	    {
@@ -163,8 +159,20 @@ namespace arcade
 	    }
 	return ;
 	default:
-	  break;
+	  return ;
       }
+    type = checkPos(x, y, m_map.getHeight() * 4 / 5);
+    if (type == TileType::EMPTY)
+      {
+	m_map.setTile(0, m_player._x, m_player._y,
+		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+			   {100, 0, 0, 255}, 0, 0, 0, 0));
+	m_player._y = y;
+	m_player._x = x;
+	m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
+      }
+    else if (type == TileType::EVIL_DUDE)
+      endGame();
   }
 
   void Centipede::useEventKeyButton(Event event)
@@ -216,26 +224,26 @@ namespace arcade
 
   void Centipede::processShoot()
   {
-    bool	check_one = checkPos(m_shoot._x, m_shoot._y - 1, 0);
-    bool	check_two = checkPos(m_shoot._x, m_shoot._y - 2, 0);
+    TileType	check_one = checkPos(m_shoot._x, m_shoot._y - 1, 0);
+    TileType	check_two = checkPos(m_shoot._x, m_shoot._y - 2, 0);
 
     if (m_shoot._y != m_player._y)
     	m_map.setTile(0, m_shoot._x, m_shoot._y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 			   {100, 0, 0, 0}, 0, 0, 0, 0));
-    if (check_one && check_two)
+    if (check_one == TileType::EMPTY && check_two == TileType::EMPTY)
       {
 	m_shoot._y = m_shoot._y - 2;
 	m_map.setTile(0, m_shoot._x, m_shoot._y, m_shoot._tile);
       }
-    else if (check_one)
+    else if (check_one == TileType::EMPTY)
       {
 	m_shoot._y = m_shoot._y - 1;
 	m_map.setTile(0, m_shoot._x, m_shoot._y, m_shoot._tile);
       }
     else
       {
-	if (m_shoot._y > 0)
+	if (check_one != TileType::OTHER)
 	  shotAt(m_shoot._x, m_shoot._y - 1);
 	m_shoot._dir = DirGame::DIR_DOWN;
       }
@@ -433,6 +441,7 @@ namespace arcade
 			      Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
 				   {col, static_cast<uint8_t >(255 - col), col, 255}, 0, 0, 0, 0));
 	      }
+	    return ;
 	  }
       }
   }
