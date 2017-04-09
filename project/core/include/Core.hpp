@@ -41,7 +41,6 @@ namespace arcade
       void * m_handlerSound;
       std::string m_error;
       ISound *m_libSound;
-      int m_ndx;
   };
 }
 

@@ -16,7 +16,6 @@ namespace arcade
   Core::Core(std::string const &fileName)
   {
     m_libsGfxName.push_back(fileName);
-    m_ndx = 0;
     m_handlerSound = dlopen("./music/lib_arcade_sound.so", RTLD_NOW | RTLD_GLOBAL);
     if (m_handlerSound != NULL)
     {
@@ -68,19 +67,39 @@ namespace arcade
     m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
     // ======================
     bool go = true;
+    int ndxGfx = 0;
+    int ndxGame = 0;
     while (go)
     {
       while (m_libsGfx->pollEvent(e))
       {
-        if (static_cast<KeyboardKey>(e.m_key) == KB_1)
+        if (static_cast<KeyboardKey>(e.m_key) == KB_2 || static_cast<KeyboardKey>(e.m_key) == KB_3)
         {
 #ifdef DEBUG
           std::cout << "switch gfx lib" << std::endl;
 #endif
           delete m_libsGfx;
-          ++m_ndx;
-          std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[m_ndx % m_handlerGfx.size()], "getLib"));
+          if (static_cast<KeyboardKey>(e.m_key) == KB_2)
+            --ndxGfx;
+          else
+            ++ndxGame;
+          std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[ndxGfx % m_handlerGfx.size()], "getLib"));
           m_libsGfx = gfxLaunch();
+          e.kb_key = KB_0;
+          m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
+        }
+        else if (static_cast<KeyboardKey>(e.m_key) == KB_4 || static_cast<KeyboardKey>(e.m_key) == KB_5)
+        {
+#ifdef DEBUG
+          std::cout << "switch game lib" << std::endl;
+#endif
+          delete m_libsGame;
+          if (static_cast<KeyboardKey>(e.m_key) == KB_4)
+            --ndxGame;
+          else
+            ++ndxGame;
+          std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[ndxGame % m_handlerGame.size()], "getGame"));
+          m_libsGame = gameLaunch();
           e.kb_key = KB_0;
           m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
         }
