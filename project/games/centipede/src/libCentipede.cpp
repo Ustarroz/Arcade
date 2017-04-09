@@ -27,9 +27,6 @@ namespace arcade
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 		      {100, 0, 0, 0}, 0, 0, 0, 0);
-    size_t posx;
-    size_t posy;
-
     for (unsigned int x = 0; x < m_map.getWidth(); x++)
       for (unsigned int y = 0; y < m_map.getHeight(); y++)
 	{
@@ -48,28 +45,21 @@ namespace arcade
     m_player._tile = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 			    {255, 255, 255, 255}, 0, 0, 0, 0);
     m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
-    /*posx = m_map.getWidth() / 2;
-    posy = m_map.getHeight() / 2 - 1;
-    m_centipede.push_back(PosGame(posx, posy, DIR_UP,
-			    Tile(TileType::EMPTY,
-				 TileTypeEvolution::PLAYER,
-				 {255, 255, 255, 255}, 0, 0, 0, 0)));
-    m_centipede.push_back(PosGame(posx, posy + 1, DIR_UP,
-			    Tile(TileType::EMPTY,
-				 TileTypeEvolution::OBSTACLE,
-				 {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_centipede.push_back(PosGame(posx, posy + 2, DIR_UP,
-			    Tile(TileType::EMPTY,
-				 TileTypeEvolution::OBSTACLE,
-				 {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_centipede.push_back(PosGame(posx, posy + 3, DIR_UP,
-			    Tile(TileType::EMPTY,
-				 TileTypeEvolution::OBSTACLE,
-				 {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_map.setTile(0, m_centipede[0]._x, m_centipede[0]._y, m_centipede[0]._tile);
-    m_map.setTile(0, m_centipede[1]._x, m_centipede[1]._y, m_centipede[1]._tile);
-    m_map.setTile(0, m_centipede[2]._x, m_centipede[2]._y, m_centipede[2]._tile);
-    m_map.setTile(0, m_centipede[3]._x, m_centipede[3]._y, m_centipede[3]._tile);*/
+
+    int posx = m_map.getWidth() * 2 / 3;
+    int posy = 0;
+    std::vector<PosGame> list;
+    for (int x = posx; x >= 0; --x)
+      {
+	PosGame pos = (PosGame(x, posy, DIR_RIGHT,
+			       Tile(TileType::EVIL_DUDE,
+				    TileTypeEvolution::ENEMY,
+				    {255, 255, x == posx ? 255 : 0, 255},
+				    0, 0, 0, 0)));
+	list.push_back(pos);
+	m_map.setTile(0, pos._x, pos._y, pos._tile);
+      }
+    m_centipede.push_back(list);
     for (size_t i = 0; i < m_map.getWidth() * m_map.getHeight() / 50; i++)
       {
 	randShroom();
@@ -332,42 +322,6 @@ namespace arcade
     addShroom(pos % m_map.getWidth(), pos / m_map.getWidth());
   }
 
-  void Centipede::addCentipede()
-  {
-    int tmp;
-    bool loop;
-
-    tmp = DIR_UP;
-    loop = true;
-    while (tmp <= DIR_DOWN && loop)
-      {
-	PosGame tail = m_centipede.back();
-	if (tmp != tail._dir)
-	  {
-	    changeDir(tail, static_cast<DirGame>(tmp));
-	    tail._dir = oppositeDir(static_cast<DirGame>(tmp));
-	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
-		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
-	      {
-		tmp = tmp + 1;
-		continue ;
-	      }
-	    loop = false;
-	    for (std::vector<PosGame>::iterator it = m_centipede.begin();
-		 it != m_centipede.end(); ++it)
-	      if (it->_x == tail._x && it->_y == tail._y)
-		{
-		  loop = true;
-		}
-	  }
-	if (!loop)
-	  m_centipede.push_back(tail);
-	tmp = tmp + 1;
-      }
-    if (loop)
-      resetGame(false);
-  }
-
   std::vector<std::unique_ptr<ISprite>> Centipede::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
@@ -446,11 +400,19 @@ namespace arcade
       }
   }
 
+  void Centipede::shotCentipede(int x, int y)
+  {
+    (void) x;
+    (void) y;
+  }
+
   void Centipede::shotAt(int x, int y)
   {
     if (m_map.getLayer(0).getTile(x, y).getTypeEv()
 	== TileTypeEvolution::OBSTACLE)
       shotShroom(x, y);
+    else
+      shotCentipede(x, y);
   }
 }
 

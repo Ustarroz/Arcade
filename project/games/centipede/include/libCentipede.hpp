@@ -43,8 +43,7 @@ namespace arcade
     std::vector<std::pair<std::string, SoundType> > m_soundsName;
     std::vector<NetworkPacket> m_net;
     std::vector<std::unique_ptr<ISprite> > m_sprites;
-    std::vector<PosGame> m_centipede;
-    size_t m_appleScore;
+    std::vector<std::vector<PosGame>> m_centipede;
     std::vector<Shroom> m_shroom;
     size_t m_score;
     PosGame m_player;
@@ -57,12 +56,12 @@ namespace arcade
     void useEventKeyButton(Event event);
     void randShroom();
     void addShroom(int x, int y);
-    void addCentipede();
     void resetGame(bool first);
     void endGame();
     TileType checkPos(int x, int y, size_t limit_y);
     void shotAt(int x, int y);
     void shotShroom(int x, int y);
+    void shotCentipede(int x, int y);
     void processShoot();
     std::vector<Sound> m_soundsPlay;
   };
