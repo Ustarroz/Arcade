@@ -132,14 +132,14 @@ namespace arcade
         {
           ITile const &tile = map.at(nb, x, y);
           pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
+          SDL_Rect rect;
+          rect.x = pos.x;
+          rect.y = pos.y;
+          rect.w = SIZE_TILE;
+          rect.h = SIZE_TILE;
           if (tile.hasSprite() && m_sprites.size() > 0)
           {
             SDL_Surface *sur = m_sprites[tile.getSpriteId() % m_sprites.size()];
-            SDL_Rect rect;
-            rect.x = pos.x;
-            rect.y = pos.y;
-            rect.w = SIZE_TILE;
-            rect.h = SIZE_TILE;
             if (sur)
               SDL_BlitScaled(sur, NULL, m_disp.screen, &rect);
           }
@@ -147,8 +147,8 @@ namespace arcade
           {
             Color a = tile.getColor();
             SDL_Color color = {a.r, a.g, a.b, a.a};
-            //if (a.a != 0)
-              drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
+            SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
+            //drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
           }
         }
       }
