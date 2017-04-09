@@ -45,7 +45,7 @@ namespace arcade
   {
     if (print_over)
       {
-	m_comps[GUI_GAMEOVER].setWidth(text.size() * 10);
+	m_comps[GUI_GAMEOVER].setWidth(text.size() * 0.01);
 	m_comps[GUI_GAMEOVER].setHeight(GUI_HEIGHT);
 	m_comps[GUI_GAMEOVER].setString(text);
       }

@@ -24,7 +24,10 @@ namespace arcade
     DIR_DOWN
   };
   struct PosGame{
-    PosGame(int x, int y, DirGame dir, Tile const & mtile)
+    PosGame(int x = 0, int y = 0,
+	    DirGame dir = DirGame::DIR_UP,
+	    Tile const & mtile = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+				      {255, 0, 0, 255}, 0, 0, 0, 0))
     {
       _x = x;
       _y = y;
