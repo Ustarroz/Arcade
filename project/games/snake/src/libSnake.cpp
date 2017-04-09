@@ -200,6 +200,9 @@ namespace arcade
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y,
+		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+			   {255, 0, 0, 0}, 0, 0, 0, 0));
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();

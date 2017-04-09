@@ -140,7 +140,8 @@ namespace arcade
           {
             Color a = tile.getColor();
             SDL_Color color = {a.r, a.g, a.b, a.a};
-            drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
+            //if (a.a != 0)
+              drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
           }
         }
       }
