@@ -6,13 +6,16 @@
 #include "Tile.hpp"
 
 #include <iostream>
+
 namespace arcade
 {
   Centipede::Centipede()
-    : m_map(64, 40)
+   : m_map(16, 16)
   {
     m_map.addLayer();
     resetGame(true);
+    size_t tmp = readHigh(CENTIPEDE_HIGH_FILE);
+    m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
   }
 
@@ -23,47 +26,53 @@ namespace arcade
   void Centipede::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-    		{255, 0, 0, 255}, 0, 0, 0, 0);
+		      {255, 0, 0, 255}, 0, 0, 0, 0);
     size_t posx;
     size_t posy;
 
     if (!first)
       {
-	for (std::vector<PosCentipede>::iterator it = m_dir.begin();
+	for (std::vector<PosGame>::iterator it = m_dir.begin();
 	     it != m_dir.end(); ++it)
 	  {
 	    m_map.setTile(0, it->_x, it->_y, reset);
 	  }
 	for (unsigned int x = 0; x < m_map.getWidth(); x++)
-	    for (unsigned int y = 0; y < m_map.getHeight(); y++)
-	      if (m_map.getLayer(0).getTile(x, y).getTypeEv() ==
-		 TileTypeEvolution::FOOD)
-		{
-		  m_map.setTile(0, x, y, reset);
-		  x = m_map.getWidth();
-		  y = m_map.getHeight();
-		}
+	  for (unsigned int y = 0; y < m_map.getHeight(); y++)
+	    if (m_map.getLayer(0).getTile(x, y).getTypeEv() ==
+		TileTypeEvolution::FOOD)
+	      {
+		m_map.setTile(0, x, y, reset);
+		x = m_map.getWidth();
+		y = m_map.getHeight();
+	      }
 	m_dir.clear();
       }
     posx = m_map.getWidth() / 2;
     posy = m_map.getHeight() / 2 - 1;
-    m_dir.push_back(PosCentipede(posx, posy, DIR_UP,
-			     Tile(TileType::OTHER,
-				  TileTypeEvolution::PLAYER,
-				  {255, 255, 255, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosCentipede(posx, posy + 1, DIR_UP,
-			     Tile(TileType::OBSTACLE,
-				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
-    m_dir.push_back(PosCentipede(posx, posy + 2, DIR_UP,
-			     Tile(TileType::OBSTACLE,
-				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosGame(posx, posy, DIR_UP,
+			    Tile(TileType::EMPTY,
+				 TileTypeEvolution::PLAYER,
+				 {255, 255, 255, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosGame(posx, posy + 1, DIR_UP,
+			    Tile(TileType::EMPTY,
+				 TileTypeEvolution::OBSTACLE,
+				 {0, 255, 0, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosGame(posx, posy + 2, DIR_UP,
+			    Tile(TileType::EMPTY,
+				 TileTypeEvolution::OBSTACLE,
+				 {0, 255, 0, 255}, 0, 0, 0, 0)));
+    m_dir.push_back(PosGame(posx, posy + 3, DIR_UP,
+			    Tile(TileType::EMPTY,
+				 TileTypeEvolution::OBSTACLE,
+				 {0, 255, 0, 255}, 0, 0, 0, 0)));
     m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
     m_map.setTile(0, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
     m_map.setTile(0, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
+    m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
+    m_gui.setScore(0);
   }
 
   GameState Centipede::getGameState() const
@@ -74,25 +83,36 @@ namespace arcade
   void Centipede::useEventKeyBoard(Event event)
   {
     switch (event.kb_key)
-    {
+      {
 	case KB_ARROW_LEFT:
 	  m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-	  break;
+	break;
 	case KB_ARROW_RIGHT:
 	  m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
-	  break;
+	break;
 	case KB_ARROW_DOWN:
 	  m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
-	  break;
+	break;
 	case KB_ARROW_UP:
 	  m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
-	  break;
+	break;
 	case KB_ENTER:
-	  m_state = GameState::MENU;
-	  return ;
+	  if (m_state == GameState::INGAME)
+	    {
+	      m_state = GameState::MENU;
+	      m_gui.setGameOver(true, "Pause");
+	    }
+	  else
+	    {
+	      if (m_state == GameState::QUIT)
+		resetGame(false);
+	      m_state = GameState::INGAME;
+	      m_gui.setGameOver(false);
+	    }
+	return ;
 	default:
 	  break;
-    }
+      }
   }
 
   void Centipede::useEventKeyButton(Event event)
@@ -111,13 +131,13 @@ namespace arcade
       {
 	case ET_KEYBOARD:
 	  useEventKeyBoard(event);
-	  break;
+	break;
 	case ET_JOYSTICK:
 	  useEventKeyJoystick(event);
-	  break;
+	break;
 	case ET_BUTTON:
 	  useEventKeyButton(event);
-	  break;
+	break;
 	default:
 	  break;
       }
@@ -128,17 +148,7 @@ namespace arcade
     for(std::vector<Event>::iterator it = event.begin();
 	it != event.end(); ++it)
       {
-	if (m_state == GameState::INGAME)
-	  useEvent(*it);
-	else
-	  {
-	    GameState prev;
-
-	    prev = m_state;
-	    m_state = m_gui.useEventGUI(*it, m_state);
-	    if (prev == GameState::QUIT && m_state == INGAME)
-	      resetGame(false);
-	  }
+	useEvent(*it);
       }
   }
 
@@ -152,51 +162,15 @@ namespace arcade
     return (std::move(m_net));
   }
 
-  static Centipede::DirCentipede oppositeDir(Centipede::DirCentipede dir)
-  {
-    switch (dir)
-      {
-	case Centipede::DIR_UP:
-	  return (Centipede::DIR_DOWN);
-	case Centipede::DIR_DOWN:
-	  return (Centipede::DIR_UP);
-	case Centipede::DIR_LEFT:
-	  return (Centipede::DIR_RIGHT);
-	case Centipede::DIR_RIGHT:
-	  return (Centipede::DIR_LEFT);
-        default:
-          return (Centipede::DIR_UP);
-      }
-  }
-
-  static void changeDir(Centipede::PosCentipede &cpy, Centipede::DirCentipede dir)
-  {
-    switch (dir)
-      {
-	case Centipede::DIR_RIGHT :
-	  cpy._x = cpy._x + 1;
-	  break;
-	case Centipede::DIR_LEFT :
-	  cpy._x = cpy._x - 1;
-	  break;
-	case Centipede::DIR_UP :
-	  cpy._y = cpy._y - 1;
-	  break;
-	case Centipede::DIR_DOWN :
-	  cpy._y = cpy._y + 1;
-	  break;
-      }
-  }
-
   void Centipede::process()
   {
-    DirCentipede	save;
-    DirCentipede	subsave;
+    DirGame	save;
+    DirGame	subsave;
 
     if (m_state != GameState::INGAME)
       return ;
     save = m_dir[0]._dir;
-    for(std::vector<PosCentipede>::iterator it = m_dir.begin();
+    for(std::vector<PosGame>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
       {
 	m_map.setTile(0, it->_x, it->_y,
@@ -210,14 +184,13 @@ namespace arcade
 	  m_map.setTile(0, it->_x, it->_y, it->_tile);
       }
     if (m_dir[0]._x < 0 || m_dir[0]._x >= static_cast<int>(m_map.getWidth()) ||
-     	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
-     	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getType()
-     	== TileType::OBSTACLE)
+	m_dir[0]._y < 0 || m_dir[0]._y >= static_cast<int>(m_map.getHeight()) ||
+	m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
+	== TileTypeEvolution ::OBSTACLE)
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	std::cout << "score " << m_score << std::endl;
-	m_state = GameState::QUIT;
+	endGame();
 	return ;
       }
     if (m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
@@ -249,15 +222,14 @@ namespace arcade
 	    list.push_back(x + y * m_map.getWidth());
 	  }
       }
-    for (std::vector<PosCentipede>::iterator it = m_dir.begin();
+    for (std::vector<PosGame>::iterator it = m_dir.begin();
 	 it != m_dir.end(); it++)
       {
 	list.erase(std::find(list.begin(), list.end(), it->_x + it->_y * m_map.getWidth()));
       }
     if (list.size() == 0)
       {
-	std::cout << "score " << m_score << std::endl;
-	m_state = GameState::QUIT;
+	endGame();
 	return ;
       }
     pos = list[std::rand() % list.size()];
@@ -276,11 +248,11 @@ namespace arcade
     loop = true;
     while (tmp <= DIR_DOWN && loop)
       {
-	PosCentipede tail = m_dir.back();
+	PosGame tail = m_dir.back();
 	if (tmp != tail._dir)
 	  {
-	    changeDir(tail, static_cast<DirCentipede>(tmp));
-	    tail._dir = oppositeDir(static_cast<DirCentipede>(tmp));
+	    changeDir(tail, static_cast<DirGame>(tmp));
+	    tail._dir = oppositeDir(static_cast<DirGame>(tmp));
 	    if (tail._x < 0 || tail._x >= static_cast<int>(m_map.getWidth()) ||
 		tail._y < 0 || tail._y >= static_cast<int>(m_map.getHeight()))
 	      {
@@ -288,7 +260,7 @@ namespace arcade
 		continue ;
 	      }
 	    loop = false;
-	    for (std::vector<PosCentipede>::iterator it = m_dir.begin();
+	    for (std::vector<PosGame>::iterator it = m_dir.begin();
 		 it != m_dir.end(); ++it)
 	      if (it->_x == tail._x && it->_y == tail._y)
 		{
@@ -333,8 +305,8 @@ namespace arcade
   {
     std::vector<Position> list;
 
-    for(std::vector<PosCentipede>::const_iterator it = m_dir.begin();
-     	it != m_dir.end(); ++it)
+    for(std::vector<PosGame>::const_iterator it = m_dir.begin();
+	it != m_dir.end(); ++it)
       {
 	Position pos;
 	pos.x = static_cast<uint16_t >(it->_x);
@@ -343,12 +315,26 @@ namespace arcade
       }
     return (list);
   }
+
+  void Centipede::endGame()
+  {
+    size_t tmp = readHigh(CENTIPEDE_HIGH_FILE);
+    if (tmp >= m_score)
+      m_gui.setHighScore(tmp);
+    else
+      {
+	writeHigh( CENTIPEDE_HIGH_FILE, m_score);
+	m_gui.setHighScore(m_score);
+      }
+    m_state = GameState::QUIT;
+    m_gui.setGameOver(true, "Game Over");
+  }
 }
 
 extern "C"
 {
-  arcade::IGame *getGame()
-  {
-    return (new arcade::Centipede());
-  }
+arcade::IGame *getGame()
+{
+  return (new arcade::Centipede());
+}
 }
