@@ -50,7 +50,7 @@ namespace arcade
   }
 
   Snake::Snake()
-    : m_map(64, 40)
+    : m_map(16, 16)
   {
     m_map.addLayer();
     resetGame(true);

@@ -20,6 +20,7 @@ namespace arcade
 
   libSound::~libSound()
   {
+      m_music.stop();
   }
 
   void libSound::loadMusic(std::string const &name)
