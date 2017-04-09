@@ -87,4 +87,14 @@ namespace arcade
   {
     m_width = width;
   }
+
+  void Component::setX(double x)
+  {
+    m_x = x;
+  }
+
+  void Component::setY(double y)
+  {
+    m_y = y;
+  }
 }

@@ -27,6 +27,8 @@ namespace arcade
       void setColor(Color const &);
       void setHeight(double width);
       void setWidth(double width);
+      void setY(double y);
+      void setX(double x);
     private:
       Color m_color;
       Color m_stringColor;

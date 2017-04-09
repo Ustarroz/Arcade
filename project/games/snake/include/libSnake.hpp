@@ -10,6 +10,7 @@
 #define MAXSCORE 500
 #define MINSCORE 50
 #define STEPSCORE 10
+#define SNAKE_HIGH_FILE "games/snake_high.txt"
 
 namespace arcade
 {
@@ -66,6 +67,7 @@ namespace arcade
       void placeApple();
       void addSnake();
       void resetGame(bool first);
+      void endGame();
       std::vector<Sound> m_soundsPlay;
   };
 }

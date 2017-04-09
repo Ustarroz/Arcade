@@ -1,18 +1,61 @@
 #include <algorithm>
 #include <string>
+#include <fstream>
+#include <iostream>
 #include "libSnake.hpp"
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
 
 #include <iostream>
+
 namespace arcade
 {
+  static size_t readHigh()
+  {
+    std::ifstream myfile;
+    std::string line;
+    int 	nb;
+
+    myfile.open(SNAKE_HIGH_FILE);
+    if (!myfile.is_open())
+      return (0);
+    getline(myfile, line);
+    if (line.size() == 0)
+      {
+	myfile.close();
+	return (0);
+      }
+    try {
+	nb = stoi(line);
+      }
+    catch (std::invalid_argument){
+	return (0);
+      }
+    myfile.close();
+    return (nb < 0 ? 0 : nb);
+  }
+
+  static void writeHigh(size_t high)
+  {
+    std::ofstream myfile;
+    std::string line;
+
+    myfile.open(SNAKE_HIGH_FILE, std::ios::trunc);
+    if (!myfile.is_open())
+      return ;
+    line = std::to_string(high);
+    myfile << line;
+    myfile.close();
+  }
+
   Snake::Snake()
     : m_map(64, 40)
   {
     m_map.addLayer();
     resetGame(true);
+    size_t tmp = readHigh();
+    m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
   }
 
@@ -69,6 +112,7 @@ namespace arcade
     m_map.setTile(0, m_dir[3]._x, m_dir[3]._y, m_dir[3]._tile);
     placeApple();
     m_score = 0;
+    m_gui.setScore(0);
   }
 
   GameState Snake::getGameState() const
@@ -93,7 +137,18 @@ namespace arcade
 	  m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
 	  break;
 	case KB_ENTER:
-	  m_state = GameState::MENU;
+	  if (m_state == GameState::INGAME)
+	    {
+	      m_state = GameState::MENU;
+	      m_gui.setGameOver(true, "Pause");
+	    }
+	  else
+	    {
+	      if (m_state == GameState::QUIT)
+		resetGame(false);
+	      m_state = GameState::INGAME;
+	      m_gui.setGameOver(false);
+	    }
 	  return ;
 	default:
 	  break;
@@ -133,17 +188,7 @@ namespace arcade
     for(std::vector<Event>::iterator it = event.begin();
 	it != event.end(); ++it)
       {
-	if (m_state == GameState::INGAME)
-	  useEvent(*it);
-	else
-	  {
-	    GameState prev;
-
-	    prev = m_state;
-	    m_state = m_gui.useEventGUI(*it, m_state);
-	    if (prev == GameState::QUIT && m_state == INGAME)
-	      resetGame(false);
-	  }
+	useEvent(*it);
       }
   }
 
@@ -221,8 +266,7 @@ namespace arcade
       {
 	changeDir(m_dir[0], oppositeDir(m_dir[0]._dir));
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	//std::cout << "score " << m_score << std::endl;
-	m_state = GameState::QUIT;
+	endGame();
 	return ;
       }
     if (m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
@@ -261,8 +305,7 @@ namespace arcade
       }
     if (list.size() == 0)
       {
-	//std::cout << "score " << m_score << std::endl;
-	m_state = GameState::QUIT;
+	endGame();
 	return ;
       }
     pos = list[std::rand() % list.size()];
@@ -347,6 +390,20 @@ namespace arcade
 	list.push_back(pos);
       }
     return (list);
+  }
+
+  void Snake::endGame()
+  {
+    size_t tmp = readHigh();
+    if (tmp >= m_score)
+      m_gui.setHighScore(tmp);
+    else
+      {
+	writeHigh(m_score);
+	m_gui.setHighScore(m_score);
+      }
+    m_state = GameState::QUIT;
+    m_gui.setGameOver(true, "Game Over");
   }
 }
 
