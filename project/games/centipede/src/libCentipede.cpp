@@ -69,7 +69,7 @@ namespace arcade
     m_map.setTile(0, m_centipede[1]._x, m_centipede[1]._y, m_centipede[1]._tile);
     m_map.setTile(0, m_centipede[2]._x, m_centipede[2]._y, m_centipede[2]._tile);
     m_map.setTile(0, m_centipede[3]._x, m_centipede[3]._y, m_centipede[3]._tile);*/
-    for (int i = 0; i < m_map.getWidth() * m_map.getHeight() / 50; i++)
+    for (size_t i = 0; i < m_map.getWidth() * m_map.getHeight() / 50; i++)
       {
 	randShroom();
       }
