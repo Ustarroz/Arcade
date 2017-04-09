@@ -159,9 +159,14 @@ namespace arcade
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Snake::getNetworkToSend()
+  std::vector<NetworkPacket> Snake::getNetworkToSend()
   {
     return (std::move(m_net));
+  }
+
+  bool Snake::hasNetwork() const
+  {
+    return (false);
   }
 
   void Snake::process()
