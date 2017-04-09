@@ -55,7 +55,7 @@ namespace arcade
 	PosGame pos = (PosGame(x, posy, DIR_RIGHT,
 			       Tile(TileType::EVIL_DUDE,
 				    TileTypeEvolution::ENEMY,
-				    {255, 255, x == posx ? 255 : 0, 255},
+				    {255, 255, 0, 255},
 				    0, 0, 0, 0)));
 	list.push_back(pos);
 	m_map.setTile(0, pos._x, pos._y, pos._tile);
@@ -426,10 +426,39 @@ namespace arcade
       }
   }
 
-  void Centipede::shotCentipede(int x, int y)
+  void	Centipede::shotCentipede(int x, int y)
   {
-    (void) x;
-    (void) y;
+    for (std::vector<std::vector<PosGame>>::iterator it = m_centipede.begin();
+	 it != m_centipede.end(); it++)
+      {
+	for (std::vector<PosGame>::iterator jt = it->begin();
+	     jt != it->end(); jt++)
+	  if (jt->_x == x && jt->_y == y)
+	    {
+	      addShroom(jt->_x, jt->_y);
+	      	if (jt == it->begin() || (jt->_x == it->back()._x &&
+					  jt->_y == it->back()._y))
+		  {
+		    it->erase(jt);
+		    return ;
+		  }
+		else
+		  {
+		    jt = it->erase(jt);
+		    size_t prev = it->size();
+		    size_t len = it->end() - jt;
+		    std::vector<PosGame> list (len);
+		    std::move(jt, it->end(), list.begin());
+		    while (jt != it->end())
+		      {
+			if (jt!= it->end())
+			  jt = it->erase(jt);
+		      }
+		    m_centipede.push_back(list);
+		    return ;
+		  }
+	    }
+      }
   }
 
   void Centipede::shotAt(int x, int y)
@@ -438,7 +467,9 @@ namespace arcade
 	== TileTypeEvolution::OBSTACLE)
       shotShroom(x, y);
     else
-      shotCentipede(x, y);
+      {
+	shotCentipede(x, y);
+      }
   }
 }
 
