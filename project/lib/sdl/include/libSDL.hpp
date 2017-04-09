@@ -7,7 +7,7 @@
 # include <string>
 # include <map>
 # include <SDL2/SDL.h>
-# include <SDL/SDL_ttf.h>
+# include <SDL2/SDL_ttf.h>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
