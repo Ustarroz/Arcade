@@ -4,6 +4,7 @@
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
+#include "Sprite.hpp"
 
 #include <iostream>
 
@@ -54,19 +55,19 @@ namespace arcade
     m_dir.push_back(PosGame(posx, posy, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::PLAYER,
-				  {0, 0, 255, 255}, 0, 0, 0, 0)));
+				  {0, 0, 255, 255}, 0, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 1, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 2, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 3, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
-				  {0, 255, 0, 255}, 0, 0, 0, 0)));
+				  {0, 255, 0, 255}, 1, 0, 0, 0, true)));
     m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
     m_map.setTile(1, m_dir[1]._x, m_dir[1]._y, m_dir[1]._tile);
     m_map.setTile(1, m_dir[2]._x, m_dir[2]._y, m_dir[2]._tile);
@@ -199,6 +200,9 @@ namespace arcade
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
+	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y,
+		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+			   {255, 0, 0, 0}, 0, 0, 0, 0));
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();
@@ -279,6 +283,8 @@ namespace arcade
   std::vector<std::unique_ptr<ISprite>> Snake::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_head.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_body.png"));
     return (std::move(sprites));
   }
 

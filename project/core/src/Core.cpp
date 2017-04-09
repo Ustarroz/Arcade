@@ -65,6 +65,7 @@ namespace arcade
     m_libsGfx = gfxLaunch();
     std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[1], "getGame"));
     m_libsGame = gameLaunch();
+    m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
     while (m_libsGfx->pollEvent(e))
     {
       if (static_cast<KeyboardKey>(e.m_key) == KB_1)
@@ -77,6 +78,7 @@ namespace arcade
         std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[m_ndx % m_handlerGfx.size()], "getLib"));
         m_libsGfx = gfxLaunch();
         e.kb_key = KB_0;
+        m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
       }
       m_libsGfx->clear();
       event_list.clear();

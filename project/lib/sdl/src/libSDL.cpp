@@ -2,7 +2,8 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include "Event.hpp"
 #include "IMap.hpp"
 #include "IGUI.hpp"
@@ -34,6 +35,7 @@ namespace arcade
   int libSDL::initSDL()
   {
     SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
     m_disp.window = SDL_CreateWindow("Arcade - SDL", SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED, m_windowWeight,
         m_windowHeight, SDL_WINDOW_SHOWN);
@@ -46,7 +48,6 @@ namespace arcade
     m_disp.palette = SDL_AllocPalette(10);
     setPalette(m_disp.palette);
 
-    TTF_Init();
     m_font = TTF_OpenFont("./assets/fonts/Sans.ttf", 14);
     return (0);
   }
@@ -102,6 +103,17 @@ namespace arcade
 #ifdef DEBUG
     std::cout << "[SDL] LOAD SPRITES" << std::endl;
 #endif
+    for (size_t i = 0; i < sprites.size(); i++)
+    {
+      SDL_Surface *tmp = IMG_Load(sprites[i]->getGraphicPath(0).c_str());
+      if (tmp)
+      {
+#ifdef DEBUG
+        std::cout << "Loaded sprite: " << sprites[i]->getGraphicPath(0) << std::endl;
+#endif
+        m_sprites.push_back(tmp);
+      }
+    }
   }
 
   void libSDL::updateMap(IMap const &map)
@@ -113,10 +125,24 @@ namespace arcade
         for (size_t x = 0; x < map.getWidth(); x++)
         {
           ITile const &tile = map.at(nb, x, y);
-          Color a = tile.getColor();
-          SDL_Color color = {a.r, a.g, a.b, a.a};
-          pos_t pos = {static_cast<int>(x * 10), static_cast<int>(y * 10)};
-          drawSquare(m_disp.screen, pos, 10, &color);
+          pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
+          if (tile.hasSprite())
+          {
+            SDL_Surface *sur = m_sprites[tile.getSpriteId()];
+            SDL_Rect rect;
+            rect.x = pos.x;
+            rect.y = pos.y;
+            rect.w = SIZE_TILE;
+            rect.h = SIZE_TILE;
+            SDL_BlitScaled(sur, NULL, m_disp.screen, &rect);
+          }
+          else
+          {
+            Color a = tile.getColor();
+            SDL_Color color = {a.r, a.g, a.b, a.a};
+            //if (a.a != 0)
+              drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
+          }
         }
       }
     }
