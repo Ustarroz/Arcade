@@ -79,6 +79,12 @@ namespace arcade
               return (true);
             }
           }
+          break;
+        default:
+          e.type = ET_NONE;
+          e.action = AT_NONE;
+          e.kb_key = KB_NONE;
+          break;
       }
     }
     return (false);
