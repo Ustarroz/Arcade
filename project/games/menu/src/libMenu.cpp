@@ -11,7 +11,9 @@ namespace arcade
   Menu::Menu()
     : m_map(64, 40)
   {
+    coord = 0;
     m_map.addLayer();
+    m_state = GameState::INGAME;
     Tile bg = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
         {84, 84, 84, 255}, 0, 0, 0, 0);
     for (int x = 10; x < 50; x++)
@@ -21,10 +23,13 @@ namespace arcade
         m_map.setTile(0, x, y, bg);
       }
     }
-    Component comp = Component({255,255,255,255}, "0", 0.7, 0.77,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
+
+/*   Component comp = Component({0,0,0,0}, "0", 0.7, 0.77,160,17);
+    comp.setStringColor({0, 0, 0, 255});
+    germ_gui.addComponent(comp);
+    pos.push_back(comp);
+*/
+    /*comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
     comp.setStringColor({0,0,0,255});
     m_gui.addComponent(comp);
     comp = Component({255,255,255,255}, "Score", 0.7, 0.82,160,17);
@@ -32,56 +37,78 @@ namespace arcade
     m_gui.addComponent(comp);
     comp = Component({255,255,255,255}, "HighScore", 0.7, 0.73,160,17);
     comp.setStringColor({0,0,0,255});
+    m_gui.addComponent(comp);*/
+
+   Component comp = Component({255,255,255,255}, "Caca", 0.7, 0.73,160,17);
+    Component.comp.setStringColor({255,255,255,0});
     m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Caca", 0.4, 0.73,160,17);
+    pos.push_back(comp);
+
+    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.73,160,17);
+    comp.setStringColor({0,255,0,255});
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component({255,255,255,255}, "SDL", 0.4, 0.82,160,17);
     comp.setStringColor({0,0,0,255});
     m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.82,160,17);
+    pos.push_back(comp);
+
+    comp = Component({255,255,255,255}, "Menu", 0.4, 0.91,160,17);
     comp.setStringColor({0,0,0,255});
     m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "SDL", 0.4, 0.91,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Menu", 0.1, 0.73,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
     comp = Component({255,255,255,255}, "Centipede", 0.1, 0.82,160,17);
     comp.setStringColor({0,0,0,255});
     m_gui.addComponent(comp);
+    pos.push_back(comp);
   }
 
   Menu::~Menu()
   {
   }
 
-
   GameState Menu::getGameState() const
   {
-    return (GameState::INGAME);
+    return (m_state);
   }
 
-  /*void Menu::useEventKeyBoard(Event event)
+  void	reline(std::vector<Component> pos, int past_coord, int next_coord)
+  {
+    pos[past_coord].setColor({0,0,0,255});
+    pos[next_coord].setColor({0,0,0,125});
+  }
+
+  void Menu::useEventKeyBoard(Event event)
     {
     switch (event.kb_key)
     {
-    case KB_ARROW_LEFT:
-    m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
-    break;
-    case KB_ARROW_RIGHT:
-    m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
-    break;
-    case KB_ARROW_DOWN:
-    m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
-    break;
-    case KB_ARROW_UP:
-    m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
-    break;
+	case KB_ARROW_LEFT:
+	  {
+	    std::cerr << "je suis un debug gauche" << std::endl;
+	    pos[1].setStringColor({54, 120, 120, 255});
+	    pos[1].setColor({145, 87, 45, 255});
+	    break;
+	  }
+    	case KB_ARROW_RIGHT:
+	  {
+	    std::cerr << "je suis un debug droite" << std::endl;
+	    pos[2].setStringColor({(54), 54, 54, 255});
+	    pos[2].setColor({255, 255, 255, 255});
+	  }
+	break;
+	case KB_ESCAPE:
+	  {
+	    m_state = GameState::QUIT;
+	    return;
+	  }
     default:
     break;
     }
-    }*/
+    }
 
-  /*void Menu::useEventKeyButton(Event event)
+  void Menu::useEventKeyButton(Event event)
     {
     (void)event;
     }
@@ -104,18 +131,20 @@ namespace arcade
     case ET_BUTTON:
     useEventKeyButton(event);
     break;
+	case ET_QUIT:
+	  m_state = GameState::QUIT;
     default:
     break;
     }
-    }*/
+    }
 
   void Menu::notifyEvent(std::vector<Event> &&event)
   {
-    /*for(std::vector<Event>::iterator it = event.begin();
+    for(std::vector<Event>::iterator it = event.begin();
       it != event.end(); ++it)
       {
-      this->useEvent(*it);
-      }*/
+      useEvent(*it);
+      }
   }
 
   void Menu::notifyNetwork(std::vector<NetworkPacket> &&events)

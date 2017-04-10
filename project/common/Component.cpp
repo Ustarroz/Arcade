@@ -1,3 +1,4 @@
+#include <iostream>
 #include "IComponent.hpp"
 #include "Component.hpp"
 #include "Color.hpp"

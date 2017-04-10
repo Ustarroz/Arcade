@@ -6,6 +6,7 @@
 # include "GUI.hpp"
 # include "ISprite.hpp"
 # include "NetworkPacket.hpp"
+# include "../../common/include/gameCommon.hpp"
 
 namespace arcade
 {
@@ -26,12 +27,21 @@ namespace arcade
       virtual IMap const &getCurrentMap() const;
       virtual IGUI &getGUI();
 
-    private:
-      Map m_map;
-      GUI m_gui;
-      std::vector<NetworkPacket> m_net;
-      std::vector<std::unique_ptr<ISprite>> m_sprite;
-      std::vector<std::pair<std::string, SoundType> > m_soundsName;
+      private:
+
+    void	useEventKeyButton(Event event);
+    void 	useEventKeyJoystick(Event event);
+    void	useEventKeyBoard(Event event);
+    void 	useEvent(Event event);
+    std::vector <Component> 	pos;
+    int 			coord;
+    Map 			m_map;
+    GUI 			m_gui;
+    GameState 			m_state;
+    std::vector<NetworkPacket> 	m_net;
+    std::vector<std::unique_ptr<ISprite>> m_sprite;
+    	std::vector<PosGame> m_dir;
+    	std::vector<std::pair<std::string, SoundType> > m_soundsName;
       std::vector<Sound> m_soundsPlay;
   };
 }
