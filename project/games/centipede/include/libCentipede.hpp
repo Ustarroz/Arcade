@@ -8,10 +8,10 @@
 #include "GameGUI.hpp"
 #include "gameCommon.hpp"
 
-#define MAXSCORE 500
-#define MINSCORE 50
-#define STEPSCORE 10
 #define SHROOM_SCORE 50
+#define CENTIPEDE_SCORE 75
+#define CENTIPEDE_KILL_SCORE 200
+#define CENTIPEDE_EMPTY_COLOR {100, 0, 0, 0}
 #define CENTIPEDE_HIGH_FILE "games/centipede_high.txt"
 
 namespace arcade
@@ -65,6 +65,7 @@ namespace arcade
     void shotShroom(int x, int y);
     void shotCentipede(int x, int y);
     void processShoot();
+    void addCentipede();
     std::vector<Sound> m_soundsPlay;
   };
 }
