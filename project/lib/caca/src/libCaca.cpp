@@ -152,6 +152,9 @@ namespace arcade
     for (size_t nb = 0; nb < gui.size(); nb++)
     {
       IComponent &c = gui.at(nb);
+#ifdef DEBUG
+      std::cout << c.getText() << std::endl;
+#endif
       pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
       caca_set_color_argb(m_canvas, CACA_BLACK, CACA_RED);
       caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
