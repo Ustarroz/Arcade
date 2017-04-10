@@ -1,4 +1,4 @@
-NAME=		./../../../lib_arcade_menu.so
+NAME=		./../../../games/lib_arcade_menu.so
 
 BASE_NAME=	lib_arcade_menu.so
 
