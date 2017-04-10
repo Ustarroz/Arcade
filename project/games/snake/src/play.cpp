@@ -3,25 +3,8 @@
 #include <unistd.h>
 #include "libSnake.hpp"
 
-template<typename T>
-void write_struct(std::ostream& out, T& t)
-{
-  std::cout.write(reinterpret_cast<char*>(&t), sizeof(T));
-}
-
 namespace arcade
 {
-  void write_map(IMap const &map, GetMap *tmp)
-  {
-    int i = -1;
-
-    for (unsigned int y = 0; y < map.getWidth(); y++)
-      for (unsigned int x = 0; x < map.getHeight(); x++)
-	{
-	  tmp->tile[++i] = dynamic_cast<const Tile &>(map.at(0, x, y)).getType();
-	}
-  }
-
   extern "C"
   {
   void Play()
@@ -29,9 +12,7 @@ namespace arcade
     Snake snake;
     CommandType in;
     size_t op;
-    //GetMap *map;
     Position pos;
-    //WhereAmI *ami;
     Event e;
     std::vector<Event> e_list;
 
@@ -49,12 +30,7 @@ namespace arcade
 #ifdef DEBUG
 	    std::cerr << "WHEREAMI: playerSize: " << snake.getPlayer().size() << std::endl;
 #endif
-	    //WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size())]);
-            WhereAmI *ami = new WhereAmI [sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size())];
-            if (!ami)
-            {
-              return ;
-            }
+	    WhereAmI *ami = new WhereAmI [sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size())];
 	    ami->type = CommandType::WHERE_AM_I;
 	    ami->lenght = snake.getPlayer().size();
 	    for (size_t i = 0; i < snake.getPlayer().size(); i++)
@@ -64,18 +40,11 @@ namespace arcade
 #ifdef DEBUG
               std::cerr << "SIZEOF wrotte: " << sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size()) << std::endl;
 #endif
-            std::cout.write(reinterpret_cast<char *>(ami), sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size()));
+	    std::cout.write(reinterpret_cast<char *>(ami), sizeof(WhereAmI) + (sizeof(Position) * snake.getPlayer().size()));
 #ifdef DEBUG
             std::cerr << "REALLY WROTE: " << std::endl;
 #endif
 
-	    	    /*WhereAmI *ami = new(WhereAmI [sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size()]);
-	    ami->type = CommandType::WHERE_AM_I;
-	    ami->lenght = static_cast<uint16_t> (snake.getPlayer().size());
-	    write_position(snake.getPlayer(), ami);
-	    std::cout.write(reinterpret_cast<char*>(ami), sizeof(struct WhereAmI) + sizeof(Position) * snake.getPlayer().size());
-	    std::cerr << "WHEREAMI" << std::endl;
-	    delete(ami);*/
 #ifdef DEBUG
 	    std::cerr << "END_WHEREAMI" << std::endl;
 #endif
@@ -105,12 +74,11 @@ namespace arcade
 		  }
 	      }
 	    std::cout.write(reinterpret_cast<char *>(getMap), sizeof(struct GetMap) +
-			     sizeof(TileType) * snake.getCurrentMap().getWidth() *
+			   sizeof(TileType) * snake.getCurrentMap().getWidth() *
                              snake.getCurrentMap().getHeight());
 #ifdef DEBUG
 	    std::cerr << "MAP: wrote: " << std::endl;
 #endif
-	    //delete (getMap);
 	  }
 
 	else if (in == CommandType::GO_UP)
