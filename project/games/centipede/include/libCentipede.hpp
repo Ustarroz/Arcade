@@ -10,6 +10,7 @@
 
 #define SHROOM_SCORE 50
 #define CENTIPEDE_SCORE 75
+#define CENTIPEDE_KILL_SCORE 200
 #define CENTIPEDE_HIGH_FILE "games/centipede_high.txt"
 
 namespace arcade
@@ -63,7 +64,7 @@ namespace arcade
     void shotShroom(int x, int y);
     void shotCentipede(int x, int y);
     void processShoot();
-    void addCentipede(DirGame dir);
+    void addCentipede();
     std::vector<Sound> m_soundsPlay;
   };
 }
