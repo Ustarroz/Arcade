@@ -6,19 +6,20 @@
 #include "IGUI.hpp"
 #include "IGfxLib.hpp"
 #include "libLapin.hpp"
+#include "Common.hpp"
 
 namespace arcade
 {
   libLapin::libLapin()
     : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640), m_map(NULL), m_gui(NULL)
   {
-
+    initLapin();
   }
 
   libLapin::libLapin(int height, int weight)
     : m_doesSupportSound(true), m_windowHeight(height), m_windowWeight(weight), m_map(NULL), m_gui(NULL)
   {
-
+    initLapin();
   }
 
   libLapin::~libLapin()
@@ -41,6 +42,7 @@ namespace arcade
     //bunny_set_click_response(click_response);
     //bunny_set_loop_main_function(libLap_bunnyMainLoop);
     //bunny_loop(m_prog.win, 25, &m_prog);
+    display();
 #ifdef DEBUG
     std::cout << "[Lapin] init ok" << std::endl;
 #endif
@@ -116,6 +118,8 @@ namespace arcade
         {
           ITile const &tile = lapin->m_map->at(nb, x, y);
           pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
+          Color col = tile.getColor();
+          lapin->drawSquare(lapin, pos, SIZE_TILE, col);
           /*if (tile.hasSprite() && m_sprites.size() > 0)
           {
             //disp sprite     
@@ -169,6 +173,18 @@ namespace arcade
     libLapin *lapin = static_cast<libLapin *>(data);
     //bunny_display(m_prog->win);
     return (EXIT_ON_SUCCESS);
+  }
+
+  void libLapin::drawSquare(libLapin *lapin, pos_t pos, int size, Color col)
+  {
+    unsigned int i= 65280;
+    for (int y = 0; y < pos.y + size; y++)
+    {
+      for (int x = 0; x < pos.x + size; x++)
+      {
+        bunny_set_pixel(&lapin->m_prog.win->buffer, {x, y}, i);
+      }
+    }
   }
 }
 

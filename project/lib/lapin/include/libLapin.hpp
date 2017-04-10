@@ -10,6 +10,7 @@
 # include "IGUI.hpp"
 # include "IGfxLib.hpp"
 # include "lapin.h"
+# include "Color.hpp"
 # include "Common.hpp"
 
 namespace arcade
@@ -42,6 +43,7 @@ namespace arcade
       static t_bunny_response _bunnyUpdateGUI(void *);
       static t_bunny_response _bunnyDisplay(void *);
       static t_bunny_response _bunnyClear(void *);
+      void drawSquare(libLapin *, pos_t, int, Color);
     private:
       bool m_doesSupportSound;
       int m_windowHeight;
