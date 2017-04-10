@@ -53,6 +53,7 @@ namespace arcade
       IMap const *m_map;
       IGUI *m_gui;
       t_program m_prog;
+      t_bunny_pixelarray *m_render;
   };
 }
 

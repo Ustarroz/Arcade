@@ -38,6 +38,7 @@ namespace arcade
       return (1);
     }
     m_prog.name = "Arcade";
+    m_render = bunny_new_pixelarray(m_windowWeight, m_windowHeight);
     bunny_clear(&m_prog.win->buffer, PINK2);
     //bunny_printl("Press escape to exit. Click left to change the window color.");
     //bunny_set_key_response(key_response);
@@ -179,12 +180,12 @@ namespace arcade
 
   void libLapin::drawSquare(libLapin *lapin, pos_t pos, int size, Color col)
   {
-    unsigned int i= 65280;
+    Color *pixels = reinterpret_cast<Color *>(lapin->m_render->pixels);
     for (int y = 0; y < pos.y + size; y++)
     {
       for (int x = 0; x < pos.x + size; x++)
       {
-        bunny_set_pixel(&lapin->m_prog.win->buffer, {x, y}, i);
+        pixels[x + lapin->m_windowWeight * y] = col;
       }
     }
   }
