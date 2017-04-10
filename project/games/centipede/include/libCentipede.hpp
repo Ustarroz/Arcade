@@ -11,6 +11,7 @@
 #define SHROOM_SCORE 50
 #define CENTIPEDE_SCORE 75
 #define CENTIPEDE_KILL_SCORE 200
+#define CENTIPEDE_EMPTY_COLOR {100, 0, 0, 0}
 #define CENTIPEDE_HIGH_FILE "games/centipede_high.txt"
 
 namespace arcade

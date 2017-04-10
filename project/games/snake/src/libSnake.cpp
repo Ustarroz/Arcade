@@ -29,26 +29,18 @@ namespace arcade
   void Snake::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-    		{255, 0, 0, 0}, 0, 0, 0, 0);
+                      SNAKE_EMPTY_COLOR, 0, 0, 0, 0);
     size_t posx;
     size_t posy;
 
+    for (unsigned int x = 0; x < m_map.getWidth(); x++)
+      for (unsigned int y = 0; y < m_map.getHeight(); y++)
+	{
+	  m_map.setTile(0, x, y, reset);
+	  m_map.setTile(1, x, y, reset);
+	}
     if (!first)
       {
-	for (std::vector<PosGame>::iterator it = m_dir.begin();
-	     it != m_dir.end(); ++it)
-	  {
-	    m_map.setTile(1, it->_x, it->_y, reset);
-	  }
-	for (unsigned int x = 0; x < m_map.getWidth(); x++)
-	    for (unsigned int y = 0; y < m_map.getHeight(); y++)
-	      if (m_map.getLayer(0).getTile(x, y).getTypeEv() ==
-		 TileTypeEvolution::FOOD)
-		{
-		  m_map.setTile(0, x, y, reset);
-		  x = m_map.getWidth();
-		  y = m_map.getHeight();
-		}
 	m_dir.clear();
       }
     posx = m_map.getWidth() / 2;
@@ -205,7 +197,7 @@ namespace arcade
       {
 	m_map.setTile(1, it->_x, it->_y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {255, 0, 0, 0}, 0, 0, 0, 0));
+			   SNAKE_EMPTY_COLOR, 0, 0, 0, 0));
 	changeDir(*it, it->_dir);
 	subsave = it->_dir;
 	it->_dir = save;
@@ -230,7 +222,7 @@ namespace arcade
 	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
 	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {255, 0, 0, 0}, 0, 0, 0, 0));
+			   SNAKE_EMPTY_COLOR, 0, 0, 0, 0));
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();

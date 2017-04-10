@@ -54,7 +54,7 @@ namespace arcade
   void Centipede::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-		      {100, 0, 0, 0}, 0, 0, 0, 0);
+		      CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0);
     for (unsigned int x = 0; x < m_map.getWidth(); x++)
       for (unsigned int y = 0; y < m_map.getHeight(); y++)
 	{
@@ -70,7 +70,7 @@ namespace arcade
     m_shoot._dir = DirGame::DIR_DOWN;
     m_player._x = m_map.getWidth() / 2;
     m_player._y = m_map.getHeight() * 9 / 10;
-    m_player._tile = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
+    m_player._tile = Tile(TileType::EMPTY, TileTypeEvolution::PLAYER,
 			    {255, 255, 255, 255}, 0, 0, 0, 0);
     m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
     addCentipede();
@@ -188,7 +188,7 @@ namespace arcade
       {
 	m_map.setTile(0, m_player._x, m_player._y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {100, 0, 0, 255}, 0, 0, 0, 0));
+			   CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
 	m_player._y = y;
 	m_player._x = x;
 	m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
@@ -261,7 +261,7 @@ namespace arcade
     if (m_shoot._y != m_player._y)
     	m_map.setTile(0, m_shoot._x, m_shoot._y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   {100, 0, 0, 0}, 0, 0, 0, 0));
+			   CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
     /*if (check_one == TileType::EMPTY && check_two == TileType::EMPTY)
       {
 	m_shoot._y = m_shoot._y - 2;
@@ -311,7 +311,7 @@ namespace arcade
 	    changeDir(*it->begin(), headsave);
 	    m_map.setTile(0, it->begin()->_x, it->begin()->_y,
 			  Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			       {100, 0, 0, 0}, 0, 0, 0, 0));
+			       CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
 	    it->erase(it->begin());
 	    m_score = m_score >= SHROOM_SCORE ? m_score - SHROOM_SCORE : 0;
 	    m_gui.setScore(m_score);
@@ -350,7 +350,7 @@ namespace arcade
 	  {
 	    m_map.setTile(0, jt->_x, jt->_y,
 			  Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			       {100, 0, 0, 0}, 0, 0, 0, 0));
+			       CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
 	    changeDir(*jt, jt->_dir);
 	    subsave = jt->_dir;
 	    jt->_dir = save;
@@ -456,7 +456,7 @@ namespace arcade
 	      {
 		m_map.setTile(0, it->_pos.x, it->_pos.y,
 			      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-				   {100, 0, 0, 255}, 0, 0, 0, 0));
+				   CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
 		m_shroom.erase(it);
 		m_score = m_score + SHROOM_SCORE;
 		m_gui.setScore(m_score);
