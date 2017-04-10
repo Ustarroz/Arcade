@@ -39,28 +39,28 @@ namespace arcade
     comp.setStringColor({0,0,0,255});
     m_gui.addComponent(comp);*/
 
-   Component comp = Component({255,255,255,255}, "Caca", 0.7, 0.73,160,17);
-    Component.comp.setStringColor({255,255,255,0});
+    Component comp = Component({0,0,0,225}, "Caca", 0.7, 0.73,160,17);
+    comp.setStringColor({255,255,255,255});
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({255,255,255,255}, "Lapin", 0.4, 0.73,160,17);
-    comp.setStringColor({0,255,0,255});
+    comp = Component({0,0,0,255}, "Lapin", 0.4, 0.73,160,17);
+    comp.setStringColor({255,255,255,255});
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({255,255,255,255}, "SDL", 0.4, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
+    comp = Component({0,0,0,255}, "SDL", 0.4, 0.82,160,17);
+    comp.setStringColor({255,255,255,255});
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({255,255,255,255}, "Menu", 0.4, 0.91,160,17);
-    comp.setStringColor({0,0,0,255});
+    comp = Component({0,0,0,255}, "Menu", 0.4, 0.91,160,17);
+    comp.setStringColor({255, 255, 255, 255});
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({255,255,255,255}, "Centipede", 0.1, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
+    comp = Component({0,0,0,255}, "Centipede", 0.1, 0.82,160,17);
+    comp.setStringColor({255,255,255,255});
     m_gui.addComponent(comp);
     pos.push_back(comp);
   }
@@ -77,7 +77,7 @@ namespace arcade
   void	reline(std::vector<Component> pos, int past_coord, int next_coord)
   {
     pos[past_coord].setColor({0,0,0,255});
-    pos[next_coord].setColor({0,0,0,125});
+    pos[next_coord].setColor({0,0,0,255});
   }
 
   void Menu::useEventKeyBoard(Event event)
@@ -86,18 +86,19 @@ namespace arcade
     {
 	case KB_ARROW_LEFT:
 	  {
-	    std::cerr << "je suis un debug gauche" << std::endl;
-	    pos[1].setStringColor({54, 120, 120, 255});
-	    pos[1].setColor({145, 87, 45, 255});
+	    std::cerr << "left" << std::endl;
+	    //pos[1].setStringColor({54, 120, 120, 255});
+	    pos[1].setColor({0, 0, 255, 255});
+	    std::cerr << static_cast<int> (*pos[1].getBackgroundColor().rgba) << std::endl;
 	    break;
 	  }
     	case KB_ARROW_RIGHT:
 	  {
-	    std::cerr << "je suis un debug droite" << std::endl;
-	    pos[2].setStringColor({(54), 54, 54, 255});
-	    pos[2].setColor({255, 255, 255, 255});
+	    std::cerr << "right" << std::endl;
+	    //pos[2].setStringColor({(54), 54, 54, 255});
+	    pos[2].setColor({0, 0, 255, 255});
+	    break;
 	  }
-	break;
 	case KB_ESCAPE:
 	  {
 	    m_state = GameState::QUIT;
