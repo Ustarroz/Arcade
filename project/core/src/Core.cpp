@@ -72,6 +72,9 @@ namespace arcade
     {
       while (m_libsGfx->pollEvent(e))
       {
+#ifdef DEBUG
+          std::cout << "POLLEVENT" << std::endl;
+#endif
         if ((static_cast<KeyboardKey>(e.m_key) == KB_2 || static_cast<KeyboardKey>(e.m_key) == KB_3) && e.action == AT_PRESSED)
         {
 #ifdef DEBUG

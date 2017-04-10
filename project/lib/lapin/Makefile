@@ -7,4 +7,8 @@ SRC=	$(addprefix ./src/,	\
 	libLapin.cpp		\
 	)
 
+SRC+=	$(addprefix ./../../common/,	\
+	Color.cpp			\
+	)
+
 include $(MK_COMMON_DIR)rules.mk
