@@ -123,7 +123,7 @@ namespace arcade
     (void)events;
   }
 
-  std::vector<NetworkPacket> &&Menu::getNetworkToSend()
+  std::vector<NetworkPacket> Menu::getNetworkToSend()
   {
     return (std::move(m_net));
   }
@@ -194,11 +194,16 @@ namespace arcade
     return (m_gui);
   }
 
+  bool Menu::hasNetwork() const
+  {
+    return false;
+  }
+}
+
   extern "C"
   {
     arcade::IGame *getGame()
     {
       return (new arcade::Menu());
     }
-  }
 }

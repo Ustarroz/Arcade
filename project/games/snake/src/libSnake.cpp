@@ -5,7 +5,6 @@
 #include "GameState.hpp"
 #include "Tile.hpp"
 #include "Sprite.hpp"
-
 #include <iostream>
 
 namespace arcade
