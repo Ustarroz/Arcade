@@ -7,6 +7,8 @@
 #include "IGfxLib.hpp"
 #include "libLapin.hpp"
 #include "Common.hpp"
+#include "ITile.hpp"
+#include "lapin.h"
 
 namespace arcade
 {

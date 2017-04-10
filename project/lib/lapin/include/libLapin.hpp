@@ -11,7 +11,9 @@
 # include "IGfxLib.hpp"
 # include "lapin.h"
 # include "Color.hpp"
+# include "ITile.hpp"
 # include "Common.hpp"
+# include "Sound.hpp"
 
 namespace arcade
 {
