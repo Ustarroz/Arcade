@@ -167,6 +167,7 @@ namespace arcade
   t_bunny_response libLapin::_bunnyDisplay(void *data)
   {
     libLapin *lapin = static_cast<libLapin *>(data);
+    bunny_blit(&lapin->m_prog.win->buffer, &lapin->m_render->clipable, NULL);
     bunny_display(lapin->m_prog.win);
     return (EXIT_ON_SUCCESS);
   }
