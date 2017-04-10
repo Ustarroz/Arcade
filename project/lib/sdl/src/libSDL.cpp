@@ -153,7 +153,6 @@ namespace arcade
           else
           {
             Color a = tile.getColor();
-            SDL_Color color = {a.r, a.g, a.b, a.a};
             SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
             //drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
           }
@@ -168,7 +167,7 @@ namespace arcade
     {
       IComponent &c = gui.at(nb);
       SDL_Color red = {255, 0, 0, 255};
-      pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
+      pos_t pos = {static_cast<int>(static_cast<double>(m_disp.screen->w) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
       drawRect(m_disp.screen, pos, c.getWidth(), c.getHeight(), &red);
 #ifdef DEBUG
       //std::cout << c.getText() << std::endl;

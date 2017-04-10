@@ -23,48 +23,71 @@ namespace arcade
 
   libLapin::~libLapin()
   {
+    bunny_stop(m_prog.win);
   }
 
-  bool libLapin::pollEvent(Event &e)
+  int libLapin::initLapin()
+  {
+    m_program.win = bunny_start(m_windowWeight, m_windowHeight, false, "Arcade - Lapin");
+    if (program.win == NULL)
+    {
+      bunny_printlerr("Cannot open the window.");
+      return (1);
+    }
+    program.name = "Arcade";
+    bunny_clear(&program.win->buffer, PINK2);
+    //bunny_printl("Press escape to exit. Click left to change the window color.");
+    bunny_set_key_response(key_response);
+    //bunny_set_click_response(click_response);
+    bunny_set_loop_main_function(libLapin::_bunnyMainLoop);
+    bunny_loop(program.win, 25, &program);
+  }
+
+  bool pollEvent(Event &e)
+  {
+  }
+
+  bool doesSupportSound() const
   {
     return (false);
   }
 
-  bool libLapin::doesSupportSound() const
+  void loadSounds(std::vector<std::pair<std::string, SoundType > > const &sounds)
   {
-    return (m_doesSupportSound);
+    (void)sounds;
   }
 
-  void libLapin::loadSounds(std::vector<std::string> const &sound)
+  void soundControl(const Sound &sound)
   {
+    (void)sound;
   }
 
-  void libLapin::soundControl(const Sound &sound)
+  void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
   {
-    std::cout << "PLAYSOUND func" << std::endl;
-  }
-  
-  void libLapin::loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites)
-  {
+    (void)sprites;
   }
 
-  void libLapin::updateMap(IMap const &map)
+  void updateMap(IMap const &map)
   {
   }
 
-  void libLapin::updateGUI(IGUI &gui)
+  void updateGUI(IGUI &gui)
   {
   }
 
-  void libLapin::display()
+  void display()
   {
-    std::cout << "DISPLAY func" << std::endl;
   }
 
-  void libLapin::clear()
+  void clear()
   {
-    std::cout << "CLEAR func" << std::endl;
   }
+
+  static t_bunny_response libLapin::_bunnyMainLoop(void *data)
+  {
+    return (EXIT_ON_SUCCESS);
+  }
+
 }
 
 extern "C"

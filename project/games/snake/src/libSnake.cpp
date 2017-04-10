@@ -29,7 +29,7 @@ namespace arcade
   void Snake::resetGame(bool first)
   {
     Tile reset = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-    		{255, 0, 0, 0}, 0, 0, 0, 0);
+    		{0, 0, 255, 0}, 0, 0, 0, 0);
     size_t posx;
     size_t posy;
 

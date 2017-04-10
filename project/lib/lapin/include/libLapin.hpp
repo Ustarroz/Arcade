@@ -7,6 +7,7 @@
 # include "IMap.hpp"
 # include "IGUI.hpp"
 # include "IGfxLib.hpp"
+# include "lapin.h"
 
 namespace arcade
 {
@@ -16,19 +17,23 @@ namespace arcade
       virtual ~libLapin();
       libLapin();
       libLapin(int, int);
-      virtual bool pollEvent(Event &e);
-      virtual bool doesSupportSound() const;
-      virtual void loadSounds(std::vector<std::string> const &sounds);
-      virtual void soundControl(const Sound &sound);
-      virtual void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites);
-      virtual void updateMap(IMap const &map);
-      virtual void updateGUI(IGUI &gui);
-      virtual void display();
-      virtual void clear();
+      bool pollEvent(Event &e);
+      bool doesSupportSound() const;
+      void loadSounds(std::vector<std::pair<std::string, SoundType > > const &sounds);
+      void soundControl(const Sound &sound);
+      void loadSprites(std::vector<std::unique_ptr<ISprite>> &&sprites);
+      void updateMap(IMap const &map);
+      void updateGUI(IGUI &gui);
+      void display();
+      void clear();
+      static t_bunny_response _bunnyMainLoop(void *);
+    private:
+      int initLapin();
     private:
       bool m_doesSupportSound;
       int m_windowHeight;
       int m_windowWeight;
+      t_program prog;
   };
 }
 
