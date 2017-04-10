@@ -63,6 +63,7 @@ namespace arcade
     void shotShroom(int x, int y);
     void shotCentipede(int x, int y);
     void processShoot();
+    void addCentipede(DirGame dir);
     std::vector<Sound> m_soundsPlay;
   };
 }

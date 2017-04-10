@@ -35,6 +35,9 @@ namespace arcade
     catch (std::invalid_argument){
 	return (0);
       }
+    catch (std::out_of_range){
+	return (0);
+      }
     myfile.close();
     return (nb < 0 ? 0 : nb);
   }
