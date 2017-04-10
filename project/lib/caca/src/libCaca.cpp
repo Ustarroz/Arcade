@@ -40,7 +40,7 @@ namespace arcade
   bool libCaca::pollEvent(Event &e)
   {
     caca_event_t event;
-    while (caca_get_event(m_disp, CACA_EVENT_KEY_PRESS, &event, 0))
+    if (caca_get_event(m_disp, CACA_EVENT_KEY_PRESS, &event, 0))
     {
       int key = caca_get_event_key_ch(&event);
 #ifdef DEBUG
@@ -50,33 +50,41 @@ namespace arcade
      {
        if (key == it->first)
        {
-         if (key == 27) // esc key
-           return (false);
+         if (key == 27)
+         {
+           e.type = ET_QUIT;
+           e.action = AT_PRESSED;
+           e.kb_key = it->second;
+           return (true);
+         }
          e.type = ET_KEYBOARD;
          e.action = AT_PRESSED;
          e.kb_key = it->second;
+         return (true);
        }
      }
+     return (true);
     }
-    /*SDL_Event event;
-    while (SDL_PollEvent(&event))
+    else if (caca_get_event(m_disp, CACA_EVENT_KEY_RELEASE, &event, 0))
     {
-      switch (event.type){
-        case SDL_KEYDOWN:
-          for (std::map<SDL_Keycode, KeyboardKey>::iterator it = m_keys.begin(); it != m_keys.end(); ++it)
-          {
-            if (event.key.keysym.sym == it->first)
-            {
-              if (it->first == SDLK_ESCAPE)
-                return (false);
-              e.type = ET_KEYBOARD;
-              e.action = AT_PRESSED;
-              e.kb_key = it->second;
-            }
-          }
-      }
-    }*/
-    return (true);
+      int key = caca_get_event_key_ch(&event);
+#ifdef DEBUG
+      std::cout << "KEY: " << key << std::endl;
+#endif
+     for (std::map<int, KeyboardKey>::iterator it = m_keys.begin(); it != m_keys.end(); ++it)
+     {
+       if (key == it->first)
+       {
+         e.type = ET_KEYBOARD;
+         e.action = AT_RELEASED;
+         e.kb_key = it->second;
+         return (true);
+       }
+     }
+     return (true);
+    }
+    else
+      return (false);
   }
 
   bool libCaca::doesSupportSound() const
@@ -141,45 +149,45 @@ namespace arcade
 
   void libCaca::updateGUI(IGUI &gui)
   {
-    (void)gui;
-    /*for (size_t nb = 0; nb < gui.size(); nb++)
+    for (size_t nb = 0; nb < gui.size(); nb++)
     {
       IComponent &c = gui.at(nb);
-      SDL_Color red = {255, 0, 0, 255};
       pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
-      drawSquare(m_disp.screen, pos, c.getHeight(), &red);
-    }*/
+      caca_set_color_argb(m_canvas, CACA_BLACK, CACA_RED);
+      caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
+      caca_set_color_ansi(m_canvas, CACA_BLACK, CACA_WHITE);
+    }
   }
 
-  void libCaca::display()
-  {
-#ifdef DEBUG
-    std::cout << "[Caca] refresh screen" << std::endl;
-#endif
-    caca_refresh_display(m_disp);
-  }
-
-  void libCaca::clear()
-  {
-    //clear caca
-  }
-
-  void libCaca::drawSquare(pos_t pos, int size)
-  {
-    for (int y = pos.y; y < pos.y + size; y++)
+    void libCaca::display()
     {
-      for (int x = pos.x; x < pos.x + size; x++)
+#ifdef DEBUG
+      std::cout << "[Caca] refresh screen" << std::endl;
+#endif
+      caca_refresh_display(m_disp);
+    }
+
+    void libCaca::clear()
+    {
+      //clear caca
+    }
+
+    void libCaca::drawSquare(pos_t pos, int size)
+    {
+      for (int y = pos.y; y < pos.y + size; y++)
       {
-        caca_put_str(m_canvas, x, y, " ");
+        for (int x = pos.x; x < pos.x + size; x++)
+        {
+          caca_put_str(m_canvas, x, y, " ");
+        }
       }
     }
   }
-}
 
-extern "C"
-{
-  arcade::IGfxLib *getLib()
+  extern "C"
   {
-    return (new arcade::libCaca());
+    arcade::IGfxLib *getLib()
+    {
+      return (new arcade::libCaca());
+    }
   }
-}
