@@ -1,6 +1,8 @@
 #ifndef LIBLAPIN_HPP_
 # define LIBLAPIN_HPP_
 
+# define SIZE_TILE (30)
+
 # include <vector>
 # include <string>
 # include "Event.hpp"
@@ -8,11 +10,18 @@
 # include "IGUI.hpp"
 # include "IGfxLib.hpp"
 # include "lapin.h"
+# include "Common.hpp"
 
 namespace arcade
 {
   class libLapin: public IGfxLib
   {
+    private:
+      struct        t_program
+      {
+        char            *name;
+        t_bunny_window    *win;
+      };
     public:
       virtual ~libLapin();
       libLapin();
@@ -26,20 +35,26 @@ namespace arcade
       void updateGUI(IGUI &gui);
       void display();
       void clear();
-      static t_bunny_response _bunnyMainLoop(void *);
     private:
       int initLapin();
+      //t_bunny_response _bunnyMainLoop(void *);
+      static t_bunny_response _bunnyUpdateMap(void *);
+      static t_bunny_response _bunnyUpdateGUI(void *);
+      static t_bunny_response _bunnyDisplay(void *);
+      static t_bunny_response _bunnyClear(void *);
     private:
       bool m_doesSupportSound;
       int m_windowHeight;
       int m_windowWeight;
-      t_program prog;
+      IMap const *m_map;
+      IGUI *m_gui;
+      t_program m_prog;
   };
 }
 
 extern "C"
 {
-  arcade::IGfxLib *entryPoint();
+  arcade::IGfxLib *getLib();
 }
 
 #endif

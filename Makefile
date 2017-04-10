@@ -1,8 +1,11 @@
 PROJECT_DIR=	./project/core/ 		\
 		./project/lib/caca/ 		\
 		./project/lib/sdl/		\
+		./project/lib/lapin/		\
 		./project/lib/sound/		\
-		./project/games/menu/
+		./project/games/snake/		\
+		./project/games/centipede/
+		#./project/games/menu/
 
 all:
 		@$(foreach c, $(PROJECT_DIR), $(MAKE) -s -C $(c) && ) true
