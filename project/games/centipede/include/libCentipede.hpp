@@ -12,6 +12,7 @@
 #define CENTIPEDE_SCORE 75
 #define CENTIPEDE_KILL_SCORE 200
 #define CENTIPEDE_EMPTY_COLOR {100, 0, 0, 0}
+#define CENTIPEDE_PART_COLOR {255, 255, 0, 255}
 #define CENTIPEDE_HIGH_FILE "games/centipede_high.txt"
 
 namespace arcade
@@ -19,6 +20,16 @@ namespace arcade
   class Centipede: public IGame
   {
    public:
+    struct CentiPart
+    {
+      CentiPart(PosGame pos, DirGame dir = DIR_RIGHT){
+	_old_dir = dir;
+	_pos = pos;
+      };
+      DirGame _old_dir;
+      PosGame _pos;
+    };
+
     struct Shroom{
       Position _pos;
       int _life;
@@ -44,7 +55,7 @@ namespace arcade
     std::vector<std::pair<std::string, SoundType> > m_soundsName;
     std::vector<NetworkPacket> m_net;
     std::vector<std::unique_ptr<ISprite> > m_sprites;
-    std::vector<std::vector<PosGame>> m_centipede;
+    std::vector<std::vector<CentiPart>> m_centipede;
     std::vector<Shroom> m_shroom;
     size_t m_score;
     PosGame m_player;
@@ -65,6 +76,8 @@ namespace arcade
     void shotShroom(int x, int y);
     void shotCentipede(int x, int y);
     void processShoot();
+    void processCentipede();
+    int checkHead(std::vector<CentiPart> &body);
     void addCentipede();
     std::vector<Sound> m_soundsPlay;
   };
