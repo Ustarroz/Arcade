@@ -55,7 +55,7 @@ namespace arcade
   bool libSDL::pollEvent(Event &e)
   {
     SDL_Event event;
-    while (SDL_PollEvent(&event))
+    if (SDL_PollEvent(&event))
     {
       switch (event.type){
         case SDL_KEYDOWN:
@@ -79,6 +79,12 @@ namespace arcade
               return (true);
             }
           }
+          break;
+        default:
+          e.type = ET_NONE;
+          e.action = AT_NONE;
+          e.kb_key = KB_NONE;
+          break;
       }
     }
     return (false);
