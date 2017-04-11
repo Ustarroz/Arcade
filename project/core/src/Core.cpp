@@ -26,8 +26,8 @@ namespace arcade
 #endif
       std::function<ISound *()> sound = cast<ISound *()>(dlsym(m_handlerSound, "getSound"));
       m_libSound = sound();
-      /*m_libSound->loadMusic("./music/stars.mp3");
-      m_libSound->playMusic(0);*/
+      m_libSound->loadMusic("./music/stars.mp3");
+      m_libSound->playMusic(0);
      }
     else
     {
