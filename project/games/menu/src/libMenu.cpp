@@ -84,7 +84,7 @@ namespace arcade
   }
 
 
-  void Menu::useEventKeyBoard(Event event)
+  void Menu::useEventKeyBoard(Event const &event)
   {
     if (event.kb_key >= KB_A && event.kb_key <= KB_Z)
       {
@@ -168,17 +168,17 @@ namespace arcade
       }
   }
 
-  void Menu::useEventKeyButton(Event event)
+  void Menu::useEventKeyButton(Event const &event)
   {
     (void)event;
   }
 
-  void Menu::useEventKeyJoystick(Event event)
+  void Menu::useEventKeyJoystick(Event const &event)
   {
     (void)event;
   }
 
-  void Menu::useEvent(Event event)
+  void Menu::useEvent(Event const &event)
   {
     switch (event.type)
       {

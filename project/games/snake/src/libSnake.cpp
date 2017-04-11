@@ -75,7 +75,7 @@ namespace arcade
     return (m_state);
   }
 
-  void Snake::useEventKeyBoard(Event event)
+  void Snake::useEventKeyBoard(Event const &event)
   {
     DirGame prev;
 
@@ -146,17 +146,17 @@ namespace arcade
     }
   }
 
-  void Snake::useEventKeyButton(Event event)
+  void Snake::useEventKeyButton(Event const &event)
   {
     (void)event;
   }
 
-  void Snake::useEventKeyJoystick(Event event)
+  void Snake::useEventKeyJoystick(Event const &event)
   {
     (void)event;
   }
 
-  void Snake::useEvent(Event event)
+  void Snake::useEvent(Event const &event)
   {
     switch (event.type)
       {

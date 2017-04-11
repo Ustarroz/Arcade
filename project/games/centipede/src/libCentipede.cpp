@@ -106,7 +106,7 @@ namespace arcade
     return (TileType::EMPTY);
   }
 
-  void Centipede::useEventKeyBoard(Event event)
+  void Centipede::useEventKeyBoard(Event const &event)
   {
     int x;
     int y;
@@ -201,17 +201,17 @@ namespace arcade
       endGame();
   }
 
-  void Centipede::useEventKeyButton(Event event)
+  void Centipede::useEventKeyButton(Event const &event)
   {
     (void)event;
   }
 
-  void Centipede::useEventKeyJoystick(Event event)
+  void Centipede::useEventKeyJoystick(Event const &event)
   {
     (void)event;
   }
 
-  void Centipede::useEvent(Event event)
+  void Centipede::useEvent(Event const &event)
   {
     switch (event.type)
       {

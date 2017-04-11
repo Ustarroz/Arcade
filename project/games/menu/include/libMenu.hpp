@@ -56,10 +56,10 @@ namespace arcade
       std::string const & getName();
       private:
 
-    void	useEventKeyButton(Event event);
-    void 	useEventKeyJoystick(Event event);
-    void	useEventKeyBoard(Event event);
-    void 	useEvent(Event event);
+    void	useEventKeyButton(Event const &event);
+    void 	useEventKeyJoystick(Event const &event);
+    void	useEventKeyBoard(Event const &event);
+    void 	useEvent(Event const &event);
     std::vector <Component> 	pos;
     Map 			m_map;
     GUI 			m_gui;
