@@ -16,6 +16,13 @@
 #define CENTIPEDE_MAX_LVL 10
 #define CENTIPEDE_MIN_LVL 3
 
+#define CENTIPEDE_SPRITE_LEFT 0
+#define CENTIPEDE_SPRITE_RIGHT 1
+#define CENTIPEDE_SPRITE_DOWN 2
+#define CENTIPEDE_SPRITE_MISSILE 3
+#define CENTIPEDE_SPRITE_SHIP 4
+#define CENTIPEDE_SPRITE_SHROOM 5
+
 namespace arcade
 {
   class Centipede: public IGame
@@ -65,10 +72,10 @@ namespace arcade
     GameProcess m_process;
     GameGUI m_gui;
     int m_level;
-    void useEvent(Event event);
-    void useEventKeyBoard(Event event);
-    void useEventKeyJoystick(Event event);
-    void useEventKeyButton(Event event);
+    void useEvent(Event const &event);
+    void useEventKeyBoard(Event const &event);
+    void useEventKeyJoystick(Event const &event);
+    void useEventKeyButton(Event const &event);
     void randShroom();
     void addShroom(int x, int y);
     void resetGame(bool first);

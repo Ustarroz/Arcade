@@ -44,10 +44,11 @@ namespace arcade
       GameState m_state;
       GameProcess m_process;
       GameGUI m_gui;
-      void useEvent(Event event);
-      void useEventKeyBoard(Event event);
-      void useEventKeyJoystick(Event event);
-      void useEventKeyButton(Event event);
+      bool m_dirSet;
+      void useEvent(Event const & event);
+      void useEventKeyBoard(Event const & event);
+      void useEventKeyJoystick(Event const  &event);
+      void useEventKeyButton(Event const &event);
       void placeApple();
       void addSnake();
       void resetGame(bool first);

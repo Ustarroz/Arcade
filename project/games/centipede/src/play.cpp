@@ -3,25 +3,8 @@
 #include <unistd.h>
 #include "libCentipede.hpp"
 
-template<typename T>
-void write_struct(std::ostream& out, T& t)
-{
-  std::cout.write(reinterpret_cast<char*>(&t), sizeof(T));
-}
-
 namespace arcade
 {
-  void write_map(IMap const &map, GetMap *tmp)
-  {
-    int i = -1;
-
-    for (unsigned int y = 0; y < map.getWidth(); y++)
-      for (unsigned int x = 0; x < map.getHeight(); x++)
-	{
-	  tmp->tile[++i] = dynamic_cast<const Tile &>(map.at(0, x, y)).getType();
-	}
-  }
-
   extern "C"
   {
   void Play()
@@ -30,8 +13,6 @@ namespace arcade
     CommandType in;
     Event e;
     std::vector<Event> e_list;
-
-
     memset(&e, 0, sizeof(Event));
     while (1)
       {

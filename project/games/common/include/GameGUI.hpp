@@ -20,8 +20,8 @@
 #define GUI_LINE_ONE 0.65
 #define GUI_LINE_TWO 0.75
 #define GUI_STEP_LINE 0.04
-#define GUI_WIDTH 0.2
-#define GUI_HEIGHT 0.1
+#define GUI_WIDTH 0.1
+#define GUI_HEIGHT 0.03
 
 namespace arcade
 {
