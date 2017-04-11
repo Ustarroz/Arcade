@@ -1,77 +1,66 @@
 #include <algorithm>
 #include <iostream>
-#include "libMenu.hpp"
+#include "Menu.hpp"
 
 namespace arcade
 {
   Menu::Menu()
-    : m_map(0, 0)
   {
-    m_state = GameState::INGAME;
+    m_state = GameState::MENU;
     m_lib = 0;
     m_cursor = 0;
     m_game = MENU_POS_GAME;
     m_name = "NAM";
 
-    Component comp = Component(MENU_COLOR_BOTH, "Caca", MENU_COL_1, MENU_LINE_1,
+    Component comp = Component(MENU_COLOR_BOTH, "lib_arcade_caca.so", MENU_COL_1, MENU_LINE_1,
 			       MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
-    comp = Component(MENU_COLOR_BG, "Lapin", MENU_COL_1,  MENU_LINE_2,
+    comp = Component(MENU_COLOR_BG, "lib_arcade_lapin.so", MENU_COL_1,  MENU_LINE_2,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
-    comp = Component(MENU_COLOR_BG, "SDL", MENU_COL_1,  MENU_LINE_3,
+    comp = Component(MENU_COLOR_BG, "lib_arcade_sdl.so", MENU_COL_1,  MENU_LINE_3,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
-    comp = Component(MENU_COLOR_SELECT, "Snake", MENU_COL_2,  MENU_LINE_1,
+    comp = Component(MENU_COLOR_SELECT, "lib_arcade_snake.so", MENU_COL_2,  MENU_LINE_1,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
-    comp = Component(MENU_COLOR_BG, "Centipede", MENU_COL_2,  MENU_LINE_2,
+    comp = Component(MENU_COLOR_BG, "lib_arcade_centipede.so", MENU_COL_2,  MENU_LINE_2,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
     comp = Component(MENU_COLOR_BG, "NAM", MENU_COL_3,  MENU_LINE_1,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
     comp = Component(MENU_COLOR_TITLE, "GRAPHICS", MENU_COL_1,  MENU_LINE_05,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
     comp = Component(MENU_COLOR_TITLE, "GAMES", MENU_COL_2,  MENU_LINE_05,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
     comp = Component(MENU_COLOR_TITLE, "NAME", MENU_COL_3,  MENU_LINE_05,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
 
     comp = Component(MENU_COLOR_MAIN_TITLE, "Menu", MENU_COL_2,  MENU_LINE_0,
 		     MENU_WIDTH, MENU_HEIGHT);
     comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
-    pos.push_back(comp);
   }
 
   Menu::~Menu()
@@ -152,7 +141,7 @@ namespace arcade
 	  }
 	case KB_ENTER:
 	  {
-	    m_state = GameState::MENU;
+	    m_state = GameState::INGAME;
 	    return;
 	  }
 	case KB_BACKSPACE:
@@ -207,26 +196,6 @@ namespace arcade
       }
   }
 
-  void Menu::notifyNetwork(std::vector<NetworkPacket> &&events)
-  {
-    (void)events;
-  }
-
-  std::vector<NetworkPacket> Menu::getNetworkToSend()
-  {
-    return (std::move(m_net));
-  }
-
-  void Menu::process()
-  {
-  }
-
-  std::vector<std::unique_ptr<ISprite>> Menu::getSpritesToLoad() const
-  {
-    std::vector<std::unique_ptr<ISprite> > sprites;
-    return (std::move(sprites));
-  }
-
   std::vector<std::pair<std::string, SoundType> > Menu::getSoundsToLoad() const
   {
     return (std::move(m_soundsName));
@@ -237,19 +206,9 @@ namespace arcade
     return (std::move(m_soundsPlay));
   }
 
-  IMap const &Menu::getCurrentMap() const
-  {
-    return (m_map);
-  }
-
   IGUI &Menu::getGUI()
   {
     return (m_gui);
-  }
-
-  bool Menu::hasNetwork() const
-  {
-    return false;
   }
 
   std::string const & Menu::getGame()
@@ -266,12 +225,27 @@ namespace arcade
   {
     return (m_gui.getComponent(MENU_POS_NAME).getText());
   }
-}
 
-extern "C"
-{
-arcade::IGame *getGame()
-{
-  return (new arcade::Menu());
-}
+  size_t Menu::setLib(std::string const & lib)
+  {
+    size_t pos_lib = 0;
+
+    while (pos_lib < MENU_POS_GAME)
+      {
+	if (lib == "lib/" + m_gui.getComponent(pos_lib).getText())
+	  break;
+	++pos_lib;
+      }
+    if (pos_lib == m_lib || pos_lib >= MENU_POS_GAME)
+      return 0;
+    m_gui.getComponent(m_lib).setColor(MENU_COLOR_BG);
+    m_gui.getComponent(pos_lib).setColor(MENU_COLOR_BOTH);
+    m_lib = pos_lib;
+    return (pos_lib);
+  }
+
+  void Menu::setGameState(GameState state)
+  {
+    m_state = state;
+  }
 }

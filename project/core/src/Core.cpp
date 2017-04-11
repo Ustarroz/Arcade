@@ -17,6 +17,8 @@ namespace arcade
   {
     m_libsGfxName.push_back(fileName);
     m_handlerSound = dlopen("./music/lib_arcade_sound.so", RTLD_NOW | RTLD_GLOBAL);
+    m_game = 0;
+    m_lib = m_menu.setLib(fileName);
     if (m_handlerSound != NULL)
     {
 #ifdef DEBUG
@@ -52,6 +54,67 @@ namespace arcade
     return (m_error);
   }
 
+  GameState Core::menuProcess(std::vector<Event> &&events)
+  {
+    size_t pos_game = 0;
+    size_t pos_lib = 0;
+
+    m_libsGfx->clear();
+    m_menu.notifyEvent(std::move(events));
+    std::string game = m_menu.getGame();
+    std::string lib = m_menu.getLib();
+
+    while (pos_game < m_libsGameName.size())
+      {
+	if ("./games/" + game == m_libsGameName[pos_game])
+	  break ;
+	++pos_game;
+      }
+    if (pos_game != m_libsGameName.size() && pos_game != m_game)
+      {
+	m_game = pos_game;
+	delete m_libsGame;
+	std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[pos_game], "getGame"));
+	m_libsGame = gameLaunch();
+	m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
+      }
+    while (pos_lib < m_libsGfxName.size())
+      {
+	if ("./lib/" + lib == m_libsGfxName[pos_lib])
+	  break ;
+	++pos_lib;
+      }
+    if (pos_lib != m_libsGfxName.size() && pos_lib != m_lib)
+      {
+	m_lib = pos_lib;
+	delete m_libsGfx;
+	std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[pos_lib], "getLib"));
+	m_libsGfx = gfxLaunch();
+	m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
+      }
+    IGUI &gui = m_menu.getGUI();
+    m_libsGfx->updateGUI(gui);
+    m_libsGfx->display();
+    return (m_menu.getGameState());
+  }
+
+  GameState Core::gameProcess(std::vector<Event> &&events)
+  {
+    /*if (m_libsGame->getGameState() == GameState::INGAME)
+      {*/
+	m_libsGfx->clear();
+	m_libsGame->notifyEvent(std::move(events));
+	m_libsGame->process();
+	IMap const &map = m_libsGame->getCurrentMap();
+	IGUI &gui = m_libsGame->getGUI();
+	m_libsGfx->updateMap(map);
+	m_libsGfx->updateGUI(gui);
+	m_libsGfx->display();
+	usleep(100000);
+      //}
+    return (m_libsGame->getGameState());
+  }
+
   int Core::gameLoop()
   {
 #ifdef DEBUG
@@ -65,10 +128,10 @@ namespace arcade
     std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[0], "getGame"));
     m_libsGame = gameLaunch();
     m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
-    bool go = true;
+    GameState go = MENU;
     int ndxGfx = 0;
     int ndxGame = 0;
-    while (go)
+    while (go != GameState::QUIT)
     {
 	event_list.clear();
       while (m_libsGfx->pollEvent(e))
@@ -76,7 +139,9 @@ namespace arcade
 #ifdef DEBUG
           std::cout << "[Core] POLLEVENT" << std::endl;
 #endif
-        if ((static_cast<KeyboardKey>(e.m_key) == KB_2 || static_cast<KeyboardKey>(e.m_key) == KB_3) && e.action == AT_PRESSED)
+        if (go == GameState::INGAME && e.action == AT_PRESSED &&
+	    (static_cast<KeyboardKey>(e.m_key) == KB_2
+	    || static_cast<KeyboardKey>(e.m_key) == KB_3))
         {
 #ifdef DEBUG
           std::cout << "switch gfx lib" << std::endl;
@@ -90,7 +155,9 @@ namespace arcade
           m_libsGfx = gfxLaunch();
           m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
         }
-        else if ((static_cast<KeyboardKey>(e.m_key) == KB_4 || static_cast<KeyboardKey>(e.m_key) == KB_5) && e.action == AT_PRESSED)
+        else if ((static_cast<KeyboardKey>(e.m_key) == KB_4 ||
+	 	static_cast<KeyboardKey>(e.m_key) == KB_5)
+		 && e.action == AT_PRESSED && go == GameState::INGAME)
         {
 #ifdef DEBUG
           std::cout << "switch game lib" << std::endl;
@@ -107,52 +174,24 @@ namespace arcade
         else
           event_list.push_back(e);
       }
-      if (m_libsGame->getGameState() == GameState::INGAME)
-      {
-        m_libsGfx->clear();
-        m_libsGame->notifyEvent(std::move(event_list));
-        m_libsGame->process();
-        IMap const &map = m_libsGame->getCurrentMap();
-        IGUI &gui = m_libsGame->getGUI();
-        m_libsGfx->updateMap(map);
-        m_libsGfx->updateGUI(gui);
-        m_libsGfx->display();
-        usleep(100000);
-      }
-      else if (m_libsGame->getGameState() == GameState::QUIT)
-        go = false;
+      if (go == GameState::MENU)
+	go = menuProcess(std::move(event_list));
+      else if (go == GameState::INGAME)
+	{
+	  go = gameProcess(std::move(event_list));
+	  if (go == GameState::MENU)
+	    {
+	      m_menu.setGameState(GameState::MENU);
+	      delete m_libsGame;
+	      std::function<IGame *()> gameLaunch = cast<IGame *()>(dlsym(m_handlerGame[m_game], "getGame"));
+	      m_libsGame = gameLaunch();
+	      m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
+	    }
+	}
       e.type = ET_NONE;
       e.action = AT_NONE;
       e.kb_key = KB_NONE;
     }
-    /*while (m_libsGfx->pollEvent(e))
-    {
-      if (static_cast<KeyboardKey>(e.m_key) == KB_1)
-      {
-#ifdef DEBUG
-        std::cout << "switch gfx lib" << std::endl;
-#endif
-        delete m_libsGfx;
-        ++m_ndx;
-        std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[m_ndx % m_handlerGfx.size()], "getLib"));
-        m_libsGfx = gfxLaunch();
-        e.kb_key = KB_0;
-        m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
-      }
-      m_libsGfx->clear();
-      event_list.clear();
-      event_list.push_back(e);
-      m_libsGame->notifyEvent(std::move(event_list));
-      m_libsGame->process();
-      IMap const &map = m_libsGame->getCurrentMap();
-      IGUI &gui = m_libsGame->getGUI();
-      m_libsGfx->updateMap(map);
-      m_libsGfx->updateGUI(gui);
-      m_libsGfx->display();
-      usleep(100000);
-      e.type = ET_NONE;
-    }*/
-
     return (0);
   }
 

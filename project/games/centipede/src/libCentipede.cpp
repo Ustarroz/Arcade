@@ -456,6 +456,13 @@ namespace arcade
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_down.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/missile.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/ship.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom1.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom2.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom3.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom4.png"));
+
+
     return (std::move(sprites));
   }
 
@@ -525,7 +532,7 @@ namespace arcade
 		m_map.setTile(0, it->_pos.x, it->_pos.y,
 			      Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
 				   {col, static_cast<uint8_t >(255 - col), col, 255},
-				   0, 0, 0, 0, true));
+				   CENTIPEDE_SPRITE_SHROOM - 1 - it->_life + 5, 0, 0, 0 , true));
 	      }
 	    return ;
 	  }
