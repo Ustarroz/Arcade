@@ -88,7 +88,7 @@ namespace arcade
 	  {
 	    std::cerr << "left" << std::endl;
 	    //pos[1].setStringColor({54, 120, 120, 255});
-	    pos[1].setColor({0, 0, 255, 255});
+	    m_gui[1].setColor({0, 0, 255, 255});
 	    std::cerr << static_cast<int> (*pos[1].getBackgroundColor().rgba) << std::endl;
 	    break;
 	  }
