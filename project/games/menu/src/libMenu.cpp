@@ -1,66 +1,74 @@
 #include <algorithm>
-#include <string>
-#include "libMenu.hpp"
-#include "Map.hpp"
-#include "GameState.hpp"
-#include "Tile.hpp"
 #include <iostream>
+#include "libMenu.hpp"
 
 namespace arcade
 {
   Menu::Menu()
-    : m_map(64, 40)
+    : m_map(0, 0)
   {
-    coord = 0;
-    m_map.addLayer();
     m_state = GameState::INGAME;
-    Tile bg = Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-        {84, 84, 84, 255}, 0, 0, 0, 0);
-    for (int x = 10; x < 50; x++)
-    {
-      for (int y = 8; y < 24; y++)
-      {
-        m_map.setTile(0, x, y, bg);
-      }
-    }
+    m_lib = 0;
+    m_cursor = 0;
+    m_game = MENU_POS_GAME;
 
-/*   Component comp = Component({0,0,0,0}, "0", 0.7, 0.77,160,17);
-    comp.setStringColor({0, 0, 0, 255});
-    germ_gui.addComponent(comp);
-    pos.push_back(comp);
-*/
-    /*comp = Component({255,255,255,255}, "0", 0.7, 0.86,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "Score", 0.7, 0.82,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);
-    comp = Component({255,255,255,255}, "HighScore", 0.7, 0.73,160,17);
-    comp.setStringColor({0,0,0,255});
-    m_gui.addComponent(comp);*/
-
-    Component comp = Component({0,0,0,225}, "Caca", 0.7, 0.73,160,17);
-    comp.setStringColor({255,255,255,255});
+    Component comp = Component(MENU_COLOR_BOTH, "Caca", MENU_COL_1, MENU_LINE_1,
+			       MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({0,0,0,255}, "Lapin", 0.4, 0.73,160,17);
-    comp.setStringColor({255,255,255,255});
+    comp = Component(MENU_COLOR_BG, "Lapin", MENU_COL_1,  MENU_LINE_2,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({0,0,0,255}, "SDL", 0.4, 0.82,160,17);
-    comp.setStringColor({255,255,255,255});
+    comp = Component(MENU_COLOR_BG, "SDL", MENU_COL_1,  MENU_LINE_3,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({0,0,0,255}, "Menu", 0.4, 0.91,160,17);
-    comp.setStringColor({255, 255, 255, 255});
+    comp = Component(MENU_COLOR_SELECT, "Snake", MENU_COL_2,  MENU_LINE_1,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
     pos.push_back(comp);
 
-    comp = Component({0,0,0,255}, "Centipede", 0.1, 0.82,160,17);
-    comp.setStringColor({255,255,255,255});
+    comp = Component(MENU_COLOR_BG, "Centipede", MENU_COL_2,  MENU_LINE_2,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component(MENU_COLOR_BG, "NAM", MENU_COL_3,  MENU_LINE_1,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component(MENU_COLOR_TITLE, "GRAPHICS", MENU_COL_1,  MENU_LINE_05,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component(MENU_COLOR_TITLE, "GAMES", MENU_COL_2,  MENU_LINE_05,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component(MENU_COLOR_TITLE, "NAME", MENU_COL_3,  MENU_LINE_05,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
+    m_gui.addComponent(comp);
+    pos.push_back(comp);
+
+    comp = Component(MENU_COLOR_MAIN_TITLE, "Menu", MENU_COL_2,  MENU_LINE_0,
+		     MENU_WIDTH, MENU_HEIGHT);
+    comp.setStringColor(MENU_COLOR_TXT);
     m_gui.addComponent(comp);
     pos.push_back(comp);
   }
@@ -74,29 +82,41 @@ namespace arcade
     return (m_state);
   }
 
-  void	reline(std::vector<Component> pos, int past_coord, int next_coord)
-  {
-    pos[past_coord].setColor({0,0,0,255});
-    pos[next_coord].setColor({0,0,0,255});
-  }
 
   void Menu::useEventKeyBoard(Event event)
-    {
+  {
     switch (event.kb_key)
-    {
+      {
 	case KB_ARROW_LEFT:
 	  {
-	    std::cerr << "left" << std::endl;
-	    //pos[1].setStringColor({54, 120, 120, 255});
-	    pos[1].setColor({0, 0, 255, 255});
-	    std::cerr << static_cast<int> (*pos[1].getBackgroundColor().rgba) << std::endl;
+	    if (m_cursor > 0)
+	      {
+		if (m_cursor == m_game || m_cursor == m_lib)
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_SELECT);
+		else
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BG);
+		--m_cursor;
+		if (m_cursor == m_game || m_cursor == m_lib)
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BOTH);
+		else
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_CURSOR);
+	      }
 	    break;
 	  }
-    	case KB_ARROW_RIGHT:
+	case KB_ARROW_RIGHT:
 	  {
-	    std::cerr << "right" << std::endl;
-	    //pos[2].setStringColor({(54), 54, 54, 255});
-	    pos[2].setColor({0, 0, 255, 255});
+	    if (m_cursor < MENU_POS_NAME)
+	      {
+		if (m_cursor == m_game || m_cursor == m_lib)
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_SELECT);
+		else
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BG);
+		++m_cursor;
+		if (m_cursor == m_game || m_cursor == m_lib)
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BOTH);
+		else
+		  m_gui.getComponent(m_cursor).setColor(MENU_COLOR_CURSOR);
+	      }
 	    break;
 	  }
 	case KB_ESCAPE:
@@ -104,47 +124,63 @@ namespace arcade
 	    m_state = GameState::QUIT;
 	    return;
 	  }
-    default:
-    break;
-    }
-    }
+	case KB_ENTER:
+	  {
+	    if (m_cursor < MENU_POS_GAME)
+	      {
+		m_gui.getComponent(m_lib).setColor(MENU_COLOR_BG);
+		m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BOTH);
+		m_lib = m_cursor;
+	      }
+	    else if (m_cursor >= MENU_POS_GAME && m_cursor < MENU_POS_NAME)
+	      {
+		m_gui.getComponent(m_game).setColor(MENU_COLOR_BG);
+		m_gui.getComponent(m_cursor).setColor(MENU_COLOR_BOTH);
+		m_game = m_cursor;
+	      }
+	    break;
+	  }
+	default:
+	  break;
+      }
+  }
 
   void Menu::useEventKeyButton(Event event)
-    {
+  {
     (void)event;
-    }
+  }
 
-    void Menu::useEventKeyJoystick(Event event)
-    {
+  void Menu::useEventKeyJoystick(Event event)
+  {
     (void)event;
-    }
+  }
 
-    void Menu::useEvent(Event event)
-    {
+  void Menu::useEvent(Event event)
+  {
     switch (event.type)
-    {
-    case ET_KEYBOARD:
-    useEventKeyBoard(event);
-    break;
-    case ET_JOYSTICK:
-    useEventKeyJoystick(event);
-    break;
-    case ET_BUTTON:
-    useEventKeyButton(event);
-    break;
+      {
+	case ET_KEYBOARD:
+	  useEventKeyBoard(event);
+	break;
+	case ET_JOYSTICK:
+	  useEventKeyJoystick(event);
+	break;
+	case ET_BUTTON:
+	  useEventKeyButton(event);
+	break;
 	case ET_QUIT:
 	  m_state = GameState::QUIT;
-    default:
-    break;
-    }
-    }
+	default:
+	  break;
+      }
+  }
 
   void Menu::notifyEvent(std::vector<Event> &&event)
   {
     for(std::vector<Event>::iterator it = event.begin();
-      it != event.end(); ++it)
+	it != event.end(); ++it)
       {
-      useEvent(*it);
+	useEvent(*it);
       }
   }
 
@@ -157,42 +193,6 @@ namespace arcade
   {
     return (std::move(m_net));
   }
-
-  /*static Menu::DirMenu oppositeDir(Menu::DirMenu dir)
-    {
-    switch (dir)
-    {
-    case Menu::DIR_UP:
-    return (Menu::DIR_DOWN);
-    case Menu::DIR_DOWN:
-    return (Menu::DIR_UP);
-    case Menu::DIR_LEFT:
-    return (Menu::DIR_RIGHT);
-    case Menu::DIR_RIGHT:
-    return (Menu::DIR_LEFT);
-    default:
-    return (Menu::DIR_UP);
-    }
-    }
-
-    static void changeDir(Menu::PosMenu &cpy, Menu::DirMenu dir)
-    {
-    switch (dir)
-    {
-    case Menu::DIR_RIGHT :
-    cpy._x = cpy._x + 1;
-    break;
-    case Menu::DIR_LEFT :
-    cpy._x = cpy._x - 1;
-    break;
-    case Menu::DIR_UP :
-    cpy._y = cpy._y - 1;
-    break;
-    case Menu::DIR_DOWN :
-    cpy._y = cpy._y + 1;
-    break;
-    }
-    }*/
 
   void Menu::process()
   {
@@ -228,12 +228,27 @@ namespace arcade
   {
     return false;
   }
+
+  std::string const & Menu::getGame()
+  {
+    return (m_gui.getComponent(m_game).getText());
+  }
+
+  std::string const & Menu::getLib()
+  {
+    return (m_gui.getComponent(m_lib).getText());
+  }
+
+  std::string const & Menu::getName()
+  {
+    return (m_gui.getComponent(MENU_POS_NAME).getText());
+  }
 }
 
-  extern "C"
-  {
-    arcade::IGame *getGame()
-    {
-      return (new arcade::Menu());
-    }
+extern "C"
+{
+arcade::IGame *getGame()
+{
+  return (new arcade::Menu());
+}
 }
