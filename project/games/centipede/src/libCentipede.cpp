@@ -72,7 +72,7 @@ namespace arcade
     m_player._x = m_map.getWidth() / 2;
     m_player._y = m_map.getHeight() * 9 / 10;
     m_player._tile = Tile(TileType::EMPTY, TileTypeEvolution::PLAYER,
-			    {255, 255, 255, 255}, 0, 0, 0, 0);
+			    {205, 205, 205, 255}, 0, 0, 0, 0);
     m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
     addCentipede();
     for (size_t i = 0; i < m_map.getWidth() * m_map.getHeight() / 50; i++)

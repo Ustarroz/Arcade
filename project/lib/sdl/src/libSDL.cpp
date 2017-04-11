@@ -14,7 +14,7 @@
 namespace arcade
 {
   libSDL::libSDL()
-    : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640)
+    : m_doesSupportSound(true), m_windowHeight(940), m_windowWeight(640)
   {
     initSDL();
   }
@@ -177,10 +177,9 @@ namespace arcade
       SDL_Rect rect;
       rect.x = pos.x;
       rect.y = pos.y;
-      rect.w = c.getWidth();
-      rect.h = c.getHeight();
+      rect.w = static_cast<int>(static_cast<double>(m_disp.screen->w) * c.getWidth());
+      rect.h = static_cast<int>(static_cast<double>(m_disp.screen->h) * c.getHeight());
       SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
-      //drawRect(m_disp.screen, pos, c.getWidth(), c.getHeight(), &red);
 #ifdef DEBUG
       //std::cout << c.getText() << std::endl;
 #endif

@@ -19,8 +19,8 @@
 #define MENU_COL_2 0.4
 #define MENU_COL_3 0.7
 
-#define MENU_WIDTH 100
-#define MENU_HEIGHT 17
+#define MENU_WIDTH 0.11
+#define MENU_HEIGHT 0.03
 
 #define MENU_POS_GAME 3
 #define MENU_POS_NAME 5
