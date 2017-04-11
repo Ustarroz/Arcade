@@ -6,6 +6,7 @@ include $(MK_COMMON_DIR)defs.mk $(MK_THIS)local_defs.mk
 SRC=	$(addprefix ./src/,	\
 	main.cpp		\
 	Core.cpp 		\
+	Menu.cpp 		\
 	)
 
 COMMON_SRC= $(addprefix ./../common/,	\
@@ -14,6 +15,6 @@ COMMON_SRC= $(addprefix ./../common/,	\
 	    Color.cpp 			\
 	    )
 
-#SRC+=	$(COMMON_SRC)
+SRC+=	$(COMMON_SRC)
 
 include $(MK_COMMON_DIR)rules.mk

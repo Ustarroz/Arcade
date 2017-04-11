@@ -7,6 +7,7 @@
 # include "IGfxLib.hpp"
 # include "IGame.hpp"
 # include "ISound.hpp"
+# include "Menu.hpp"
 
 namespace arcade
 {
@@ -30,6 +31,8 @@ namespace arcade
       void getLibsGame();
       int setInterfaceGfx(std::string const &);
       int setInterfaceGame(std::string const &);
+      GameState gameProcess(std::vector<Event> &&events);
+      GameState menuProcess(std::vector<Event> &&events);
 
     private:
       std::vector<std::string> m_libsGfxName;
@@ -41,6 +44,9 @@ namespace arcade
       void * m_handlerSound;
       std::string m_error;
       ISound *m_libSound;
+      Menu m_menu;
+      size_t m_game;
+      size_t m_lib;
   };
 }
 
