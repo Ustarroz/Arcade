@@ -4,9 +4,8 @@
 #include "Map.hpp"
 #include "GameState.hpp"
 #include "Tile.hpp"
+#include "Sprite.hpp"
 
-#include <iostream>
-#include <unistd.h>
 namespace arcade
 {
   Centipede::Centipede()
@@ -45,7 +44,9 @@ namespace arcade
 			       Tile(TileType::EVIL_DUDE,
 				    TileTypeEvolution::ENEMY,
 				    CENTIPEDE_PART_COLOR,
-				    0, 0, 0, 0)));
+				    dir == DIR_RIGHT ? CENTIPEDE_SPRITE_RIGHT :
+				    CENTIPEDE_SPRITE_LEFT,
+				     0, 0, 0, true)));
 	list.push_back(CentiPart(pos, dir));
 	m_map.setTile(0, pos._x, pos._y, pos._tile);
       }
@@ -67,12 +68,14 @@ namespace arcade
 	m_shroom.clear();
       }
     m_shoot._tile = Tile(TileType::MY_SHOOT, TileTypeEvolution::SHOT_PLAYER,
-			 {0, 0, 255, 255}, 0, 0, 0, 0);
+			 {0, 0, 255, 255}, CENTIPEDE_SPRITE_MISSILE,
+			 0, 0, 0, true);
     m_shoot._dir = DirGame::DIR_DOWN;
     m_player._x = m_map.getWidth() / 2;
     m_player._y = m_map.getHeight() * 9 / 10;
     m_player._tile = Tile(TileType::EMPTY, TileTypeEvolution::PLAYER,
-			    {205, 205, 205, 255}, 0, 0, 0, 0);
+			  {205, 205, 205, 255}, CENTIPEDE_SPRITE_SHIP,
+			  0, 0, 0, true);
     m_map.setTile(0, m_player._x, m_player._y, m_player._tile);
     addCentipede();
     for (size_t i = 0; i < m_map.getWidth() * m_map.getHeight() / 50; i++)
@@ -448,6 +451,11 @@ namespace arcade
   std::vector<std::unique_ptr<ISprite>> Centipede::getSpritesToLoad() const
   {
     std::vector<std::unique_ptr<ISprite> > sprites;
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_left.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_right.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_down.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/missile.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/ship.png"));
     return (std::move(sprites));
   }
 
@@ -516,7 +524,8 @@ namespace arcade
 		uint8_t col = static_cast<uint8_t >(255 - 50 * it->_life);
 		m_map.setTile(0, it->_pos.x, it->_pos.y,
 			      Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
-				   {col, static_cast<uint8_t >(255 - col), col, 255}, 0, 0, 0, 0));
+				   {col, static_cast<uint8_t >(255 - col), col, 255},
+				   0, 0, 0, 0, true));
 	      }
 	    return ;
 	  }

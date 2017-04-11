@@ -16,6 +16,13 @@
 #define CENTIPEDE_MAX_LVL 10
 #define CENTIPEDE_MIN_LVL 3
 
+#define CENTIPEDE_SPRITE_LEFT 0
+#define CENTIPEDE_SPRITE_RIGHT 1
+#define CENTIPEDE_SPRITE_DOWN 2
+#define CENTIPEDE_SPRITE_MISSILE 3
+#define CENTIPEDE_SPRITE_SHIP 4
+#define CENTIPEDE_SPRITE_SHROOM 5
+
 namespace arcade
 {
   class Centipede: public IGame
