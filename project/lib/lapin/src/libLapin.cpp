@@ -34,13 +34,14 @@ namespace arcade
   int libLapin::initLapin()
   {
     m_prog.win = bunny_start(m_windowWeight, m_windowHeight, false, "Arcade - Lapin");
-    if (m_prog.win == NULL)
-    {
-      bunny_printlerr("Cannot open the window.");
-      return (1);
-    }
     m_prog.name = "Arcade";
     m_render = bunny_new_pixelarray(m_windowWeight, m_windowHeight);
+    if (m_prog.win == NULL)
+      {
+	bunny_printlerr("Cannot open the window.");
+	return (1);
+	exit(1);
+      }
     bunny_clear(&m_prog.win->buffer, PINK2);
     //bunny_printl("Press escape to exit. Click left to change the window color.");
     //bunny_set_key_response(key_response);
