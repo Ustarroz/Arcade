@@ -386,6 +386,12 @@ namespace arcade
 		save = jt->_pos._dir;
 		jt->_pos._dir = oppositeDir(jt->_old_dir);
 		jt->_old_dir =	jt->_pos._dir;
+		jt->_pos._tile = Tile(TileType::EVIL_DUDE,
+				      TileTypeEvolution::ENEMY,
+				      CENTIPEDE_PART_COLOR,
+				      jt->_old_dir == DIR_RIGHT ? CENTIPEDE_SPRITE_RIGHT :
+				      CENTIPEDE_SPRITE_LEFT,
+				      0, 0, 0, true);
 	      }
 	    else if (jt->_pos._dir == DIR_DOWN)
 	      {
@@ -393,6 +399,12 @@ namespace arcade
 		if (save != DIR_DOWN)
 		  jt->_old_dir = jt->_pos._dir;
 		save = DIR_DOWN;
+		jt->_pos._tile = Tile(TileType::EVIL_DUDE,
+				      TileTypeEvolution::ENEMY,
+				      CENTIPEDE_PART_COLOR,
+				      jt->_old_dir == DIR_RIGHT ? CENTIPEDE_SPRITE_RIGHT :
+				      CENTIPEDE_SPRITE_LEFT,
+				      0, 0, 0, true);
 	      }
 	    else
 	      {
@@ -453,7 +465,6 @@ namespace arcade
     std::vector<std::unique_ptr<ISprite> > sprites;
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_left.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_right.png"));
-    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/centi_down.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/missile.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/ship.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/Mushroom.png"));
@@ -532,7 +543,7 @@ namespace arcade
 		m_map.setTile(0, it->_pos.x, it->_pos.y,
 			      Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
 				   {col, static_cast<uint8_t >(255 - col), col, 255},
-				   CENTIPEDE_SPRITE_SHROOM - 1 - it->_life + 5, 0, 0, 0 , true));
+				   CENTIPEDE_SPRITE_SHROOM - it->_life + 5, 0, 0, 0 , true));
 	      }
 	    return ;
 	  }
