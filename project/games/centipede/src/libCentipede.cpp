@@ -423,7 +423,7 @@ namespace arcade
     shroom._pos.y = y;
     shroom._life = 5;
     shroom._tile = Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
-			{0, 255, 0, 255}, 0, 0, 0, 0);
+			{0, 255, 0, 255}, CENTIPEDE_SPRITE_SHROOM, 0, 0, 0, true);
     m_shroom.push_back(shroom);
     m_map.setTile(0, shroom._pos.x, shroom._pos.y, shroom._tile);
   }
