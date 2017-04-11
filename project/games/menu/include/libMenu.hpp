@@ -68,6 +68,7 @@ namespace arcade
     size_t			m_cursor;
     size_t			m_lib;
     size_t			m_game;
+    std::string			m_name;
     std::vector<std::pair<std::string, SoundType> > m_soundsName;
     std::vector<Sound> m_soundsPlay;
   };

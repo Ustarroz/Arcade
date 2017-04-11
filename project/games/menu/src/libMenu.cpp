@@ -11,6 +11,7 @@ namespace arcade
     m_lib = 0;
     m_cursor = 0;
     m_game = MENU_POS_GAME;
+    m_name = "NAM";
 
     Component comp = Component(MENU_COLOR_BOTH, "Caca", MENU_COL_1, MENU_LINE_1,
 			       MENU_WIDTH, MENU_HEIGHT);
@@ -85,6 +86,15 @@ namespace arcade
 
   void Menu::useEventKeyBoard(Event event)
   {
+    if (event.kb_key >= KB_A && event.kb_key <= KB_Z)
+      {
+	if (m_name.size() < 3 && m_cursor == MENU_POS_NAME)
+	  {
+	    m_name.append(1, 'A' + event.kb_key - KB_A);
+	    m_gui.getComponent(MENU_POS_NAME).setString(m_name);
+	  }
+	return ;
+      }
     switch (event.kb_key)
       {
 	case KB_ARROW_LEFT:
@@ -124,7 +134,7 @@ namespace arcade
 	    m_state = GameState::QUIT;
 	    return;
 	  }
-	case KB_ENTER:
+	case KB_SPACE:
 	  {
 	    if (m_cursor < MENU_POS_GAME)
 	      {
@@ -139,6 +149,19 @@ namespace arcade
 		m_game = m_cursor;
 	      }
 	    break;
+	  }
+	case KB_ENTER:
+	  {
+	    m_state = GameState::MENU;
+	    return;
+	  }
+	case KB_BACKSPACE:
+	  {
+	    if (m_name.size() > 0 && m_cursor == MENU_POS_NAME)
+	      {
+		m_name.resize(m_name.size() - 1);
+		m_gui.getComponent(MENU_POS_NAME).setString(m_name);
+	      }
 	  }
 	default:
 	  break;
