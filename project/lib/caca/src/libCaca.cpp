@@ -13,13 +13,13 @@
 namespace arcade
 {
   libCaca::libCaca()
-    : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640)
+    : m_doesSupportSound(true), m_windowHeight(320), m_windowWeight(320)
   {
     initCaca();
   }
 
   libCaca::libCaca(int height, int weight)
-    : m_doesSupportSound(true), m_windowHeight(640), m_windowWeight(640)
+    : m_doesSupportSound(true), m_windowHeight(height), m_windowWeight(weight)
   {
     initCaca();
   }
@@ -155,10 +155,10 @@ namespace arcade
 #ifdef DEBUG
       std::cout << c.getText() << std::endl;
 #endif
-      pos_t pos = {static_cast<int>(static_cast<double>(m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(m_windowHeight) * c.getY())};
-      caca_set_color_argb(m_canvas, CACA_BLACK, CACA_RED);
-      caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
+      pos_t pos = {static_cast<int>(static_cast<double>(50) * c.getX()), static_cast<int>(static_cast<double>(30) * c.getY())};
       caca_set_color_ansi(m_canvas, CACA_BLACK, CACA_WHITE);
+      caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
+      caca_set_color_ansi(m_canvas, CACA_WHITE, CACA_BLACK);
     }
   }
 
@@ -172,6 +172,7 @@ namespace arcade
 
     void libCaca::clear()
     {
+	    caca_clear_canvas(m_canvas);
       //clear caca
     }
 

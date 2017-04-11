@@ -85,26 +85,26 @@ namespace arcade
   {
     m_map = &map;
     bunny_set_loop_main_function(libLapin::_bunnyUpdateMap);
-    bunny_loop(m_prog.win, 6000, this);
+    bunny_loop(m_prog.win, 60, this);
   }
 
   void libLapin::updateGUI(IGUI &gui)
   {
     m_gui = &gui;
     bunny_set_loop_main_function(&_bunnyUpdateGUI);
-    bunny_loop(m_prog.win, 6000, this);
+    bunny_loop(m_prog.win, 60, this);
   }
 
   void libLapin::display()
   {
     bunny_set_loop_main_function(&_bunnyDisplay);
-    bunny_loop(m_prog.win, 6000, this);
+    bunny_loop(m_prog.win, 60, this);
   }
 
   void libLapin::clear()
   {
     bunny_set_loop_main_function(&_bunnyClear);
-    bunny_loop(m_prog.win, 6000, this);
+    bunny_loop(m_prog.win, 60, this);
   }
 
   t_bunny_response libLapin::_bunnyUpdateMap(void *data)
