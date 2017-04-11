@@ -1,10 +1,10 @@
-PROJECT_DIR=	./project/core/ 		\
-		./project/lib/caca/ 		\
+PROJECT_DIR=	./project/lib/caca/ 		\
 		./project/lib/sdl/		\
 		./project/lib/sound/		\
 		./project/games/snake/		\
 		./project/games/centipede/	\
-		./project/lib/lapin/
+		./project/lib/lapin/		\
+		./project/core/
 
 
 all:
