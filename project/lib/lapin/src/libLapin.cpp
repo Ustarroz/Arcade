@@ -34,7 +34,7 @@ namespace arcade
   int libLapin::initLapin()
   {
     m_prog.win = bunny_start(m_windowWeight, m_windowHeight, false, "Arcade - Lapin");
-    m_prog.name = "Arcade";
+    m_prog.name = strdup("Arcade - lapin");
     m_render = bunny_new_pixelarray(m_windowWeight, m_windowHeight);
     if (m_prog.win == NULL)
       {
@@ -51,6 +51,7 @@ namespace arcade
 #ifdef DEBUG
     std::cout << "[Lapin] init ok" << std::endl;
 #endif
+    return (0);
   }
 
   bool libLapin::pollEvent(Event &e)
@@ -60,7 +61,7 @@ namespace arcade
 	  m_event = &e;
 	   bunny_set_key_response(libLapin::_bunnyPollEvent);
     bunny_set_loop_main_function(libLapin::_bunnyPollEventLoop);
-    bunny_loop(m_prog.win, 6000, this);
+    bunny_loop(m_prog.win, 60, this);
     return (a);
   }
 
@@ -150,28 +151,7 @@ namespace arcade
 #ifdef DEBUG
     std::cout << "[Lapin] updating GUI" << std::endl;
 #endif
-    libLapin *lapin = static_cast<libLapin *>(data);
-    if (lapin->m_gui == NULL)
-      exit(EXIT_ON_SUCCESS);
-    for (size_t nb = 0; nb < lapin->m_gui->size(); nb++)
-    {
-      IComponent const &c = lapin->m_gui->at(nb);
-      pos_t pos = {static_cast<int>(static_cast<double>(lapin->m_windowWeight) * c.getX()), static_cast<int>(static_cast<double>(lapin->m_windowHeight) * c.getY())};
-      //drawRect(m_disp.screen, pos, c.getWidth(), c.getHeight(), &red);
-#ifdef DEBUG
-      //std::cout << c.getText() << std::endl;
-#endif
-      //if (m_font)
-      //{
-        //font ok so disp c.getText().c_str();
-      //}
-      /*else
-      {
-#ifdef DEBUG
-        std::cout << "Cannot load font : " << TTF_GetError() << std::endl;
-#endif
-      }*/
-    }
+    (void)data;
     return (EXIT_ON_SUCCESS);
   }
 
@@ -205,7 +185,7 @@ namespace arcade
 #ifdef DEBUG
     std::cout << "[Lapin] PollEventLoop" << std::endl;
 #endif
-    libLapin *lapin = static_cast<libLapin *>(data);
+    (void)data;
     return (EXIT_ON_SUCCESS);
   }
 

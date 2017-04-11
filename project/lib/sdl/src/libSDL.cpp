@@ -14,13 +14,13 @@
 namespace arcade
 {
   libSDL::libSDL()
-    : m_doesSupportSound(true), m_windowHeight(940), m_windowWeight(640)
+    : m_doesSupportSound(false), m_windowHeight(640), m_windowWeight(640)
   {
     initSDL();
   }
 
   libSDL::libSDL(int height, int weight)
-    : m_doesSupportSound(true), m_windowHeight(height), m_windowWeight(weight)
+    : m_doesSupportSound(false), m_windowHeight(height), m_windowWeight(weight)
   {
     initSDL();
   }
@@ -98,6 +98,7 @@ namespace arcade
 
   void libSDL::loadSounds(std::vector<std::pair<std::string, SoundType> > const &sound)
   {
+	  (void)sound;
 #ifdef DEBUG
     std::cout << "[SDL] LOAD SOUNDS" << std::endl;
 #endif
@@ -105,6 +106,7 @@ namespace arcade
 
   void libSDL::soundControl(const Sound &sound)
   {
+	  (void)sound;
 #ifdef DEBUG
     std::cout << "[SDL] SOUND CONTROL" << std::endl;
 #endif
@@ -138,11 +140,6 @@ namespace arcade
         for (size_t x = 0; x < map.getWidth(); x++)
         {
           ITile const &tile = map.at(nb, x, y);
-	  /*if (tile.getSpriteId() == 56)
-	  {
-		  std::cout << "OLOLOLOLOL" << std::endl;
-		  exit(1);
-	  }*/
           pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
           SDL_Rect rect;
           rect.x = pos.x;
@@ -159,7 +156,6 @@ namespace arcade
           {
             Color a = tile.getColor();
             SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
-            //drawSquare(m_disp.screen, pos, SIZE_TILE, &color);
           }
         }
       }
@@ -177,12 +173,9 @@ namespace arcade
       SDL_Rect rect;
       rect.x = pos.x;
       rect.y = pos.y;
-      rect.w = static_cast<int>(static_cast<double>(m_disp.screen->w) * c.getWidth());
-      rect.h = static_cast<int>(static_cast<double>(m_disp.screen->h) * c.getHeight());
+      rect.w = c.getWidth();
+      rect.h = c.getHeight();
       SDL_FillRect(m_disp.screen, &rect, SDL_MapRGBA(m_disp.screen->format, a.r, a.g, a.b, a.a));
-#ifdef DEBUG
-      //std::cout << c.getText() << std::endl;
-#endif
       if (m_font)
       {
         SDL_Color lmao = {b.r, b.g, b.b, b.a};

@@ -13,13 +13,15 @@
 namespace arcade
 {
   libCaca::libCaca()
-    : m_doesSupportSound(true), m_windowHeight(320), m_windowWeight(320)
+    : m_windowHeight(320), m_windowWeight(320), m_doesSupportSound(false),
+	m_disp(NULL), m_canvas(NULL)
   {
     initCaca();
   }
 
   libCaca::libCaca(int height, int weight)
-    : m_doesSupportSound(true), m_windowHeight(height), m_windowWeight(weight)
+    : m_windowHeight(height), m_windowWeight(weight), m_doesSupportSound(false),
+	m_disp(NULL), m_canvas(NULL)
   {
     initCaca();
   }
