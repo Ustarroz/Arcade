@@ -532,7 +532,7 @@ namespace arcade
 		m_map.setTile(0, it->_pos.x, it->_pos.y,
 			      Tile(TileType::OBSTACLE, TileTypeEvolution::OBSTACLE,
 				   {col, static_cast<uint8_t >(255 - col), col, 255},
-				   CENTIPEDE_SPRITE_SHROOM - 1 - it->_life + 5, 0, 0, 0 , true));
+				   CENTIPEDE_SPRITE_SHROOM - it->_life + 5, 0, 0, 0 , true));
 	      }
 	    return ;
 	  }
