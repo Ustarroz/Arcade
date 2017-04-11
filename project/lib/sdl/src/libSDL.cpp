@@ -167,6 +167,7 @@ namespace arcade
     {
       IComponent &c = gui.at(nb);
       Color a = c.getBackgroundColor();
+      Color b = c.getTextColor();
       pos_t pos = {static_cast<int>(static_cast<double>(m_disp.screen->w) * c.getX()), static_cast<int>(static_cast<double>(m_disp.screen->h) * c.getY())};
       SDL_Rect rect;
       rect.x = pos.x;
@@ -180,7 +181,8 @@ namespace arcade
 #endif
       if (m_font)
       {
-        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(m_font, c.getText().c_str(), {255, 255, 255});
+        SDL_Color lmao = {b.r, b.g, b.b, b.a};
+        SDL_Surface* surfaceMessage = TTF_RenderText_Solid(m_font, c.getText().c_str(), lmao);
         SDL_Rect fontRect;
         fontRect.x = static_cast<int>(static_cast<double>(m_windowWeight) * c.getX());
         fontRect.y = static_cast<int>(static_cast<double>(m_windowHeight) * c.getY());
