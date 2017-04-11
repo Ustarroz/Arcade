@@ -44,6 +44,7 @@ namespace arcade
       GameState m_state;
       GameProcess m_process;
       GameGUI m_gui;
+      bool m_dirSet;
       void useEvent(Event const & event);
       void useEventKeyBoard(Event const & event);
       void useEventKeyJoystick(Event const  &event);

@@ -132,10 +132,10 @@ namespace arcade
           Color a = tile.getColor();
           pos_t pos = {static_cast<int>(x), static_cast<int>(y)};
           uint16_t u = 0;
-          u = a.a << 8;
-          u += a.r << 6;
-          u += a.g << 4;
-          u += a.b << 0;
+	    u += a.a * 15 / 255 << 12;
+	    u += a.r * 15 / 255 << 8;
+	    u += a.g * 15 / 255 << 4;
+	    u += a.b * 15 / 255 << 0;
 #ifdef DEBUG
           //std::cout << "Color: " << u << std::endl;
 #endif
@@ -156,9 +156,21 @@ namespace arcade
       std::cout << c.getText() << std::endl;
 #endif
       pos_t pos = {static_cast<int>(static_cast<double>(50) * c.getX()), static_cast<int>(static_cast<double>(30) * c.getY())};
-      caca_set_color_ansi(m_canvas, CACA_BLACK, CACA_WHITE);
-      caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
-      caca_set_color_ansi(m_canvas, CACA_WHITE, CACA_BLACK);
+	Color a = c.getBackgroundColor();
+	uint16_t u = 0;
+	u += a.a * 15 / 255 << 12;
+	u += a.r * 15 / 255 << 8;
+	u += a.g * 15 / 255 << 4;
+	u += a.b * 15 / 255 << 0;
+	a = c.getTextColor();
+	uint16_t v = 0;
+	v += a.a * 15 / 255 << 12;
+	v += a.r * 15 / 255 << 8;
+	v += a.g * 15 / 255 << 4;
+	v += a.b * 15 / 255 << 0;
+        caca_set_color_argb(m_canvas, v, u);
+	caca_put_str(m_canvas, pos.x, pos.y, c.getText().c_str());
+	caca_set_color_argb(m_canvas, CACA_BLACK, CACA_BLACK);
     }
   }
 
@@ -179,12 +191,12 @@ namespace arcade
     void libCaca::drawSquare(pos_t pos, int size)
     {
       for (int y = pos.y; y < pos.y + size; y++)
-      {
-        for (int x = pos.x; x < pos.x + size; x++)
-        {
-          caca_put_str(m_canvas, x, y, " ");
-        }
-      }
+	{
+	  for (int x = pos.x; x < pos.x + size; x++)
+	    {
+	      caca_put_str(m_canvas, x, y, " ");
+	    }
+	}
     }
   }
 

@@ -47,7 +47,7 @@ namespace arcade
     m_dir.push_back(PosGame(posx, posy, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::PLAYER,
-				  {0, 0, 255, 255}, 0, 0, 0, 0, true)));
+				  {255, 0, 0, 255}, 0, 0, 0, 0, true)));
     m_dir.push_back(PosGame(posx, posy + 1, DIR_UP,
 			     Tile(TileType::EMPTY,
 				  TileTypeEvolution::OBSTACLE,
@@ -67,6 +67,7 @@ namespace arcade
     placeApple();
     m_score = 0;
     m_gui.setScore(0);
+    m_dirSet = false;
   }
 
   GameState Snake::getGameState() const
@@ -76,6 +77,8 @@ namespace arcade
 
   void Snake::useEventKeyBoard(Event const &event)
   {
+    DirGame prev;
+
     switch (event.kb_key)
     {
 	case KB_ENTER:
@@ -107,20 +110,36 @@ namespace arcade
 	  m_state = GameState::QUIT;
 	  return ;
 	case KB_ARROW_LEFT:
-	  if (m_process == GameProcess::GAMEPLAYING)
-	    m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
+	  if (m_process == GameProcess::GAMEPLAYING && !m_dirSet)
+	    {
+	      prev = m_dir[0]._dir;
+	      m_dir[0]._dir = m_dir[0]._dir != DIR_RIGHT ? DIR_LEFT : DIR_RIGHT;
+	      m_dirSet = prev != m_dir[0]._dir;
+	    }
 	break;
 	case KB_ARROW_RIGHT:
-	  if (m_process == GameProcess::GAMEPLAYING)
-	    m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
+	  if (m_process == GameProcess::GAMEPLAYING && !m_dirSet)
+	    {
+	      prev = m_dir[0]._dir;
+	      m_dir[0]._dir = m_dir[0]._dir == DIR_LEFT ? DIR_LEFT : DIR_RIGHT;
+	      m_dirSet = prev != m_dir[0]._dir;
+	    }
 	break;
 	case KB_ARROW_DOWN:
-	  if (m_process == GameProcess::GAMEPLAYING)
-	    m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
+	  if (m_process == GameProcess::GAMEPLAYING && !m_dirSet)
+	    {
+	      prev = m_dir[0]._dir;
+	      m_dir[0]._dir = m_dir[0]._dir == DIR_UP ? DIR_UP : DIR_DOWN;
+	      m_dirSet = prev != m_dir[0]._dir;
+	    }
 	break;
 	case KB_ARROW_UP:
-	  if (m_process == GameProcess::GAMEPLAYING)
-	    m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
+	  if (m_process == GameProcess::GAMEPLAYING && !m_dirSet)
+	    {
+	      prev = m_dir[0]._dir;
+	      m_dir[0]._dir = m_dir[0]._dir != DIR_DOWN ? DIR_UP : DIR_DOWN;
+	      m_dirSet = prev != m_dir[0]._dir;
+	    }
 	break;
 	default:
 	  return ;
@@ -190,6 +209,7 @@ namespace arcade
 
     if (m_process != GameProcess::GAMEPLAYING)
       return ;
+    m_dirSet = false;
     save = m_dir[0]._dir;
     for(std::vector<PosGame>::iterator it = m_dir.begin();
 	it != m_dir.end(); ++it)
@@ -214,14 +234,11 @@ namespace arcade
 	endGame();
 	return ;
       }
-    if (m_map.getLayer(0).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
+    if (m_map.getLayer(1).getTile(m_dir[0]._x, m_dir[0]._y).getTypeEv()
 	== TileTypeEvolution ::FOOD)
       {
 	m_score = m_score + m_appleScore;
 	m_map.setTile(1, m_dir[0]._x, m_dir[0]._y, m_dir[0]._tile);
-	m_map.setTile(0, m_dir[0]._x, m_dir[0]._y,
-		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
-			   SNAKE_EMPTY_COLOR, 0, 0, 0, 0));
 	m_gui.setScore(m_score);
 	addSnake();
 	placeApple();
@@ -258,7 +275,7 @@ namespace arcade
       }
     pos = list[std::rand() % list.size()];
     m_appleScore = MAXSCORE;
-    m_map.setTile(0, pos % m_map.getWidth(), pos / m_map.getWidth(),
+    m_map.setTile(1, pos % m_map.getWidth(), pos / m_map.getWidth(),
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
 		       {255, 0, 255, 255}, 0, 0, 0, 0));
   }
