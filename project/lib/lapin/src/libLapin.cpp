@@ -194,6 +194,10 @@ namespace arcade
 				     void			*data)
   {
     libLapin *lapin = static_cast<libLapin *>(data);
+    if (lapin == NULL)
+	    return (EXIT_ON_SUCCESS);
+    if (lapin->m_event == NULL)
+	    return (EXIT_ON_SUCCESS);
 	  switch (state)
 	  {
 		  case GO_DOWN:
