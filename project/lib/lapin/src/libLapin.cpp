@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstring>
 #include "Event.hpp"
 #include "IMap.hpp"
 #include "IGUI.hpp"
@@ -54,11 +55,13 @@ namespace arcade
 
   bool libLapin::pollEvent(Event &e)
   {
+	  static bool a = false;
+	  a = !a;
 	  m_event = &e;
 	   bunny_set_key_response(libLapin::_bunnyPollEvent);
     bunny_set_loop_main_function(libLapin::_bunnyPollEventLoop);
     bunny_loop(m_prog.win, 6000, this);
-    return (false);
+    return (a);
   }
 
   bool libLapin::doesSupportSound() const
@@ -189,7 +192,11 @@ namespace arcade
     std::cout << "[Lapin] CLEAR" << std::endl;
 #endif
     libLapin *lapin = static_cast<libLapin *>(data);
-    bunny_clear(&lapin->m_prog.win->buffer, PINK2);
+    Color *pixels = reinterpret_cast<Color *>(lapin->m_render->pixels);
+    std::memset(pixels, PINK2, lapin->m_windowWeight * lapin->m_windowHeight * sizeof(Color));
+    //bunny_clear(&lapin->m_render->clipable.buffer, BLACK);
+    //bunny_blit(&lapin->m_prog.win->buffer, &lapin->m_render->clipable, NULL);
+    //bunny_display(lapin->m_prog.win);
     return (EXIT_ON_SUCCESS);
   }
 
@@ -240,9 +247,9 @@ namespace arcade
   void libLapin::drawSquare(libLapin *lapin, pos_t pos, int size, Color col)
   {
 	  Color *pixels = reinterpret_cast<Color *>(lapin->m_render->pixels);
-	  for (int y = 0; y < pos.y + size; y++)
+	  for (int y = pos.y; y < pos.y + size; y++)
 	  {
-		  for (int x = 0; x < pos.x + size; x++)
+		  for (int x = pos.x; x < pos.x + size; x++)
 		  {
 			  int ndx = x + lapin->m_windowWeight * y;
 			  Color oldColor;
@@ -255,7 +262,7 @@ namespace arcade
 			    newColor.r = col.r * alpha + oldColor.r * (1 - alpha);
 			    newColor.g = col.g * alpha + oldColor.g * (1 - alpha);
 			    newColor.b = col.b * alpha + oldColor.b * (1 - alpha);
-			    newColor.a = col.a * alpha + oldColor.a * (1 - alpha);
+			    newColor.a = col.a + oldColor.a * (1 - alpha);
 			  pixels[ndx] = newColor;
 		  }
 	  }

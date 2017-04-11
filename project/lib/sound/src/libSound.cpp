@@ -14,7 +14,7 @@ namespace arcade
     }
     else
     {
-      //m_music.play();
+      m_music.play();
     }
   }
 
