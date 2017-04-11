@@ -198,7 +198,17 @@ namespace arcade
   int Core::loadLibraries()
   {
     getLibsGfx();
+    if (m_libsGfxName.size() == 0)
+      {
+	m_error = "No lib to load";
+	return (1);
+      }
     getLibsGame();
+    if (m_libsGameName.size() == 0)
+      {
+	m_error = "No game to load";
+	return (1);
+      }
     for (unsigned long i = 0; i < m_libsGfxName.size(); i++)
     {
       if (setInterfaceGfx(m_libsGfxName[i]))

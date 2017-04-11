@@ -232,7 +232,8 @@ namespace arcade
 
     while (pos_lib < MENU_POS_GAME)
       {
-	if (lib == "lib/" + m_gui.getComponent(pos_lib).getText())
+	if (lib == "lib/" + m_gui.getComponent(pos_lib).getText() ||
+	   lib == "./lib/" + m_gui.getComponent(pos_lib).getText())
 	  break;
 	++pos_lib;
       }
