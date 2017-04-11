@@ -260,7 +260,7 @@ namespace arcade
     m_appleScore = MAXSCORE;
     m_map.setTile(0, pos % m_map.getWidth(), pos / m_map.getWidth(),
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
-		       {255, 0, 255, 255}, 1, 0, 0, 0, true));
+		       {255, 0, 255, 255}, 0, 0, 0, 0));
   }
 
   void Snake::addSnake()

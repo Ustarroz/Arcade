@@ -138,6 +138,11 @@ namespace arcade
         for (size_t x = 0; x < map.getWidth(); x++)
         {
           ITile const &tile = map.at(nb, x, y);
+	  /*if (tile.getSpriteId() == 56)
+	  {
+		  std::cout << "OLOLOLOLOL" << std::endl;
+		  exit(1);
+	  }*/
           pos_t pos = {static_cast<int>(x * SIZE_TILE), static_cast<int>(y * SIZE_TILE)};
           SDL_Rect rect;
           rect.x = pos.x;
