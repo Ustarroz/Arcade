@@ -5,6 +5,7 @@
 
 # include <vector>
 # include <string>
+# include <map>
 # include "Event.hpp"
 # include "IMap.hpp"
 # include "IGUI.hpp"
@@ -38,6 +39,8 @@ namespace arcade
       void updateGUI(IGUI &gui);
       void display();
       void clear();
+      static std::map<e_bunny_keysym, KeyboardKey> m_keys;
+      Event *m_event;
     private:
       int initLapin();
       //t_bunny_response _bunnyMainLoop(void *);
@@ -45,13 +48,19 @@ namespace arcade
       static t_bunny_response _bunnyUpdateGUI(void *);
       static t_bunny_response _bunnyDisplay(void *);
       static t_bunny_response _bunnyClear(void *);
+      static t_bunny_response _bunnyPollEventLoop(void *);
+      static t_bunny_response _bunnyPollEvent(t_bunny_event_state,
+				     t_bunny_keysym,
+				     void*);
       void drawSquare(libLapin *, pos_t, int, Color);
     private:
+      //static std::map<e_bunny_keysym, KeyboardKey> m_keys;
       bool m_doesSupportSound;
       int m_windowHeight;
       int m_windowWeight;
       IMap const *m_map;
       IGUI *m_gui;
+      //Event *m_event;
       t_program m_prog;
       t_bunny_pixelarray *m_render;
   };

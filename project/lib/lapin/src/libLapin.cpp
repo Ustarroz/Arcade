@@ -9,6 +9,7 @@
 #include "Common.hpp"
 #include "ITile.hpp"
 #include "lapin.h"
+#include "lapin/enum.h"
 
 namespace arcade
 {
@@ -53,6 +54,10 @@ namespace arcade
 
   bool libLapin::pollEvent(Event &e)
   {
+	  m_event = &e;
+	   bunny_set_key_response(libLapin::_bunnyPollEvent);
+    bunny_set_loop_main_function(libLapin::_bunnyPollEventLoop);
+    bunny_loop(m_prog.win, 6000, this);
     return (false);
   }
 
@@ -78,38 +83,35 @@ namespace arcade
 
   void libLapin::updateMap(IMap const &map)
   {
-#ifdef DEBUG
-    std::cout << "[Lapin] updating map" << std::endl;
-#endif
     m_map = &map;
     bunny_set_loop_main_function(libLapin::_bunnyUpdateMap);
-    bunny_loop(m_prog.win, 60, this);
+    bunny_loop(m_prog.win, 6000, this);
   }
 
   void libLapin::updateGUI(IGUI &gui)
   {
-#ifdef DEBUG
-    std::cout << "[Lapin] updating GUI" << std::endl;
-#endif
     m_gui = &gui;
     bunny_set_loop_main_function(&_bunnyUpdateGUI);
-    bunny_loop(m_prog.win, 60, this);
+    bunny_loop(m_prog.win, 6000, this);
   }
 
   void libLapin::display()
   {
     bunny_set_loop_main_function(&_bunnyDisplay);
-    bunny_loop(m_prog.win, 60, this);
+    bunny_loop(m_prog.win, 6000, this);
   }
 
   void libLapin::clear()
   {
     bunny_set_loop_main_function(&_bunnyClear);
-    bunny_loop(m_prog.win, 60, this);
+    bunny_loop(m_prog.win, 6000, this);
   }
 
   t_bunny_response libLapin::_bunnyUpdateMap(void *data)
   {
+#ifdef DEBUG
+    std::cout << "[Lapin] updating map" << std::endl;
+#endif
     libLapin *lapin = static_cast<libLapin *>(data);
     if (lapin->m_map == NULL)
       return (EXIT_ON_SUCCESS);
@@ -139,6 +141,9 @@ namespace arcade
 
   t_bunny_response libLapin::_bunnyUpdateGUI(void *data)
   {
+#ifdef DEBUG
+    std::cout << "[Lapin] updating GUI" << std::endl;
+#endif
     libLapin *lapin = static_cast<libLapin *>(data);
     if (lapin->m_gui == NULL)
       exit(EXIT_ON_SUCCESS);
@@ -166,6 +171,9 @@ namespace arcade
 
   t_bunny_response libLapin::_bunnyDisplay(void *data)
   {
+#ifdef DEBUG
+    std::cout << "[Lapin] DSIPLAY" << std::endl;
+#endif
     libLapin *lapin = static_cast<libLapin *>(data);
     bunny_blit(&lapin->m_prog.win->buffer, &lapin->m_render->clipable, NULL);
     bunny_display(lapin->m_prog.win);
@@ -174,28 +182,85 @@ namespace arcade
 
   t_bunny_response libLapin::_bunnyClear(void *data)
   {
+#ifdef DEBUG
+    std::cout << "[Lapin] CLEAR" << std::endl;
+#endif
     libLapin *lapin = static_cast<libLapin *>(data);
-    //bunny_display(m_prog->win);
+    bunny_clear(&lapin->m_prog.win->buffer, PINK2);
     return (EXIT_ON_SUCCESS);
+  }
+
+  t_bunny_response libLapin::_bunnyPollEventLoop(void *data)
+  {
+#ifdef DEBUG
+    std::cout << "[Lapin] PollEventLoop" << std::endl;
+#endif
+    libLapin *lapin = static_cast<libLapin *>(data);
+    return (GO_ON);
+  }
+
+  t_bunny_response	libLapin::_bunnyPollEvent(t_bunny_event_state	state,
+				     t_bunny_keysym		sym,
+				     void			*data)
+  {
+    libLapin *lapin = static_cast<libLapin *>(data);
+	  switch (state)
+	  {
+		  case GO_DOWN:
+			  for (std::map<e_bunny_keysym, KeyboardKey>::iterator it = lapin->m_keys.begin(); it != lapin->m_keys.end(); ++it)
+			  {
+				  if (sym == it->first)
+				  {
+					  if (it->first == BKS_ESCAPE)
+					  {
+						  lapin->m_event->type = ET_QUIT;
+						  lapin->m_event->action = AT_PRESSED;
+						  lapin->m_event->kb_key = it->second;
+					  }
+					  lapin->m_event->type = ET_KEYBOARD;
+					  lapin->m_event->action = AT_PRESSED;
+					  lapin->m_event->kb_key = it->second;
+				  }
+			  }
+			  break;
+		  default:
+			  lapin->m_event->type = ET_NONE;
+			  lapin->m_event->action = AT_NONE;
+			  lapin->m_event->kb_key = KB_NONE;
+			  break;
+	  }
+	  return (EXIT_ON_SUCCESS);
   }
 
   void libLapin::drawSquare(libLapin *lapin, pos_t pos, int size, Color col)
   {
-    Color *pixels = reinterpret_cast<Color *>(lapin->m_render->pixels);
-    for (int y = 0; y < pos.y + size; y++)
-    {
-      for (int x = 0; x < pos.x + size; x++)
-      {
-        pixels[x + lapin->m_windowWeight * y] = col;
-      }
-    }
+	  Color *pixels = reinterpret_cast<Color *>(lapin->m_render->pixels);
+	  for (int y = 0; y < pos.y + size; y++)
+	  {
+		  for (int x = 0; x < pos.x + size; x++)
+		  {
+			  int ndx = x + lapin->m_windowWeight * y;
+			  /*Color oldColor;
+			    oldColor.a = pixels[ndx].a;
+			    oldColor.r = pixels[ndx].r;
+			    oldColor.g = pixels[ndx].g;
+			    oldColor.b = pixels[ndx].b;
+			    double alpha = col.a / 255.0;
+			    Color newColor;
+			    newColor.r = col.r * alpha + oldColor.r * (1 - alpha);
+			    newColor.g = col.g * alpha + oldColor.g * (1 - alpha);
+			    newColor.b = col.b * alpha + oldColor.b * (1 - alpha);
+			    newColor.a = col.a * alpha + oldColor.a * (1 - alpha);*/
+			  pixels[ndx] = col;
+		  }
+	  }
   }
 }
 
 extern "C"
 {
-  arcade::IGfxLib *getLib()
-  {
-    return (new arcade::libLapin());
-  }
+	arcade::IGfxLib *getLib()
+	{
+		return (new arcade::libLapin());
+	}
 }
