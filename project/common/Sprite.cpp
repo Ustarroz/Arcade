@@ -23,6 +23,7 @@ namespace arcade
 
   char Sprite::getAscii(size_t pos) const
   {
+    (void) pos;
     return ('A');
   }
 }

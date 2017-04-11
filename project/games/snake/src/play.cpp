@@ -11,11 +11,8 @@ namespace arcade
   {
     Snake snake;
     CommandType in;
-    size_t op;
-    Position pos;
     Event e;
     std::vector<Event> e_list;
-
 
     memset(&e, 0, sizeof(Event));
     while (1)
@@ -63,7 +60,6 @@ namespace arcade
 	    getMap->type = CommandType::GET_MAP;
 	    getMap->width = snake.getCurrentMap().getWidth();
 	    getMap->height = snake.getCurrentMap().getHeight();
-            int l = 0;
 	    for (size_t i = 0; i < getMap->height; ++i)
 	      {
 		for (size_t j = 0; j < getMap->width; ++j)

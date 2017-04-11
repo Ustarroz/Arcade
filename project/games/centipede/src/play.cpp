@@ -28,10 +28,6 @@ namespace arcade
   {
     Centipede centipede;
     CommandType in;
-    size_t op;
-    //GetMap *map;
-    Position pos;
-    //WhereAmI *ami;
     Event e;
     std::vector<Event> e_list;
 
@@ -49,12 +45,7 @@ namespace arcade
 #ifdef DEBUG
 	    std::cerr << "WHEREAMI" << std::endl;
 #endif
-	    //WhereAmI *ami = reinterpret_cast<WhereAmI *> (new char [sizeof(WhereAmI) + (sizeof(Position) * centipede.getPlayer().size())]);
             WhereAmI *ami = new WhereAmI [sizeof(WhereAmI) + (sizeof(Position))];
-            if (!ami)
-            {
-              return ;
-            }
 	    ami->type = CommandType::WHERE_AM_I;
 	    ami->lenght = 1;
 	    ami->position[0] = centipede.getPlayer();
@@ -65,14 +56,6 @@ namespace arcade
 #ifdef DEBUG
             std::cerr << "REALLY WROTE: " << std::endl;
 #endif
-
-	    	    /*WhereAmI *ami = new(WhereAmI [sizeof(struct WhereAmI) + sizeof(Position) * centipede.getPlayer().size()]);
-	    ami->type = CommandType::WHERE_AM_I;
-	    ami->lenght = static_cast<uint16_t> (centipede.getPlayer().size());
-	    write_position(centipede.getPlayer(), ami);
-	    std::cout.write(reinterpret_cast<char*>(ami), sizeof(struct WhereAmI) + sizeof(Position) * centipede.getPlayer().size());
-	    std::cerr << "WHEREAMI" << std::endl;
-	    delete(ami);*/
 #ifdef DEBUG
 	    std::cerr << "END_WHEREAMI" << std::endl;
 #endif
@@ -91,7 +74,6 @@ namespace arcade
 	    getMap->type = CommandType::GET_MAP;
 	    getMap->width = centipede.getCurrentMap().getWidth();
 	    getMap->height = centipede.getCurrentMap().getHeight();
-            int l = 0;
 	    for (size_t i = 0; i < getMap->height; ++i)
 	      {
 		for (size_t j = 0; j < getMap->width; ++j)
@@ -107,7 +89,6 @@ namespace arcade
 #ifdef DEBUG
 	    std::cerr << "MAP: wrote: " << std::endl;
 #endif
-	    //delete (getMap);
 	  }
 
 	else if (in == CommandType::GO_UP)
