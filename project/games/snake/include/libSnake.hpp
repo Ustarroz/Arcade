@@ -12,7 +12,7 @@
 #define MINSCORE 50
 #define STEPSCORE 10
 #define SNAKE_EMPTY_COLOR {0, 0, 255, 0}
-#define SNAKE_HIGH_FILE "games/snake_high.txt"
+#define SNAKE_HIGH_FILE "score/snake_high.txt"
 
 namespace arcade
 {

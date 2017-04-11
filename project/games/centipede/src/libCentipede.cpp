@@ -12,12 +12,13 @@ namespace arcade
   Centipede::Centipede()
    : m_map(15, 15)
   {
-    m_map.addLayer();
-    resetGame(true);
+    m_level = CENTIPEDE_MIN_LVL;
     size_t tmp = readHigh(CENTIPEDE_HIGH_FILE);
     m_gui.setHighScore(tmp);
     m_state = GameState::INGAME;
     m_process = GameProcess::GAMEPLAYING;
+    m_map.addLayer();
+    resetGame(true);
   }
 
   Centipede::~Centipede()
@@ -32,9 +33,9 @@ namespace arcade
 
     dir = rand() % 2 == 0 ? DIR_RIGHT : DIR_LEFT;
     if (dir == DIR_RIGHT)
-      posx = m_map.getWidth() * 1 / 3;
+      posx = m_map.getWidth() * m_level / CENTIPEDE_MAX_LVL;
     else
-      posx = m_map.getWidth() * 2 / 3;
+      posx = m_map.getWidth() * (CENTIPEDE_MAX_LVL - m_level) / CENTIPEDE_MAX_LVL;
     std::vector<CentiPart> list;
     for (int x = posx;
 	 dir == DIR_RIGHT ? x >= 0 : x < static_cast<int>(m_map.getWidth());
@@ -299,18 +300,28 @@ namespace arcade
     pos._dir = body.begin()->_pos._dir;
     changeDir(pos, pos._dir);
     check = checkPos(pos._x, pos._y, 0);
-    /*if (check == TileType::MY_SHOOT)
+    if (check == TileType::MY_SHOOT)
       {
-	std::cout << "shoot" << std::endl;
+	int exit;
+
+	exit = -3;
+	if ((body.size() == 1 && m_centipede.size() == 1) ||
+	    (body.size() == 1 &&
+	     body[0]._pos._x == (*(m_centipede.end() - 1))[0]._pos._x))
+	  exit = -1;
+	else if (body.size() == 1)
+	  exit = -2;
 	m_map.setTile(0, body.begin()->_pos._x, body.begin()->_pos._y,
 		      Tile(TileType::EMPTY, TileTypeEvolution::EMPTY,
 			   CENTIPEDE_EMPTY_COLOR, 0, 0, 0, 0));
 	changeDir(body.begin()->_pos, body.begin()->_pos._dir);
 	m_map.setTile(0, pos._x, pos._y, body.begin()->_pos._tile);
 	shotAt(body.begin()->_pos._x, body.begin()->_pos._y);
-	return (2);
+	if (exit == -3)
+	  return (checkHead(body));
+	return (exit);
       }
-    else */if (pos._x == m_player._x && pos._y == m_player._y)
+    else if (pos._x == m_player._x && pos._y == m_player._y)
       {
 	endGame();
 	return (-1);
@@ -357,6 +368,8 @@ namespace arcade
 	  }
 	else if (check == -1)
 	  return ;
+	else if (check == -2)
+	  continue ;
 	save = it->begin()->_pos._dir;
 	for (std::vector<CentiPart>::iterator jt = it->begin();
 	     jt != it->end(); jt++)
@@ -530,7 +543,9 @@ namespace arcade
 			m_centipede.erase(it);
 			if (m_centipede.size() == 0)
 			  {
-			    m_score = m_score + CENTIPEDE_KILL_SCORE - CENTIPEDE_SCORE;
+			    m_score = m_score + CENTIPEDE_SCORE * m_level;
+			    if (m_level < CENTIPEDE_MAX_LVL - 1)
+			      ++m_level;
 			    addCentipede();
 			  }
 		      }

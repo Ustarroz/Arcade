@@ -3,9 +3,9 @@ PROJECT_DIR=	./project/core/ 		\
 		./project/lib/sdl/		\
 		./project/lib/sound/		\
 		./project/games/snake/		\
+		./project/games/centipede/	\
 		./project/lib/lapin/
 		#./project/games/menu/		\
-		#./project/games/centipede/	\
 
 
 all:

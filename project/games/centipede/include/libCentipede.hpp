@@ -9,11 +9,12 @@
 #include "gameCommon.hpp"
 
 #define SHROOM_SCORE 50
-#define CENTIPEDE_SCORE 75
-#define CENTIPEDE_KILL_SCORE 200
+#define CENTIPEDE_SCORE 25
 #define CENTIPEDE_EMPTY_COLOR {100, 0, 0, 0}
 #define CENTIPEDE_PART_COLOR {255, 255, 0, 255}
-#define CENTIPEDE_HIGH_FILE "games/centipede_high.txt"
+#define CENTIPEDE_HIGH_FILE "score/centipede_high.txt"
+#define CENTIPEDE_MAX_LVL 10
+#define CENTIPEDE_MIN_LVL 3
 
 namespace arcade
 {
@@ -63,6 +64,7 @@ namespace arcade
     GameState m_state;
     GameProcess m_process;
     GameGUI m_gui;
+    int m_level;
     void useEvent(Event event);
     void useEventKeyBoard(Event event);
     void useEventKeyJoystick(Event event);
