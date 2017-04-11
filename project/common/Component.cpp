@@ -77,8 +77,6 @@ namespace arcade
   void Component::setColor(Color const &cpy)
   {
     m_color = cpy;
-    std::cerr << static_cast<int> (*cpy.rgba) << std::endl;
-    std::cerr << static_cast<int> (*m_color.rgba) << std::endl;
   }
 
   void Component::setHeight(double height)

@@ -70,6 +70,7 @@ namespace arcade
     int ndxGame = 0;
     while (go)
     {
+	event_list.clear();
       while (m_libsGfx->pollEvent(e))
       {
 #ifdef DEBUG
@@ -109,8 +110,6 @@ namespace arcade
       if (m_libsGame->getGameState() == GameState::INGAME)
       {
         m_libsGfx->clear();
-        event_list.clear();
-        event_list.push_back(e);
         m_libsGame->notifyEvent(std::move(event_list));
         m_libsGame->process();
         IMap const &map = m_libsGame->getCurrentMap();

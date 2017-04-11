@@ -8,6 +8,31 @@
 # include "NetworkPacket.hpp"
 # include "../../common/include/gameCommon.hpp"
 
+#define MENU_LINE_0 0.2
+#define MENU_LINE_05 0.3
+
+#define MENU_LINE_1 0.4
+#define MENU_LINE_2 0.55
+#define MENU_LINE_3 0.7
+
+#define MENU_COL_1 0.1
+#define MENU_COL_2 0.4
+#define MENU_COL_3 0.7
+
+#define MENU_WIDTH 100
+#define MENU_HEIGHT 17
+
+#define MENU_POS_GAME 3
+#define MENU_POS_NAME 5
+
+#define MENU_COLOR_BG {0,0,0,255}
+#define MENU_COLOR_TXT {255,255,255,255}
+#define MENU_COLOR_SELECT {0,100,0,255}
+#define MENU_COLOR_CURSOR {0,0,100,255}
+#define MENU_COLOR_BOTH {0,100,100,255}
+#define MENU_COLOR_TITLE {100,0,0,255}
+#define MENU_COLOR_MAIN_TITLE {200,0,0,255}
+
 namespace arcade
 {
   class Menu: public IGame
@@ -26,23 +51,26 @@ namespace arcade
       virtual std::vector<Sound> getSoundsToPlay();
       virtual IMap const &getCurrentMap() const;
       virtual IGUI &getGUI();
-
+      std::string const & getGame();
+      std::string const & getLib();
+      std::string const & getName();
       private:
 
-    void	useEventKeyButton(Event event);
-    void 	useEventKeyJoystick(Event event);
-    void	useEventKeyBoard(Event event);
-    void 	useEvent(Event event);
+    void	useEventKeyButton(Event const &event);
+    void 	useEventKeyJoystick(Event const &event);
+    void	useEventKeyBoard(Event const &event);
+    void 	useEvent(Event const &event);
     std::vector <Component> 	pos;
-    int 			coord;
     Map 			m_map;
     GUI 			m_gui;
     GameState 			m_state;
     std::vector<NetworkPacket> 	m_net;
-    std::vector<std::unique_ptr<ISprite>> m_sprite;
-    	std::vector<PosGame> m_dir;
-    	std::vector<std::pair<std::string, SoundType> > m_soundsName;
-      std::vector<Sound> m_soundsPlay;
+    size_t			m_cursor;
+    size_t			m_lib;
+    size_t			m_game;
+    std::string			m_name;
+    std::vector<std::pair<std::string, SoundType> > m_soundsName;
+    std::vector<Sound> m_soundsPlay;
   };
 }
 
