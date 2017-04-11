@@ -277,7 +277,7 @@ namespace arcade
     m_appleScore = MAXSCORE;
     m_map.setTile(1, pos % m_map.getWidth(), pos / m_map.getWidth(),
 		  Tile(TileType::POWERUP, TileTypeEvolution::FOOD,
-		       {255, 0, 255, 255}, 0, 0, 0, 0));
+		       {255, 0, 255, 255}, 2, 0, 0, 0, true));
   }
 
   void Snake::addSnake()
@@ -321,6 +321,7 @@ namespace arcade
     std::vector<std::unique_ptr<ISprite> > sprites;
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_head.png"));
     sprites.push_back(std::make_unique<Sprite>("./assets/sprites/snake_body.png"));
+    sprites.push_back(std::make_unique<Sprite>("./assets/sprites/apple.png"));
     return (std::move(sprites));
   }
 
