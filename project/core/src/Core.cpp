@@ -150,7 +150,7 @@ namespace arcade
           if (static_cast<KeyboardKey>(e.m_key) == KB_2)
             --ndxGfx;
           else
-            ++ndxGame;
+            ++ndxGfx;
           std::function<IGfxLib *()> gfxLaunch = cast<IGfxLib *()>(dlsym(m_handlerGfx[ndxGfx % m_handlerGfx.size()], "getLib"));
           m_libsGfx = gfxLaunch();
           m_libsGfx->loadSprites(m_libsGame->getSpritesToLoad());
